@@ -17,8 +17,8 @@
 @media only screen and (min-width: 993px) {
     .container {
         width: 90%;
-        -max-width: 1125px;
-        max-width: 1325px;
+        max-width: 1125px;
+        -max-width: 1325px;
     }
 
     .head-container {
@@ -30,8 +30,8 @@
     .post-container {
         width: 90%;
         margin: 0 auto;
-        -max-width: 1250px;
-        max-width: 1450px;
+        max-width: 1250px;
+        -max-width: 1450px;
     }
 }
 
@@ -578,7 +578,7 @@ header .go-back i {
 }
 /* 首页背景文字大小 */
 .bg-cover .title {
-    font-size: 6rem;
+    font-size: 5rem;
     /* 5 */
     line-height: 1.2em;
     margin-bottom: 20px;
@@ -587,9 +587,9 @@ header .go-back i {
 /* 描述文字大小 */
 .bg-cover .description {
     font-weight: 300;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     /*  1.25  1.4  */
-    line-height: 1.4em;
+    line-height: 1.25em;
     color: #eee;
 }
 
