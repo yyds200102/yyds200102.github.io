@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JAVASE(六):注解 | Notes</title><meta name="keywords" content="JavaSE"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Java注解的简单使用包含Java8的注解特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVASE(六):注解">
+<meta property="og:url" content="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E5%85%AD%20)%20%E6%B3%A8%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="Java注解的简单使用包含Java8的注解特性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/cover/6.jpg">
+<meta property="article:published_time" content="2021-06-21T06:53:03.000Z">
+<meta property="article:modified_time" content="2021-06-21T06:53:05.000Z">
+<meta property="article:author" content="Bug">
+<meta property="article:tag" content="JavaSE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/cover/6.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E5%85%AD%20)%20%E6%B3%A8%E8%A7%A3/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Bug","link":"链接: ","source":"来源: Notes","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JAVASE(六):注解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-21 14:53:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/6.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JAVASE(六):注解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-21T06:53:03.000Z" title="发表于 2021-06-21 14:53:03">2021-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-21T06:53:05.000Z" title="更新于 2021-06-21 14:53:05">2021-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JAVASE(六):注解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h2><ul>
+<li>JDK5.0开始引入</li>
+<li>作用类似于注释，可以对程序<strong>作出解释</strong>，这些信息可以在编译、类加载、运行时被读取</li>
+<li>通过使用 Annotation, 程序员可以在不改变原有逻辑的情况下, 在源文件中嵌入一些补充信息，现在的主流Java框架均大量使用注解，可以这么说：<strong>框架 = 注解 + 反射 + 设计模式</strong></li>
+</ul>
+<h2 id="2、分类"><a href="#2、分类" class="headerlink" title="2、分类"></a>2、分类</h2><h3 id="2-1、内置注解："><a href="#2-1、内置注解：" class="headerlink" title="2.1、内置注解："></a>2.1、内置注解：</h3><p>​        比如@Override、@Depercated、@SuppressWarnings等等，在Java代码能经常看到</p>
+<p>​        如**@Override**就是表明该方法是重写了父类的方法。</p>
+<h3 id="2-2、元注解："><a href="#2-2、元注解：" class="headerlink" title="2.2、元注解："></a>2.2、元注解：</h3><p>​        负责<strong>注解其他注解</strong>，为meta-annotation类型，一共有4个，通过元注解就可以自定义注解，上面提到的Java内置注解其实就是Java预先用元注解帮我们定义好的，基本的4个元注解的作用如下</p>
+<ol>
+<li><code>@Target</code>：描述注解的使用范围</li>
+<li><code>@Rentention</code>：描述该注解的生命周期，即在什么时候有效</li>
+<li><code>@Document</code>：说明该注解将被包含在Javadoc中</li>
+<li><code>@Inherited</code>：说明子类可以继承父类中的注解</li>
+</ol>
+<p><strong>@Target、@Rentention都是有参数的，各参数的定义如下</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="comment">// 形式：ElementType. 后面加上参数</span></span><br><span class="line"><span class="comment">// 当然也可以直接写参数 TYPE，不写前面的ElementType，不过需要import 静态常量</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>TYPE</code> : 类、接口或enum声明</li>
+<li><code>FIELD</code>: 域(属性)声明</li>
+<li><code>METHOD</code>: 方法声明</li>
+<li><code>PARAMETER</code>: 参数声明</li>
+<li><code>CONSTRUCTOR</code>: 构造方法声明 LOCAL_VARIABLE:局部变量声明</li>
+<li><code>ANNOTATION_TYPE</code>:注释类型声明</li>
+<li><code>PACKAGE</code>: 包声明</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>SOURCE</code>:在源文件中有效（即源文件保留），编译器直接丢弃</li>
+<li><code>CLASS</code>:在class文件中有效（即class保留） ， 当运行 Java 程序时, JVM不会保留注解</li>
+<li><code>RUNTIME</code>：在运行时有效（即运行时保留），当运行 Java程序, JVM会保留注释，此时可以通过反射获取注解。</li>
+</ul>
+<h3 id="2-3、自定义注解"><a href="#2-3、自定义注解" class="headerlink" title="2.3、自定义注解"></a>2.3、自定义注解</h3><h2 id="3、自定义注解"><a href="#3、自定义注解" class="headerlink" title="3、自定义注解"></a>3、自定义注解</h2><h3 id="3-1、实例："><a href="#3-1、实例：" class="headerlink" title="3.1、实例："></a>3.1、实例：</h3><p>定义注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123;</span><br><span class="line">    <span class="function">String <span class="title">age</span><span class="params">()</span> <span class="keyword">default</span> &quot;20&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyAnnotation(age = &quot;30&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2、分析"><a href="#3-2、分析" class="headerlink" title="3.2、分析"></a>3.2、分析</h3><p>注解的格式： public @interface 注解名 {   定义体  }     <strong>并且再加上元注解</strong></p>
+<p><strong>这里我们先：</strong></p>
+<ol>
+<li>使用  <strong>@Retention(RetentionPolicy.RUNTIME)</strong>   表明 该注解是在 运行时 有效的</li>
+<li>使用  <strong>@Target(ElementType.TYPE)</strong>  表明该接口定义在  类、接口或enum上</li>
+<li>指定名称为  MyAnnotation</li>
+</ol>
+<p><strong>接着定义方法体的内容：</strong></p>
+<ul>
+<li>String age() default “20”; 表明定义了一个参数，名字为age，类型为String，默认值为20(可以不用默认值)</li>
+</ul>
+<p><strong>使用：</strong></p>
+<ul>
+<li>@MyAnnotation(age = “30”) 使用注解，给参数age赋值30并且标记在test<strong>类</strong>上面</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法体里面的类型是数组时</span></span><br><span class="line">String[] value();</span><br><span class="line"><span class="meta">@MyAnnotation(&#123;&quot;4&quot;,&quot;1&quot;&#125;)</span></span><br><span class="line">myAnnotation.value()[<span class="number">0</span>];   <span class="comment">// myAnnotation为通过反射获取的注解对象</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意点</p>
+</blockquote>
+<ul>
+<li>类型只能是基本数据类型、String类型、Class类型、enum类型、Annotation类型、以上所有类型的数组</li>
+<li>没有成员定义的 Annotation 称为<strong>标记</strong>; 包含成员变量的 Annotation 称为<strong>元数据</strong> Annotation</li>
+<li>如果只有一个注解，可以这么定义：String value() default “20”  ，这样使用时可以@MyAnnotation(“30”)</li>
+</ul>
+<h2 id="4、Java8新增特性"><a href="#4、Java8新增特性" class="headerlink" title="4、Java8新增特性"></a>4、Java8新增特性</h2><h3 id="4-1、可重复注解"><a href="#4-1、可重复注解" class="headerlink" title="4.1、可重复注解"></a>4.1、可重复注解</h3><p>​        在 Java 8 之前我们不能在<code>同一个类</code>、<code>同一方法</code>上重复使用同一个注解，在 JDK 8 中引入了一个注解<code> @Repeatable</code> 来标识某个注解是可被重复使用的，但是需要一个容器注解</p>
+<p><strong>使用：</strong></p>
+<p>定义可重复的注解容器注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Repeatable(MyTests.class)</span></span><br><span class="line"><span class="meta">@interface</span> MyTest&#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定义一个可以重复的注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@interface</span> MyTests &#123;</span><br><span class="line">    MyTest[] value();       <span class="comment">//这是重复的容器注解</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyTest(&quot;1&quot;)</span></span><br><span class="line"><span class="meta">@MyTest(&quot;2&quot;)</span></span><br><span class="line"><span class="meta">@MyTest(&quot;3&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反射获取注解并输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// test表示使用注解的那个类</span></span><br><span class="line">    <span class="comment">// 反射是通过MyTest来获取，而不是通过容器注解来获取</span></span><br><span class="line">    MyTest[] annotationsByType = test.class.getAnnotationsByType(MyTest.class);</span><br><span class="line">    <span class="keyword">for</span> (MyTest myTest: annotationsByType) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;获取类上的注解:&quot;</span>+myTest.value());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我的理解：</p>
+<ul>
+<li>要让A注解支持重复注解，需要新定义B注解，里面属性的名为value，返回数组，类型为A注解。</li>
+</ul>
+<h3 id="4-2、类型注解"><a href="#4-2、类型注解" class="headerlink" title="4.2、类型注解"></a>4.2、类型注解</h3><p>DK 8 为 @Target 元注解新增了两种类型：<code>TYPE_PARAMETER</code>、<code>TYPE_USE</code></p>
+<ol>
+<li><p><code>TYPE_PARAMETER</code>：表示该注解能够写在 声明为 <code>泛型</code> 的语句中，类型参数声明如：<T>、&lt;T extends 某个类&gt;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.TYPE_PARAMETER:表示注解能够放在泛型上面</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_PARAMETER)</span></span><br><span class="line"><span class="meta">@interface</span> TypeParam&#123;  </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 使用，</span></span><br><span class="line"><span class="keyword">public</span> &lt;<span class="meta">@TypeParam</span> T&gt; <span class="function">T <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>TYPE_USE</code>：表示注解可以用在[任何用到类型]的地方使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//表示注解可以用在[任何用到类型]的地方使用</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_USE)</span></span><br><span class="line"><span class="meta">@interface</span> NotNull&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">private</span> <span class="meta">@NotNull</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E5%85%AD%20)%20%E6%B3%A8%E8%A7%A3/">http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E5%85%AD%20)%20%E6%B3%A8%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaSE/">JavaSE</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/6.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/21/JavaSE/JavaSE%20(%20%E4%BA%94%20)%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"><img class="prev-cover" src="/img/cover/5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JAVASE(五):异常处理</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/21/JavaSE/JavaSE%20(%20%E4%B8%83%20)%20IO%E6%B5%81/"><img class="next-cover" src="/img/cover/7.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JAVASE(七):IO流</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/21/JavaSE/JavaSE ( 二 ) 类和对象/" title="JAVASE(二):类和对象"><img class="cover" src="/img/cover/2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(二):类和对象</div></div></a></div><div><a href="/2021/06/21/JavaSE/JavaSE ( 五 ) 异常处理/" title="JAVASE(五):异常处理"><img class="cover" src="/img/cover/5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(五):异常处理</div></div></a></div><div><a href="/2021/06/21/JavaSE/JavaSE ( 九 ) 时间日期/" title="JAVASE(九):Java的时间日期API使用"><img class="cover" src="/img/cover/9.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(九):Java的时间日期API使用</div></div></a></div><div><a href="/2021/06/21/JavaSE/JavaSE ( 十 ) JDBC/" title="JAVASE(十):JDBC"><img class="cover" src="/img/cover/12.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(十):JDBC</div></div></a></div><div><a href="/2021/06/21/JavaSE/JavaSE ( 八 ) 流式编程/" title="JAVASE(八):流式编程"><img class="cover" src="/img/cover/8.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(八):流式编程</div></div></a></div><div><a href="/2021/06/21/JavaSE/JavaSE ( 七 ) IO流/" title="JAVASE(七):IO流"><img class="cover" src="/img/cover/7.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-21</div><div class="title">JAVASE(七):IO流</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">1、概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">2、分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E5%86%85%E7%BD%AE%E6%B3%A8%E8%A7%A3%EF%BC%9A"><span class="toc-text">2.1、内置注解：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E5%85%83%E6%B3%A8%E8%A7%A3%EF%BC%9A"><span class="toc-text">2.2、元注解：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.3、自定义注解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3"><span class="toc-text">3、自定义注解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%AE%9E%E4%BE%8B%EF%BC%9A"><span class="toc-text">3.1、实例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E5%88%86%E6%9E%90"><span class="toc-text">3.2、分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81Java8%E6%96%B0%E5%A2%9E%E7%89%B9%E6%80%A7"><span class="toc-text">4、Java8新增特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81%E5%8F%AF%E9%87%8D%E5%A4%8D%E6%B3%A8%E8%A7%A3"><span class="toc-text">4.1、可重复注解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81%E7%B1%BB%E5%9E%8B%E6%B3%A8%E8%A7%A3"><span class="toc-text">4.2、类型注解</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
