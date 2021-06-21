@@ -1,0 +1,531 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JavaSE(一):基本语法 | Notes</title><meta name="keywords" content="Java"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Java的基本语法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaSE(一):基本语法">
+<meta property="og:url" content="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E4%B8%80%20)%20%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="Java的基本语法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/cover/1.jpg">
+<meta property="article:published_time" content="2021-06-21T10:53:05.000Z">
+<meta property="article:modified_time" content="2021-06-21T10:56:05.000Z">
+<meta property="article:author" content="Bug">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/cover/1.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E4%B8%80%20)%20%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Bug","link":"链接: ","source":"来源: Notes","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JavaSE(一):基本语法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-21 18:56:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JavaSE(一):基本语法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-21T10:53:05.000Z" title="发表于 2021-06-21 18:53:05">2021-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-21T10:56:05.000Z" title="更新于 2021-06-21 18:56:05">2021-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaSE/">JavaSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JavaSE(一):基本语法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、数据类型"><a href="#1、数据类型" class="headerlink" title="1、数据类型"></a>1、数据类型</h2><p><strong>按照数据类型分类：</strong></p>
+<ul>
+<li>基本类型：整形、浮点型、字符型、布尔型</li>
+<li>引用类型：类、接口、数组、枚举、注解等</li>
+</ul>
+<p><strong>按声明的位置的不同</strong></p>
+<ul>
+<li>成员变量：方法体外，类体内声明的变量称为（其中被static修饰的称为<strong>类变量</strong>，其他为实例变量）</li>
+<li>局部变量：在方法体内部声明（形参、方法内局部变量、代码块局部变量）</li>
+</ul>
+<p><strong>同：</strong>都有生命周期 </p>
+<p><strong>异：</strong>局部变量除形参外，需显式初始化。</p>
+<h3 id="1-1、整型"><a href="#1-1、整型" class="headerlink" title="1.1、整型"></a>1.1、整型</h3><p>整型表示没有小数部分的数值</p>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">存储需求</th>
+<th>范围</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int</td>
+<td align="center">4字节</td>
+<td>-2 ^31 ~2^31-1(约21亿)</td>
+<td>正常表示</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2字节</td>
+<td>-2 ^15 ~2^15 -1</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">8字节</td>
+<td>-2 ^63 ~2^63-1(约21亿)</td>
+<td>后缀有L或者l</td>
+</tr>
+<tr>
+<td align="center">byte</td>
+<td align="center">1字节</td>
+<td>-128~127</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>需要注意的是，</p>
+<ul>
+<li>Java的整型范围与平台无关（C/C++会自动选择最优的）</li>
+<li>Java没有任何无符号形式的整形</li>
+</ul>
+<h3 id="1-2、浮点类型"><a href="#1-2、浮点类型" class="headerlink" title="1.2、浮点类型"></a>1.2、浮点类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储需求</th>
+<th>范围</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>float</td>
+<td>4字节</td>
+<td>-3.403E38 ~ 3.403E38</td>
+<td>后缀有F或者f</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8字节</td>
+<td>-1.798E308 ~ 1.798E308</td>
+<td>后缀有D或者d</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p>没有后缀默认为double类型</p>
+</li>
+<li><p>两种表示方法： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5.1</span>   <span class="number">6.34F</span>   <span class="number">.512</span>   <span class="comment">// 十进制计数法 </span></span><br><span class="line"><span class="number">5.12e2</span> <span class="number">512E2</span> <span class="number">100E-2</span>  <span class="comment">// 科学计数法</span></span><br></pre></td></tr></table></figure></li>
+<li><p>特殊的三个值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Double.POSITIVE_INFINITY;  <span class="comment">// 表示正无穷大</span></span><br><span class="line">Double.NEGATIVE_INFINITY;  <span class="comment">// 表示负无穷大</span></span><br><span class="line">Double.NaN;                <span class="comment">// 表示不是一个数字，0/0 或者 负数平方根</span></span><br></pre></td></tr></table></figure></li>
+<li><p>所有的浮点数直接不能比较，因为浮点数底层还是用<strong>二进制</strong>表示的，二进制无法准确的表示小数</p>
+</li>
+</ul>
+<h3 id="1-3、char类型"><a href="#1-3、char类型" class="headerlink" title="1.3、char类型"></a>1.3、char类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储需求</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>2字节</td>
+<td>\u0000~\uFFFF</td>
+</tr>
+</tbody></table>
+<ul>
+<li>char类型用于表示<strong>单个字符</strong>，一些Unicode编码<strong>需要两个char</strong>表示</li>
+<li>Java中的所有字符都使用Unicode编码，通常字符用一个char存储，特殊的用两个存储，如emoji表情🍺</li>
+<li>字符型变量的三种表现形式：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> c1 = <span class="string">&#x27;a&#x27;</span>;       <span class="comment">// 字面量表示</span></span><br><span class="line"><span class="keyword">char</span> c2 = <span class="string">&#x27;\n&#x27;</span>;      <span class="comment">// 用转义字符‘\’来将其后的字符转变为特殊字符型常量</span></span><br><span class="line"><span class="keyword">char</span> c3 = <span class="string">&#x27;\uXXXX&#x27;</span>;  <span class="comment">// 直接使用 Unicode 值来表示字符型常量</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>特殊的：\u是一种<strong>转义序列</strong>，可以出现在<strong>加引号的字符常量</strong>或者<strong>字符串之外</strong>（其他转义序列不行）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String\u005B\u005D args)</span>  <span class="comment">// 可以运行</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong></p>
+<ul>
+<li>Unicode转义序列会在<strong>解析代码</strong>之前处理，</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// \u000A a        会报错,因为\u000A会转换成一个换行符 \n</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>char也是用二进制存储的，可以和int相互转换，但int的范围不能太大</li>
+</ul>
+<blockquote>
+<p>Unicode和char类型</p>
+</blockquote>
+<p>​    Unicode统一了同一了世界上所有字符，每个字符都为其分配一个数字来表示，当时认为16位（65536）已经足够表示了，所以Java设计char类型时也使用16位的Uicode字符集，但是后来随着汉字和日韩语言等的加入，16位得char已经不够使用了。</p>
+<p>​    新标准：U+0000~U+FFFF表示经典Unicode编码，其他在最前面加入一位表示<strong>代码平面</strong>，例如U+10000就表示第一个代码平面。</p>
+<p><strong>注意：Unicode只是一种标准，一般传输数据多用UTF-8或UTF-16</strong></p>
+<p><strong>UTF-8（Unicode的一种实现）：</strong></p>
+<ul>
+<li>变长字节的设计，一个字符最长4字节，最少1字节，大部分汉字3字节</li>
+<li>用一个字节表示的字符，第一位设为0，后面七位对应字符的Unicode码点，由于128个字符的Unicode完全对照ASCII码，所以ASCII编码的文件可以用UTF-8打开不乱码</li>
+<li>用n个字节以上表示的，则第一个字节的前n位都为1，第N+1位为0，剩下的n-1个字节前两位都设置为10，多余的位置使用该字符的Unicode二进制代码填充，不够用0填充</li>
+</ul>
+<p><strong>UTF-16（Java使用的编码方式）</strong>：</p>
+<ul>
+<li>用2个字节或者4个字节表示</li>
+<li>4字节表示的使用两个char，2字节的使用一个char表示</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">U+1D546 使用UTF-16需要两个代码单元，也就是使用两个char表示</span><br><span class="line">此时如果调用charAt(1) 获取的是第二个代码单元</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4、boolean类型"><a href="#1-4、boolean类型" class="headerlink" title="1.4、boolean类型"></a>1.4、boolean类型</h3><ul>
+<li>大小1bit（位），判断逻辑条件，不能和整形相互转换</li>
+<li>不允许取null值</li>
+</ul>
+<h3 id="1-5、数值类型之间的转换"><a href="#1-5、数值类型之间的转换" class="headerlink" title="1.5、数值类型之间的转换"></a>1.5、数值类型之间的转换</h3><ul>
+<li>自动类型转换：多数据混合运算时，会<strong>自动转换</strong>成容量最大的那种。</li>
+<li>强制类型转换：可以把<strong>大的数据类型强制转换(casting)成小的</strong>数据类型。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">char</span>、<span class="keyword">byte</span>、<span class="keyword">short</span>)<span class="keyword">int</span> -&gt; <span class="keyword">long</span> -&gt; <span class="keyword">float</span> -&gt; <span class="keyword">double</span> -&gt; String</span><br><span class="line"><span class="comment">// char、byte、short运算时会自动转换成int类型   </span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong></p>
+<ul>
+<li>布尔类型不能转换</li>
+<li>String类型转回基本类型需要通过基本类型的包装类</li>
+</ul>
+<h3 id="1-6、进制"><a href="#1-6、进制" class="headerlink" title="1.6、进制"></a>1.6、进制</h3><ul>
+<li>Java整数常量默认是int类型，当用二进制定义整数时，其第32位是符号位；当是long类型时，二进制默认占64位，第64位是符号位，即最高位</li>
+<li>前缀0X或者0x表示十六进制，前缀0表示八进制，前缀0b或者0B表示二进制</li>
+<li>计算机以二进制<strong>补码</strong>的形式保存所有的整数</li>
+</ul>
+<p><strong>三种形式：</strong>负数情况下：反码  = 127 - 原码 、  补码 = 128 - 原码</p>
+<ul>
+<li>原码：最高位为符号位，负数为1。</li>
+<li>反码：正数与原码相等，负数除了最高位，其他取反</li>
+<li>补码：正数与原码相等，负数等于反码加1。</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>正数的原码、反码、补码都相同</li>
+<li>负数的补码是其反码+1</li>
+</ul>
+<p><strong>原因：</strong></p>
+<p>让计算机<strong>计算符号位</strong>比较麻烦，于是人们想出了将符号位也参与运算的方法。</p>
+<p>根据运算法则减去一个正数等于加上一个负数, 即: 1-1 = 1 + (-1) = 0 , 所以机器可以只有加法而没有减法, 这样计算机运算的设计就更简单了。</p>
+<p>1-1=1+(-1)=0000 0001(原) + 1000 0001(原) = 0000 0001(补) + 1111 1111(补) = 0000 0000(原) = 0</p>
+<ul>
+<li>即让 1-1  = 1 + (-1) = (1 + (128-1))%128 =  128 % 128 = 0</li>
+</ul>
+<h2 id="2、变量和常量"><a href="#2、变量和常量" class="headerlink" title="2、变量和常量"></a>2、变量和常量</h2><h3 id="2-1、变量"><a href="#2-1、变量" class="headerlink" title="2.1、变量"></a>2.1、变量</h3><p><strong>概念：</strong></p>
+<ul>
+<li>内存中的一个存储区域（保存数据），该区域的值在不断变化，</li>
+<li>程序中最基本的存储单元，</li>
+</ul>
+<p><strong>声明变量：</strong>每个变量都有一个类型，声明时需要指定类型，然后是变量名，以分号结尾。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">变量名: 合法的标志符</span><br><span class="line">标识符: 以字母开头并由字母(包括下划线)或者数字构成的序列，注意不能与关键字和保留字重名</span><br><span class="line">关键字: 被Java语言赋予了特殊含义，用做专门用途的字符串（单词），都为小写</span><br><span class="line">保留字: 现在Java没用到，但是以后可能用到</span><br></pre></td></tr></table></figure>
+
+<p><strong>初始化：</strong>变量必须初始化后才能使用（类的成员变量会有默认值）</p>
+<p><strong>作用域：</strong>其定义所在的一对{ }内 </p>
+<p><strong>分类：</strong>引用类型和基本类型</p>
+<h3 id="2-2、常量"><a href="#2-2、常量" class="headerlink" title="2.2、常量"></a>2.2、常量</h3><ul>
+<li>使用关键字 final 修饰的变量，不能被修改，</li>
+<li>通常使用大写字母作为变量名</li>
+</ul>
+<h3 id="2-3、枚举对象"><a href="#2-3、枚举对象" class="headerlink" title="2.3、枚举对象"></a>2.3、枚举对象</h3><p>Java 枚举是一个<code>特殊的类</code>，一般表示一组常量，参数默认用public static final 修饰</p>
+<h2 id="3、数字计算"><a href="#3、数字计算" class="headerlink" title="3、数字计算"></a>3、数字计算</h2><h3 id="3-1、算术运算符"><a href="#3-1、算术运算符" class="headerlink" title="3.1、算术运算符"></a>3.1、算术运算符</h3><ul>
+<li>当两个操作数含浮点数时：表示浮动除法，</li>
+<li>全为整数时：为整数除法（自动舍弃小数点后的数）</li>
+</ul>
+<h3 id="3-2、数学函数与变量"><a href="#3-2、数学函数与变量" class="headerlink" title="3.2、数学函数与变量"></a>3.2、数学函数与变量</h3><ul>
+<li>Math 类提供很多方法，提供数学计算</li>
+<li>StrictMath 类可以保证所有平台的计算结果一致</li>
+<li>Math.PI    Math.E  表示π</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">abs  <span class="comment">// 绝对值</span></span><br><span class="line">acos,asin,atan,cos,sin,tan  <span class="comment">// 三角函数</span></span><br><span class="line">sqrt  <span class="comment">// 平方根</span></span><br><span class="line">pow(<span class="keyword">double</span> a,doble b) <span class="comment">//  a的b次幂</span></span><br><span class="line">log  <span class="comment">// 自然对数</span></span><br><span class="line">exp <span class="comment">//  e为底指数</span></span><br><span class="line">max(<span class="keyword">double</span> a,<span class="keyword">double</span> b)</span><br><span class="line">min(<span class="keyword">double</span> a,<span class="keyword">double</span> b)</span><br><span class="line">random()                  <span class="comment">// 返回0.0到1.0的随机数</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">round</span><span class="params">(<span class="keyword">double</span> a)</span>      <span class="comment">// double型数据a转换为long型（四舍五入）</span></span></span><br><span class="line"><span class="function"><span class="title">toDegrees</span><span class="params">(<span class="keyword">double</span> angrad)</span>  <span class="comment">// 弧度—&gt;角度</span></span></span><br><span class="line"><span class="function"><span class="title">toRadians</span><span class="params">(<span class="keyword">double</span> angdeg)</span>  <span class="comment">// 角度—&gt;弧度</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4、结合赋值运算符"><a href="#3-4、结合赋值运算符" class="headerlink" title="3.4、结合赋值运算符"></a>3.4、结合赋值运算符</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+=  *= /= %=</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5、自增和自减"><a href="#3-5、自增和自减" class="headerlink" title="3.5、自增和自减"></a>3.5、自增和自减</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x++  <span class="comment">// 先使用x，再++   </span></span><br><span class="line">++x  <span class="comment">// 先++，在使用x </span></span><br><span class="line">x-- </span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6、位运算"><a href="#3-6、位运算" class="headerlink" title="3.6、位运算"></a>3.6、位运算</h3><p>位运算是对整形的操作，若为布尔值，则为逻辑操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&amp;    <span class="comment">// 与：全1则1，否则0</span></span><br><span class="line">|    <span class="comment">// 或：含1则1</span></span><br><span class="line">^    <span class="comment">// 异或：不同为1，相同为0</span></span><br><span class="line">~    <span class="comment">// 非：取反</span></span><br><span class="line">&gt;&gt;   <span class="comment">// 右移：</span></span><br><span class="line">&lt;&lt;   <span class="comment">// 左移</span></span><br><span class="line">&gt;&gt;&gt;  <span class="comment">// 右移并且用0填充高位</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">3</span>;</span><br><span class="line">System.out.println(a&lt;&lt;<span class="number">1</span>);  <span class="comment">// 6</span></span><br><span class="line">System.out.println(a&gt;&gt;<span class="number">1</span>);  <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-7、逻辑运算"><a href="#3-7、逻辑运算" class="headerlink" title="3.7、逻辑运算"></a>3.7、逻辑运算</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;&amp;  逻辑短路与  &amp;</span><br><span class="line">||  逻辑短路或  |</span><br><span class="line">!   取反</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、字符串String类型"><a href="#4、字符串String类型" class="headerlink" title="4、字符串String类型"></a>4、字符串String类型</h2><h3 id="4-1、String类"><a href="#4-1、String类" class="headerlink" title="4.1、String类"></a>4.1、String类</h3><p><strong>概念：</strong></p>
+<ul>
+<li>String属于引用类型</li>
+<li>String是一个<strong>final类</strong>，代表不可变的<strong>字符序列</strong>。</li>
+<li>String对象的字符内容是存储在一个**字符数组value[]**中的，但是不能把字符串和字符数组划上等号，</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span>[] value;   <span class="comment">// String 内部是一个用final定义的char[]数组</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>定义：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法一，使用字面量</span></span><br><span class="line">String str1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"><span class="comment">// 方法二，使用字符串创建</span></span><br><span class="line">String str2 = <span class="keyword">new</span> String(<span class="string">&quot;abc&quot;</span>);</span><br><span class="line"><span class="comment">// 方法三，使用字符数组创建</span></span><br><span class="line">String str3 = <span class="keyword">new</span> String(<span class="keyword">new</span> <span class="keyword">char</span>[]&#123;<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>字面量形式创建的字符串是放在<code>字符串常量池</code>的</li>
+<li>new出来的是放在<code>堆</code>中的，在常量池创建一个对象（存在即不用创建），然后引用</li>
+</ul>
+<p><strong>子串：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">String s2 = s1.substring(<span class="number">0</span>,<span class="number">3</span>);  <span class="comment">// s2 为 s1的一个子串</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>拼接：</strong></p>
+<ul>
+<li>两个字符串拼接，只要一个不为字面量，结果就在堆中产生</li>
+<li>拼接结果调用intern()方法，把结果放到常量池中<ul>
+<li>JDK1.8，无论结果失败成功，都返回常量池中的对象</li>
+<li>JDK1.6，只有成功返回常量池的对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s4 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;   <span class="comment">// 字符串常量拼接的原理是编译器优化</span></span><br><span class="line"></span><br><span class="line">String s5 = s1 + <span class="string">&quot;b&quot;</span>;   <span class="comment">// 字符串变量拼接的原理是StringBuilder，返回新对象</span></span><br><span class="line"><span class="comment">// String s5 = new StringBuilder().append(&quot;a&quot;).append(&quot;b&quot;).toString();</span></span><br><span class="line"><span class="comment">// 并且这种情况如果在循环体内不断进行，会很浪费资源</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>不可变的优劣：</strong></p>
+<p><strong>劣：</strong></p>
+<ul>
+<li>由于不可变，所以String每次想要改变时，只能通过定义新的字符串，这样效率低</li>
+</ul>
+<p><strong>优：</strong></p>
+<ul>
+<li>编译器可以让字符串共享（放在字符串常量池中）</li>
+</ul>
+<p>Java开发者认为共享更加高效，大多数情况下字符串都是比较等而很少修改</p>
+<p><strong>空串与Null串：</strong></p>
+<ul>
+<li>空串：长度为0的字符串，””，本质上是一个Java对象，只是没有内容</li>
+<li>Null串：没有和任何对象关联</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(str != <span class="keyword">null</span> &amp;&amp; str.length()!=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>码点与代码单元：</strong></p>
+<ul>
+<li>码点：每一个char</li>
+<li>代码单元：每个字符</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">&quot;🍺 很牛逼&quot;</span>;</span><br><span class="line"><span class="comment">// 输出char[]数组的长度 6</span></span><br><span class="line">System.out.println(str.length()); </span><br><span class="line"><span class="comment">// 输出实际字符个数 5</span></span><br><span class="line">System.out.println(str.codePointCount(<span class="number">0</span>,str.length()));</span><br><span class="line"><span class="comment">// 输出？，而不是空格 </span></span><br><span class="line">System.out.println(str.charAt(<span class="number">1</span>));</span><br><span class="line"><span class="comment">// 输出 57210，转换成int</span></span><br><span class="line">System.out.println(str.codePointAt(<span class="number">1</span>));</span><br><span class="line"><span class="comment">// 遍历每一个码点，然后转换回字符串 🍺 很牛逼     </span></span><br><span class="line"><span class="keyword">int</span>[] codes = str.codePoints().toArray();</span><br><span class="line">System.out.println(<span class="keyword">new</span> String(codes,<span class="number">0</span>,codes.length));</span><br></pre></td></tr></table></figure>
+
+<p>常用API：</p>
+<p><strong>转换成基本类型</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String a = “<span class="number">43</span>”; </span><br><span class="line"><span class="keyword">int</span> i = Integer.parseInt(a);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-2、StringBuilder"><a href="#4-2、StringBuilder" class="headerlink" title="4.2、StringBuilder"></a>4.2、StringBuilder</h3><ul>
+<li>StringBuilder继承了AbstractStringBuilder类</li>
+<li>AbstractStringBuilder类定义了char数组，但是没有指定为final，这意味着可变</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder str = <span class="keyword">new</span> StringBuilder(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">System.out.println(str.hashCode());</span><br><span class="line">str.append(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">System.out.println(str.hashCode());</span><br><span class="line"><span class="comment">// 两次的结果一致</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>常用API：</strong></p>
+<ul>
+<li>创建对象，注意<strong>只能通过new创建</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder()           <span class="comment">// 初始容量16的字符串缓冲区</span></span><br><span class="line">StringBuilder(<span class="keyword">int</span> size)   <span class="comment">// 构造指定容量的字符串缓冲区</span></span><br><span class="line">StringBuilder(String str) <span class="comment">// 将内容初始化为指定字符串内容</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">StringBuilder <span class="title">append</span><span class="params">(xxx)</span>：               <span class="comment">// 字符串拼接</span></span></span><br><span class="line"><span class="function">StringBuilder <span class="title">delete</span><span class="params">(<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span>   <span class="comment">// 删除指定位置的内容</span></span></span><br><span class="line"><span class="function">StringBuilder <span class="title">replace</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end, String str)</span>   <span class="comment">// 替换</span></span></span><br><span class="line"><span class="function">StringBuilder <span class="title">insert</span><span class="params">(<span class="keyword">int</span> offset, xxx)</span>     <span class="comment">// 在指定位置插入xxx</span></span></span><br><span class="line"><span class="function">StringBuilder <span class="title">reverse</span><span class="params">()</span>                   <span class="comment">// 把当前字符序列逆转</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(String str)</span>            <span class="comment">// 返回str出现的位置           </span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">substring</span><span class="params">(<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">length</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">char</span> <span class="title">charAt</span><span class="params">(<span class="keyword">int</span> n)</span>                 <span class="comment">// 获得指定位置的字符</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCharAt</span><span class="params">(<span class="keyword">int</span> n ,<span class="keyword">char</span> ch)</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3、StringBuffer"><a href="#4-3、StringBuffer" class="headerlink" title="4.3、StringBuffer"></a>4.3、StringBuffer</h3><ul>
+<li>线程安全</li>
+<li>同样的继承了AbstractStringBuilder类，</li>
+<li>大部分方法使用synchronized修饰</li>
+</ul>
+<h2 id="5、输入与输出"><a href="#5、输入与输出" class="headerlink" title="5、输入与输出"></a>5、输入与输出</h2><h3 id="5-1、输入"><a href="#5-1、输入" class="headerlink" title="5.1、输入"></a>5.1、输入</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取密码可以通过Console,这样输入不可见。并且一次只能读一行</span></span><br><span class="line">Scanner in = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line"><span class="comment">// 获取一行的输入 输入 124 d 读取 124 d</span></span><br><span class="line">String str1 = in.nextLine();</span><br><span class="line">System.out.println(str1);</span><br><span class="line"><span class="comment">// 读取到空格 输入 124 d 读取 124</span></span><br><span class="line">String str2 = in.next();</span><br><span class="line">System.out.println(str2);</span><br><span class="line"><span class="comment">// 判断数据是否还有其他词 true</span></span><br><span class="line">System.out.println(in.hasNext());</span><br><span class="line"><span class="comment">// 直接获取下一个</span></span><br><span class="line">System.out.println(in.next());</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2、输出"><a href="#5-2、输出" class="headerlink" title="5.2、输出"></a>5.2、输出</h3><p><strong>格式化输出</strong>：Java沿用了C语言的printf方法</p>
+<h2 id="6、控制流程"><a href="#6、控制流程" class="headerlink" title="6、控制流程"></a>6、控制流程</h2><h3 id="6-1、块作用域"><a href="#6-1、块作用域" class="headerlink" title="6.1、块作用域"></a>6.1、块作用域</h3><ul>
+<li>块是指由若干条Java语句组成的语句，并且用一对大括号括起来</li>
+<li>块定义了变量的作用域，一个块中（或者是块1中的块2）的变量<strong>不能同名</strong></li>
+</ul>
+<h3 id="6-2、条件语句"><a href="#6-2、条件语句" class="headerlink" title="6.2、条件语句"></a>6.2、条件语句</h3><h3 id="6-3、循环"><a href="#6-3、循环" class="headerlink" title="6.3、循环"></a>6.3、循环</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while()&#123;</span><br><span class="line"> 	程序体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-4、确定循环"><a href="#6-4、确定循环" class="headerlink" title="6.4、确定循环"></a>6.4、确定循环</h3><p>for循环等</p>
+<h3 id="6-5、多重选择"><a href="#6-5、多重选择" class="headerlink" title="6.5、多重选择"></a>6.5、多重选择</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Scanner in = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line"><span class="keyword">int</span> choice = in.nextInt();</span><br><span class="line"><span class="keyword">switch</span> (choice)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        System.out.println(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        System.out.println(<span class="string">&quot;2&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        System.out.println(<span class="string">&quot;Not in&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果没有break会一直往下执行</li>
+<li>case标签可以是如下（常量）<ul>
+<li>char、byte、short、int的常量表达式</li>
+<li>枚举常量</li>
+<li>字符串<strong>字面量</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="6-6、中断控制"><a href="#6-6、中断控制" class="headerlink" title="6.6、中断控制"></a>6.6、中断控制</h3><ul>
+<li>break</li>
+<li>continue</li>
+<li>goto（不建议使用）</li>
+</ul>
+<h2 id="7、大数"><a href="#7、大数" class="headerlink" title="7、大数"></a>7、大数</h2><p>有时候，基本的整数和浮点数不能满足需求，可以使用math包里的<strong>BigInteger</strong>和<strong>BigDecimal</strong></p>
+<h3 id="7-1、BigInteger"><a href="#7-1、BigInteger" class="headerlink" title="7.1、BigInteger"></a>7.1、BigInteger</h3><p><strong>获取大数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BigInteger bigInteger1 = BigInteger.valueOf(<span class="number">100</span>);   <span class="comment">// 通过数值</span></span><br><span class="line">BigInteger bigInteger2 = <span class="keyword">new</span> BigInteger(<span class="string">&quot;100&quot;</span>);     <span class="comment">// 通过构造方法</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>运算：</strong>大数运算并不能和普通的数一样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">abs</span><span class="params">()</span>              <span class="comment">// 绝对值的 BigInteger。 </span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">BigInteger <span class="title">add</span><span class="params">(BigInteger val)</span>       <span class="comment">// this + val </span></span></span><br><span class="line"><span class="function">BigInteger <span class="title">subtract</span><span class="params">(BigInteger val)</span>  <span class="comment">// this - val</span></span></span><br><span class="line"><span class="function">BigInteger <span class="title">multiply</span><span class="params">(BigInteger val)</span>  <span class="comment">// this * val</span></span></span><br><span class="line"><span class="function">BigInteger <span class="title">divide</span><span class="params">(BigInteger val)</span>    <span class="comment">// 除，只保留整数</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">BigInteger <span class="title">sqrt</span><span class="params">(BigInteger val)</span>      <span class="comment">// 平方根</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BigInteger</span><span class="params">(BigInteger val)</span>       <span class="comment">// 比较大小</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">BigInteger <span class="title">remainder</span><span class="params">(BigInteger val)</span>            <span class="comment">// 求余</span></span></span><br><span class="line"><span class="function">BigInteger[] <span class="title">divideAndRemainder</span><span class="params">(BigInteger val)</span> <span class="comment">// 返回数组 </span></span></span><br><span class="line"><span class="function">BigInteger <span class="title">pow</span><span class="params">(<span class="keyword">int</span> exponent)</span>    <span class="comment">// 返回其值为 (thisexponent) 的 BigInteger。    </span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2、BigDecimal"><a href="#7-2、BigDecimal" class="headerlink" title="7.2、BigDecimal"></a>7.2、BigDecimal</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获得</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BigDecimal</span><span class="params">(<span class="keyword">double</span> val)</span> </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BigDecimal</span><span class="params">(String val)</span> </span></span><br><span class="line"><span class="function"><span class="keyword">static</span> BigDecimal <span class="title">valueOf</span><span class="params">(<span class="keyword">long</span> val)</span>           <span class="comment">// 根据long获得</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> BigDecimal <span class="title">valueOf</span><span class="params">(<span class="keyword">long</span> val,<span class="keyword">int</span> scale)</span> <span class="comment">// 参数依次为3,1  则结果 3.0    </span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> BigDecimal <span class="title">valueOf</span><span class="params">(<span class="keyword">double</span> val)</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function"><span class="comment">// 加减乘除    </span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigDecimal <span class="title">add</span><span class="params">(BigDecimal augend)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigDecimal <span class="title">subtract</span><span class="params">(BigDecimal subtrahend)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigDecimal <span class="title">multiply</span><span class="params">(BigDecimal multiplicand)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigDecimal <span class="title">divide</span><span class="params">(BigDecimal divisor, <span class="keyword">int</span> scale, <span class="keyword">int</span> roundingMode)</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="8、数组"><a href="#8、数组" class="headerlink" title="8、数组"></a>8、数组</h2><h3 id="8-1、概念"><a href="#8-1、概念" class="headerlink" title="8.1、概念"></a>8.1、概念</h3><ol>
+<li>数组(Array)，是多个<strong>相同类型数据</strong>按一定顺序排列 的集合，并使用一个名字命名，并通过<strong>编号的方式管理</strong></li>
+<li>数组本身是引用数据类型，而数组中的元素可以是任何数据类型</li>
+<li>数据占用连续的空间地址，长度一旦确定，就<strong>不能修改</strong></li>
+</ol>
+<h3 id="8-2、创建数组"><a href="#8-2、创建数组" class="headerlink" title="8.2、创建数组"></a>8.2、创建数组</h3><p><strong>声明：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[];  <span class="comment">// 注意：声明数组时不能指定其长度</span></span><br><span class="line"><span class="keyword">int</span>[] a;  <span class="comment">// 这两种方式都可以</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>初始化</strong></p>
+<ul>
+<li><p><strong>动态初始化：</strong>初始化完毕再赋值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法一</span></span><br><span class="line"><span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>]; arr[<span class="number">0</span>] = <span class="number">3</span>;</span><br><span class="line"><span class="comment">// 方法二</span></span><br><span class="line">String names[];   names = <span class="keyword">new</span> String[<span class="number">3</span>];  names[<span class="number">0</span>] = “钱学森”;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>静态初始化：</strong>初始化时就赋值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法一</span></span><br><span class="line"><span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123; <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>&#125;;  </span><br><span class="line"><span class="comment">// 方法二</span></span><br><span class="line"><span class="keyword">int</span>[] arr = &#123;<span class="number">3</span>,<span class="number">9</span>,<span class="number">8</span>&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>Java允许有长度为0的数组，与null不同</li>
+<li>定义并<strong>用运算符new为之分配空间</strong>后，才可以引用数组中的每个元素</li>
+<li>数组是引用类型，<strong>它的元素相当于类的成员变量</strong>，因此数组一经分配空间，其中的每个元素也被按照成员变量同样的方式被隐式初始化，初始化默认值不尽相同。<strong>默认值 基本类型大部分为0，引用类型为null</strong></li>
+</ul>
+<h3 id="8-3、访问数组"><a href="#8-3、访问数组" class="headerlink" title="8.3、访问数组"></a>8.3、访问数组</h3><ul>
+<li>for循环</li>
+<li>for each循环</li>
+<li>Arrays.toString(a) 方法把数组转换成 [1,2,3] 这种形式的字符串</li>
+</ul>
+<h3 id="8-4、数组拷贝"><a href="#8-4、数组拷贝" class="headerlink" title="8.4、数组拷贝"></a>8.4、数组拷贝</h3><ul>
+<li>调用 Arrays.copyOf ，这样新数组与原数组就没有关系了</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> b[] = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line"><span class="keyword">int</span>[] a = Arrays.copyOf(b,<span class="number">3</span>);  <span class="comment">// 参数2为新数组长度</span></span><br><span class="line">a[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">System.out.println(a[<span class="number">0</span>]);</span><br><span class="line">System.out.println(b[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-5、数组排序"><a href="#8-5、数组排序" class="headerlink" title="8.5、数组排序"></a>8.5、数组排序</h3><p>对应数值型的数组，可以使用 Arrays.sort() 进行排序，算法为<strong>优化的快排</strong></p>
+<h3 id="8-6、多维数组"><a href="#8-6、多维数组" class="headerlink" title="8.6、多维数组"></a>8.6、多维数组</h3><ul>
+<li><p>从数组底层的运行机制来看，其实<strong>没有</strong>多维数组。</p>
+</li>
+<li><p>二维数组[][]：数组中的数组</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 动态初始化：规则数组</span></span><br><span class="line"><span class="keyword">int</span>[][] arr = <span class="keyword">new</span> <span class="keyword">int</span> [<span class="number">3</span>][<span class="number">2</span>];</span><br><span class="line"><span class="comment">// 动态初始化：不规则数组</span></span><br><span class="line"><span class="keyword">int</span>[][] arr = <span class="keyword">new</span> <span class="keyword">int</span> [<span class="number">3</span>][]; arr[<span class="number">0</span>] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>];</span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">int</span>[][] arr = <span class="keyword">new</span> <span class="keyword">int</span>[][]&#123;&#123;<span class="number">3</span>,<span class="number">8</span>,<span class="number">2</span>&#125;,&#123;<span class="number">2</span>,<span class="number">7</span>&#125;,&#123;<span class="number">9</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">6</span>&#125;&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-7、Arrays工具类"><a href="#8-7、Arrays工具类" class="headerlink" title="8.7、Arrays工具类"></a>8.7、Arrays工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span>[] b)</span>   <span class="comment">//  判断相等</span></span></span><br><span class="line"><span class="function">String <span class="title">toString</span><span class="params">(<span class="keyword">int</span>[] a)</span>          </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fill</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> val)</span>        <span class="comment">// 指定值添加到数组</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a)</span>                <span class="comment">// 排序</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> key)</span> <span class="comment">// 对排序后的数组进行二分法检索指定的值</span></span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copyOf</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> end)</span> </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copyOf</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span> </span></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E4%B8%80%20)%20%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/">http://example.com/2021/06/21/JavaSE/JavaSE%20(%20%E4%B8%80%20)%20%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/20/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL/"><img class="prev-cover" src="/img/cover/0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL基础</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/21/JavaSE/JavaSE%20(%20%E4%BA%8C%20)%20%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/"><img class="next-cover" src="/img/cover/2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JAVASE(二):类和对象</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">1、数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E6%95%B4%E5%9E%8B"><span class="toc-text">1.1、整型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B"><span class="toc-text">1.2、浮点类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E3%80%81char%E7%B1%BB%E5%9E%8B"><span class="toc-text">1.3、char类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4%E3%80%81boolean%E7%B1%BB%E5%9E%8B"><span class="toc-text">1.4、boolean类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-text">1.5、数值类型之间的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6%E3%80%81%E8%BF%9B%E5%88%B6"><span class="toc-text">1.6、进制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F"><span class="toc-text">2、变量和常量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E5%8F%98%E9%87%8F"><span class="toc-text">2.1、变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E5%B8%B8%E9%87%8F"><span class="toc-text">2.2、常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E6%9E%9A%E4%B8%BE%E5%AF%B9%E8%B1%A1"><span class="toc-text">2.3、枚举对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%95%B0%E5%AD%97%E8%AE%A1%E7%AE%97"><span class="toc-text">3、数字计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">3.1、算术运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8F%98%E9%87%8F"><span class="toc-text">3.2、数学函数与变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81%E7%BB%93%E5%90%88%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">3.4、结合赋值运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5%E3%80%81%E8%87%AA%E5%A2%9E%E5%92%8C%E8%87%AA%E5%87%8F"><span class="toc-text">3.5、自增和自减</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6%E3%80%81%E4%BD%8D%E8%BF%90%E7%AE%97"><span class="toc-text">3.6、位运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7%E3%80%81%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="toc-text">3.7、逻辑运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2String%E7%B1%BB%E5%9E%8B"><span class="toc-text">4、字符串String类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81String%E7%B1%BB"><span class="toc-text">4.1、String类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81StringBuilder"><span class="toc-text">4.2、StringBuilder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81StringBuffer"><span class="toc-text">4.3、StringBuffer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA"><span class="toc-text">5、输入与输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E8%BE%93%E5%85%A5"><span class="toc-text">5.1、输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E8%BE%93%E5%87%BA"><span class="toc-text">5.2、输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B"><span class="toc-text">6、控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1%E3%80%81%E5%9D%97%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="toc-text">6.1、块作用域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2%E3%80%81%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="toc-text">6.2、条件语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3%E3%80%81%E5%BE%AA%E7%8E%AF"><span class="toc-text">6.3、循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4%E3%80%81%E7%A1%AE%E5%AE%9A%E5%BE%AA%E7%8E%AF"><span class="toc-text">6.4、确定循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5%E3%80%81%E5%A4%9A%E9%87%8D%E9%80%89%E6%8B%A9"><span class="toc-text">6.5、多重选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6%E3%80%81%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6"><span class="toc-text">6.6、中断控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E5%A4%A7%E6%95%B0"><span class="toc-text">7、大数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1%E3%80%81BigInteger"><span class="toc-text">7.1、BigInteger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2%E3%80%81BigDecimal"><span class="toc-text">7.2、BigDecimal</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E6%95%B0%E7%BB%84"><span class="toc-text">8、数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-text">8.1、概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2%E3%80%81%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84"><span class="toc-text">8.2、创建数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3%E3%80%81%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84"><span class="toc-text">8.3、访问数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4%E3%80%81%E6%95%B0%E7%BB%84%E6%8B%B7%E8%B4%9D"><span class="toc-text">8.4、数组拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-5%E3%80%81%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F"><span class="toc-text">8.5、数组排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-6%E3%80%81%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="toc-text">8.6、多维数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-7%E3%80%81Arrays%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-text">8.7、Arrays工具类</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
