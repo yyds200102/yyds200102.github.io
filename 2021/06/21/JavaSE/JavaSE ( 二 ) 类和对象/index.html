@@ -145,11 +145,13 @@
     if (fontSizeVal !== undefined) {
       document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
     }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/2.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JAVASE(二):类和对象</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-21T03:53:03.000Z" title="发表于 2021-06-21 11:53:03">2021-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-21T03:53:05.000Z" title="更新于 2021-06-21 11:53:05">2021-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">11k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>40分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JAVASE(二):类和对象"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、类和对象概念"><a href="#1、类和对象概念" class="headerlink" title="1、类和对象概念"></a>1、类和对象概念</h2><h3 id="1-1、面向对象与面向过程"><a href="#1-1、面向对象与面向过程" class="headerlink" title="1.1、面向对象与面向过程"></a>1.1、面向对象与面向过程</h3><p><strong>面向对象与面向过程</strong></p>
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/2.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JAVASE(二):类和对象</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-21T03:53:03.000Z" title="发表于 2021-06-21 11:53:03">2021-06-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-21T03:53:05.000Z" title="更新于 2021-06-21 11:53:05">2021-06-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">11.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>41分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JAVASE(二):类和对象"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、类和对象概念"><a href="#1、类和对象概念" class="headerlink" title="1、类和对象概念"></a>1、类和对象概念</h2><h3 id="1-1、面向对象与面向过程"><a href="#1-1、面向对象与面向过程" class="headerlink" title="1.1、面向对象与面向过程"></a>1.1、面向对象与面向过程</h3><p><strong>面向对象与面向过程</strong></p>
 <ul>
 <li>面向过程，强调的是功能行为，以函数为最小单位，考虑怎么做。</li>
 <li>面向对象，<code>将功能封装进对象</code>，强调具备了功能的对象，以类/对象为最小单位，考虑谁来做。</li>
 </ul>
+<p>面向过程性能高，但是面向对象<strong>易维护、易复用、易扩展。</strong></p>
+<p><strong>Java 性能差</strong>：主要原因并不是因为它是⾯向对象语言，而是 Java 是半编译语⾔，最终的执行代码并不是可以直接被 CPU 执⾏的⼆进制机械码。而面向过程语言大多都是直接编译成机械码在电脑上执行，并且其它⼀些面向过程的脚本语⾔性能也并不⼀定比 Java 好</p>
 <p><strong>面向对象三大特征：</strong></p>
 <ul>
 <li>封装</li>
@@ -252,13 +254,7 @@
 <p>参数传递机制</p>
 </blockquote>
 <p>Java里方法的<strong>参数传递</strong>方式只有一种：值传递。 </p>
-<ul>
-<li>将实际参数值的副本（复制品）传入方法内，而参数本身不受影响。 <ul>
-<li>基本数据类型：传递值</li>
-<li>引用数据类型：传递地址值</li>
-</ul>
-</li>
-</ul>
+<p><strong>将实际参数值的副本（复制品）传入方法内，而参数本身不受影响。</strong> </p>
 <blockquote>
 <p>方法重载</p>
 </blockquote>
@@ -303,7 +299,7 @@
 <h3 id="2-6、static"><a href="#2-6、static" class="headerlink" title="2.6、static"></a>2.6、static</h3><p><strong>静态字段：</strong>被static修饰的静态字段，将不再属于某个对象，而是属于类被共享，<strong>可以同时被类和对象调用</strong></p>
 <p>注意：Java叫做类字段，静态字段只是沿用了C++的叫法</p>
 <p><strong>静态常量：</strong></p>
-<p><strong>静态方法：</strong>同上，静态方法常用于工厂方法的实现，main方法也是一个静态方法，<strong>只能被类调用而无法被对象调用</strong>，由于独立于方法，所以不能使用this和super</p>
+<p><strong>静态方法：</strong>同上，静态方法常用于工厂方法的实现，main方法也是一个静态方法，可以被类调用，由于独立于类，所以不能使用this和super，除此之外，静态方法不能调用非静态字段。</p>
 <h3 id="2-7、代码块"><a href="#2-7、代码块" class="headerlink" title="2.7、代码块"></a>2.7、代码块</h3><p>三种初始化数据字段的方法</p>
 <ul>
 <li>构造器设置值</li>
@@ -349,19 +345,12 @@
 <h3 id="3-2、重写方法"><a href="#3-2、重写方法" class="headerlink" title="3.2、重写方法"></a>3.2、重写方法</h3><p>可以看到，上面例子中子类父类的print方法名一致，这样就是重写方法</p>
 <p><strong>重写规则</strong></p>
 <ul>
-<li><p>方法必须具有相同的<strong>名称和参数</strong></p>
-</li>
-<li><p>返回值类型要比父类的小</p>
-</li>
-<li><p><strong>访问权限要比父类的高或者相等</strong></p>
-</li>
-<li><p>抛出的异常不能比父类的更大</p>
-</li>
-<li><p>无法重写static方法，因为static方法是类方法，不是成员方法</p>
-</li>
-<li><p>无法重写私有方法</p>
-</li>
+<li>方法必须具有相同的<strong>名称和参数</strong></li>
+<li>返回值类型、异常类型要和父类一致，或为父类的子类</li>
+<li><strong>访问权限要比父类的高或者相等</strong></li>
+<li>无法重写static、final、private方法，因为static方法是类方法，不是成员方法</li>
 </ul>
+<p><strong>注意：</strong>重写发生在发生在运行期间</p>
 <h3 id="3-3、子类构造器"><a href="#3-3、子类构造器" class="headerlink" title="3.3、子类构造器"></a>3.3、子类构造器</h3><p><strong>注意：子类初始化，必须提供父类构造的实现</strong>，几种调用方式如下</p>
 <ul>
 <li>父类含有无参构造时：会自动调用父类构造方法</li>
@@ -376,7 +365,8 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Manage</span> <span class="keyword">extends</span> <span class="title">Employee</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Manage</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 调用其他构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Manage</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-4、多态与类型转换"><a href="#3-4、多态与类型转换" class="headerlink" title="3.4、多态与类型转换"></a>3.4、多态与类型转换</h3><p><strong>对象类型转换</strong></p>
+<h3 id="3-4、多态与类型转换"><a href="#3-4、多态与类型转换" class="headerlink" title="3.4、多态与类型转换"></a>3.4、多态与类型转换</h3><p><strong>概念：</strong>多态就是指程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程时并不确定，而是在程序运行期间才确定，即⼀个引用变量到底会指向哪个类的实例对象，该引用变量发出的方法调用到底是哪个类中实现的方法，必须在由程序运行期间才能决定。</p>
+<p><strong>对象类型转换</strong></p>
 <ol>
 <li>向上转型：父类的引用指向子类的对象</li>
 <li>向下转型：子类的引用指向父类的对象（必须强制转换）</li>
@@ -409,7 +399,7 @@
 <ul>
 <li>数组对象向上转型可以会出现一些问题</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Employee[] employees = <span class="keyword">new</span> Employee[<span class="number">3</span>];</span><br><span class="line">        Manage[] manages = <span class="keyword">new</span> Manage[<span class="number">3</span>];</span><br><span class="line">        <span class="comment">// 子类引用指向父类对象</span></span><br><span class="line">        employees = manages;</span><br><span class="line">        <span class="comment">// 注意此时父类子类引用同一个，相当于父类对象指向子类而没有强转，报错</span></span><br><span class="line">        employees[<span class="number">0</span>] = <span class="keyword">new</span> Employee(<span class="string">&quot;Tom&quot;</span>);</span><br><span class="line">        manages[<span class="number">0</span>].print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Employee[] employees = <span class="keyword">new</span> Employee[<span class="number">3</span>];</span><br><span class="line">        Manage[] manages = <span class="keyword">new</span> Manage[<span class="number">3</span>];</span><br><span class="line">        <span class="comment">// 父类引用指向子类对象，向上转型</span></span><br><span class="line">        employees = manages;</span><br><span class="line">        <span class="comment">// 注意此时父类子类引用同一个，相当于父类对象指向子类而没有强转，报错</span></span><br><span class="line">        employees[<span class="number">0</span>] = <span class="keyword">new</span> Employee(<span class="string">&quot;Tom&quot;</span>);</span><br><span class="line">        manages[<span class="number">0</span>].print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="3-5、方法"><a href="#3-5、方法" class="headerlink" title="3.5、方法"></a>3.5、方法</h3><p><strong>通过子类的对象调用 a 方法，</strong></p>
 <ol>
@@ -756,6 +746,10 @@
 
 <h3 id="8-5、对象克隆"><a href="#8-5、对象克隆" class="headerlink" title="8.5、对象克隆"></a>8.5、对象克隆</h3><p><strong>问题：</strong>众所周知，把A对象赋给B对象，只是传递了引用，二者实际还是指向同一个地址，此时B对象的改变会引起A对象的改变</p>
 <p><strong>解决</strong>：通过克隆（实现cloneable接口）可以产生一个新的对象，并且完全脱离旧对象而存在</p>
+<ul>
+<li>浅拷⻉：对基本数据类型进⾏值传递，对引⽤数据类型进⾏引⽤传递般的拷⻉，此为浅拷</li>
+<li>深拷⻉：对基本数据类型进⾏值传递，对引⽤数据类型，创建⼀个新的对象，并复制其内容</li>
+</ul>
 <blockquote>
 <p>浅克隆</p>
 </blockquote>
@@ -780,7 +774,8 @@
 <li>我们可以在一个接口上使用 @FunctionalInterface 注解，这样做可以检 查它是否是一个函数式接口。同时 javadoc 也会包含一条声明，说明这个 接口是一个函数式接口。</li>
 <li><strong>Lambda表达式就是一个函数式接口的实例。</strong></li>
 </ol>
-<h3 id="9-2、Java内置四大核心函数式接口"><a href="#9-2、Java内置四大核心函数式接口" class="headerlink" title="9.2、Java内置四大核心函数式接口"></a>9.2、Java内置四大核心函数式接口</h3><table>
+<h3 id="9-2、Java内置四大核心函数式接口"><a href="#9-2、Java内置四大核心函数式接口" class="headerlink" title="9.2、Java内置四大核心函数式接口"></a>9.2、Java内置四大核心函数式接口</h3><p><img src="C:\Users\admin\Desktop\JavaSE\img\JavaSE\3.jpg"></p>
+<table>
 <thead>
 <tr>
 <th></th>
