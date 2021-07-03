@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>设计模式:规则 | Notes</title><meta name="keywords" content="设计模式"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="设计模式的规则以及UML简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式:规则">
+<meta property="og:url" content="http://example.com/2021/06/28/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99%E5%92%8CUML%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="设计模式的规则以及UML简介">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/cover/14.jpg">
+<meta property="article:published_time" content="2021-06-28T02:53:03.000Z">
+<meta property="article:modified_time" content="2021-06-28T02:56:05.000Z">
+<meta property="article:author" content="Bug">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/cover/14.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/06/28/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99%E5%92%8CUML%E7%AE%80%E4%BB%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Bug","link":"链接: ","source":"来源: Notes","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '设计模式:规则',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-28 10:56:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">38</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/14.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">设计模式:规则</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-28T02:53:03.000Z" title="发表于 2021-06-28 10:53:03">2021-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-28T02:56:05.000Z" title="更新于 2021-06-28 10:56:05">2021-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">23种设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="设计模式:规则"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、概念"><a href="#1、概念" class="headerlink" title="1、概念"></a>1、概念</h2><h3 id="1-1、概念"><a href="#1-1、概念" class="headerlink" title="1.1、概念"></a>1.1、概念</h3><p>设计模式是为了让程序(软件)，具有更好的以下特性</p>
+<ol>
+<li>代码重用性 (即：相同功能的代码，不用多次编写)</li>
+<li>可读性 (即：编程规范性, 便于其他程序员的阅读和理解)</li>
+<li>可扩展性 (即：当需要增加新的功能时，非常的方便，称为可维护)</li>
+<li>可靠性 (即：当我们增加新的功能后，对原来的功能没有影响)</li>
+<li>使程序呈现<strong>高内聚</strong>，<strong>低耦合</strong>的特性</li>
+</ol>
+<h3 id="1-2、分类"><a href="#1-2、分类" class="headerlink" title="1.2、分类"></a>1.2、分类</h3><ol>
+<li><strong>创建型模式</strong>：单例模式、抽象工厂模式、原型模式、建造者模式、<strong>工厂模式</strong>。</li>
+<li><strong>结构型模式</strong>：适配器模式、桥接模式、<strong>装饰模式</strong>、组合模式、外观模式、享元模式、<strong>代理模式</strong>。</li>
+<li><strong>行为型模式</strong>：模版方法模式、命令模式、访问者模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式（Interpreter模式）、状态模式、策略模式、职责链模式(责任链模式)。</li>
+</ol>
+<h2 id="2、七大设计原则"><a href="#2、七大设计原则" class="headerlink" title="2、七大设计原则"></a>2、七大设计原则</h2><h3 id="2-1、单一职责原则"><a href="#2-1、单一职责原则" class="headerlink" title="2.1、单一职责原则"></a>2.1、单一职责原则</h3><p><strong>概念：</strong>对类来说的，即一个类应该只负责一项职责。</p>
+<blockquote>
+<p>不使用规则</p>
+</blockquote>
+<p>如类A负责两个不同职责：职责1，职责2。<code>当职责1需求变更而改变A时，可能造成职责2执行错误</code>，所以需要将类A的粒度分解为 A1，A2</p>
+<h3 id="2-2、接口隔离原则"><a href="#2-2、接口隔离原则" class="headerlink" title="2.2、接口隔离原则"></a>2.2、接口隔离原则</h3><p><strong>概念：</strong>客户端不应该依赖它不需要的接口，即一个类对另一个类的依赖应该建立在最小的接口上</p>
+<p><strong>总结：</strong>减少接口的粒度，保证一个类能尽可能使用接口的全部</p>
+<blockquote>
+<p>不使用接口隔离原则</p>
+</blockquote>
+<p>假设类A通过接口Interface1依赖类B，类C通过接口Interface1依赖类D，</p>
+<p>此时类A只需要使用interface1的部分方法，但却必须实现interface1的全部的方法，这样就造成了浪费。</p>
+<h3 id="2-3、依赖倒转原则"><a href="#2-3、依赖倒转原则" class="headerlink" title="2.3、依赖倒转原则"></a>2.3、依赖倒转原则</h3><p><strong>概念：</strong>一个方法依赖（参数）的是一个接口，这样调用方法时可以根据需要选择合适的参数，（接口的实现类）去完成合适的方法。即不依赖具体细节而是依赖抽象。</p>
+<p><strong>总结：</strong>依赖接口或者父类，不要依赖具体的类。</p>
+<blockquote>
+<p>没有使用依赖倒转原则</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DependencyInversion</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Person person = <span class="keyword">new</span> Person();</span><br><span class="line">        person.receive(<span class="keyword">new</span> Email());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Email</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello,World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 完成接收消息的功能</span></span><br><span class="line"><span class="comment">// 只能接收Email的消息，如果是微信就必须再次写其他类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">receive</span><span class="params">(Email email)</span></span>&#123;</span><br><span class="line">        System.out.println(email.getInfo());</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用依赖倒转原则</p>
+</blockquote>
+<ul>
+<li>可以看到<strong>方法的参数</strong>不再是具体的实现类，<strong>而是接口</strong></li>
+<li>调用方法传递的参数是**<code>接口的具体实现类</code>**</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DependencyInversion</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Person person = <span class="keyword">new</span> Person();</span><br><span class="line">        person.receive(<span class="keyword">new</span> Email());</span><br><span class="line">        person.receive(<span class="keyword">new</span> WeChat());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IReceiver</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Email</span> <span class="keyword">implements</span> <span class="title">IReceiver</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello,World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WeChat</span> <span class="keyword">implements</span> <span class="title">IReceiver</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  <span class="string">&quot;WeChat&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 完成接收消息的功能</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">receive</span><span class="params">(IReceiver receiver)</span></span>&#123;</span><br><span class="line">        System.out.println(receiver.getInfo());</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4、里氏替换原则"><a href="#2-4、里氏替换原则" class="headerlink" title="2.4、里氏替换原则"></a>2.4、里氏替换原则</h3><p><strong>概念：</strong>使用父类的地方，使用子类的方法，结果没有变化（没有重写方法）</p>
+<p><strong>总结：</strong>继承时，在子类中尽量不要重写父类的方法</p>
+<h3 id="2-5、开闭原则"><a href="#2-5、开闭原则" class="headerlink" title="2.5、开闭原则"></a>2.5、开闭原则</h3><p><strong>概念：</strong>一个软件实体如类，模块和函数应该对扩展开放(对提供方)，对修改关闭(对使用方)。当软件需要变化时，尽量通过扩展，而不是通过修改。</p>
+<p><strong>总结：</strong>对扩展开放，对修改关闭。</p>
+<blockquote>
+<p>未遵循开闭原则</p>
+</blockquote>
+<ul>
+<li>此时如果需要增加功能（画其它图形），那么处理新增一个图形类继承shape外</li>
+<li>GraphicEditor画图的类也需要进行修改</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Ocp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        GraphicEditor g = <span class="keyword">new</span> GraphicEditor();</span><br><span class="line">        g.drawCircle(<span class="keyword">new</span> Rectangle());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphicEditor</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 根据接收的对象来判断对象并且绘制图形</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawShape</span><span class="params">(Shape s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s.m_type == <span class="number">1</span>)</span><br><span class="line">            drawRectangle(s);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (s.m_type == <span class="number">2</span>)  <span class="comment">// 判断多次，</span></span><br><span class="line">            drawCircle(s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawRectangle</span><span class="params">(Shape r)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;矩形&quot;</span>);&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawCircle</span><span class="params">(Shape r)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;圆形&quot;</span>);</span><br><span class="line">    &#125;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m_type;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 定义各种图形</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化父类的成员变量</span></span><br><span class="line">    Rectangle() &#123;</span><br><span class="line">        <span class="keyword">super</span>.m_type = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    Circle() &#123;</span><br><span class="line">        <span class="keyword">super</span>.m_type = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>遵循</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Ocp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        GraphicEditor g = <span class="keyword">new</span> GraphicEditor();</span><br><span class="line">        g.draw(<span class="keyword">new</span> Rectangle());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GraphicEditor</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(Shape shape)</span> </span>&#123;</span><br><span class="line">        shape.draw();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;绘制长方形&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6、迪米特法则"><a href="#2-6、迪米特法则" class="headerlink" title="2.6、迪米特法则"></a>2.6、迪米特法则</h3><p><strong>概念：</strong>迪米特法则(<strong>Demeter Principle</strong>)又叫最少知道原则，即一个类对自己依赖的类知道的越少越好。也就是说，对于被依赖的类不管多么复杂，都尽量将逻辑封装在类的内部。对外除了提供的public 方法，不对外泄露任何信息</p>
+<p><strong>总结：</strong>隐藏自己的内部复杂结构，只给外部提供简单的接口</p>
+<h3 id="2-7、合成复用原则"><a href="#2-7、合成复用原则" class="headerlink" title="2.7、合成复用原则"></a>2.7、合成复用原则</h3><p><strong>概念：</strong>原则是尽量使用**<code>合成/聚合</code>**的方式，而不是使用继承</p>
+<p>让B调用A的方法</p>
+<ol>
+<li>B继承A，这样B和A之间的耦合性高</li>
+<li>B通过构造方法，获得A的对象实例（组合、合成）</li>
+<li>B设置一个属性，属性就为A的实例，（聚合）</li>
+<li>B通过方法参数，接收获得A的对象实例</li>
+</ol>
+<p><strong>总结：</strong>通过合成，聚合的方式调用其他对象，而不是通过继承。</p>
+<h3 id="2-8、总结"><a href="#2-8、总结" class="headerlink" title="2.8、总结"></a>2.8、总结</h3><ol>
+<li>找出应用中可能需要变化之处，把它们独立出来，不要和那些不需要变化的代码混在一起。</li>
+<li>针对接口编程，而不是针对实现编程。</li>
+<li>为了交互对象之间的松耦合设计而努力</li>
+</ol>
+<h2 id="3、UML图简介"><a href="#3、UML图简介" class="headerlink" title="3、UML图简介"></a>3、UML图简介</h2><p>3.1、概念</p>
+<ol>
+<li>UML——Unified modeling language UML (<strong>统一建模语言</strong>)，是一种用于软件系统分析和设计的语言工具，它用于帮助软件开发人员进行思考和记录思路的结果</li>
+<li>UML本身是一套符号的规定，就像数学符号和化学符号一样，这些符号用于描述软件模型中的各个元素和他们之间的关系，比如类、接口、实现、泛化、依赖、组合、聚合等，如右图:</li>
+<li>使用UML来建模，常用的工具有 Rational Rose , 也可以使用一些插件来建模</li>
+</ol>
+<p><img src="/img/23/1.jpg"></p>
+<h3 id="3-2、分类"><a href="#3-2、分类" class="headerlink" title="3.2、分类"></a>3.2、分类</h3><ol>
+<li>用例图</li>
+<li>静态结构图：类图、对象图、包图、组件图、部署图</li>
+<li>动态行为图：交互图（时序图与协作图）、状态图、活动图</li>
+</ol>
+<h3 id="3-3、用例图"><a href="#3-3、用例图" class="headerlink" title="3.3、用例图"></a>3.3、用例图</h3><p>由参与者、用例，边界以及它们之间的关系 构成的用于<strong>描述系统功能</strong>的视图</p>
+<p><strong>用例图中包含以下四种关系：</strong></p>
+<ul>
+<li>包含关系使用符号《include》，想要查看订单列表，前提是需要先登录。<strong>（必须）</strong></li>
+<li>扩展关系使用符号《extend》，基于查询订单列表的功能，可以增加一个导出数据的功能<strong>（非必须）</strong></li>
+<li>泛化关系：子用例**<code>继承</code><strong>父用例</strong>所有结构、行为和关系**，如下图请假审批和审批</li>
+<li>关联关系：<strong>参与者与用例</strong>之间的关系，图中的部门领导和审批</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>包含和扩展：只能是用例之间的关系</li>
+<li>关联关系：参与者与用例之间的关系</li>
+</ul>
+<p><img src="/img/23/2.jpg"></p>
+<h3 id="3-4、类图"><a href="#3-4、类图" class="headerlink" title="3.4、类图"></a>3.4、类图</h3><p>描述类与类之间的关系的，是UML图中最<strong>核心</strong>的</p>
+<p><strong>类与类之间的关系</strong></p>
+<blockquote>
+<p>依赖关系</p>
+</blockquote>
+<ul>
+<li>【依赖关系】是一种使用关系，即一个类的实现需要另一个类的协助。</li>
+<li>【箭头指向】带普通箭头的虚线，普通箭头指向被使用者。</li>
+<li>老司机只管开车，车是谁的不重要，给什么车开什么车。</li>
+</ul>
+<p><img src="/img/23/11.jpg"></p>
+<blockquote>
+<p>泛化关系（继承）</p>
+</blockquote>
+<ul>
+<li>【泛化关系】是一种**<code>继承关系</code><strong>，表示子类继承父类的</strong>所有特征和行为**。</li>
+<li>【箭头指向】带三角箭头的实线，箭头指向父类。</li>
+<li>圆是形状的一个子类</li>
+</ul>
+<p><img src="/img/23/12.jpg"></p>
+<blockquote>
+<p>实现关系</p>
+</blockquote>
+<ul>
+<li>【实现关系】是一种类与接口的关系，表示类是接口所有特征和行为的实现。</li>
+<li>【箭头指向】带三角箭头的虚线，箭头指向接口。</li>
+<li>Alipay继承了IPay这个方式</li>
+</ul>
+<p><img src="/img/23/13.jpg"></p>
+<blockquote>
+<p>关联关系</p>
+</blockquote>
+<ul>
+<li>【关联关系】是一种拥有关系，它使得一个类知道另一个类的<strong>属性和方法</strong>。</li>
+<li>【代码体现】成员变量</li>
+<li>【箭头指向】带普通箭头的实线，指向被拥有者。双向的关联可以有两个箭头，或者没有箭头。单向的关联有一个箭头。</li>
+</ul>
+<p><strong>关系的特性</strong></p>
+<ul>
+<li><p><strong><code>特殊的依赖关系</code></strong></p>
+</li>
+<li><p>导航性：可以单向或者多项</p>
+</li>
+<li><p>多重性：“1”（表示有且仅有一个），“0…”（表示0个或者多个），“0，1”（表示0个或者一个），“n…m”(表示n到 m个都可以),“m…*”（表示至少m个）</p>
+</li>
+</ul>
+<p><img src="/img/23/14.jpg"></p>
+<blockquote>
+<p>聚合关系：</p>
+</blockquote>
+<ul>
+<li>聚合关系是关联关系的特例，表示的是<strong>整体和部分</strong>的关系，且部分可以离开整体而单独存在</li>
+<li>关联和聚合在语法上无法区分，必须考察具体的<strong>逻辑关系</strong></li>
+<li>电脑有键盘才能输入信息，电脑是整体，键盘是部分，键盘也可以离开电脑，单纯的拿去敲。、</li>
+</ul>
+<p><img src="/img/23/15.jpg"></p>
+<blockquote>
+<p>组合关系：</p>
+</blockquote>
+<ul>
+<li>也是整体与部分的关系，但是<strong>部分不能离开整体而单独存在</strong></li>
+<li>组合关系是关联关系的一种，是比聚合关系还要强的关系。</li>
+<li>翅膀依赖鸟存在</li>
+</ul>
+<p><img src="/img/23/16.jpg"></p>
+<p>注意：</p>
+<ul>
+<li>A使用了B和C则表示之间存在依赖关系</li>
+<li>依赖关系可以具体到<strong>关联</strong>情况</li>
+<li>若A由B和C组成，可分则表示聚合，不可分则表示组合</li>
+</ul>
+<h3 id="3-5、对象图"><a href="#3-5、对象图" class="headerlink" title="3.5、对象图"></a>3.5、对象图</h3><ul>
+<li>【概念】对象图是<strong>类图的一个实例</strong>，是系统在某个时间点的详细状态的快照。</li>
+<li>【目的】用来表示两个或者多个对象之间在某一时刻之间的关系。</li>
+</ul>
+<p>表示某时间点bat这个公司有一个研发部，一个销售部，两个部门只有一个人iisheng</p>
+<p><img src="/img/23/10.jpg"></p>
+<h3 id="3-6、包图"><a href="#3-6、包图" class="headerlink" title="3.6、包图"></a>3.6、包图</h3><ul>
+<li>【概念】描绘了系统在包层面上的结构设计。</li>
+<li>【目的】用来表示包和包之间的依赖关系。</li>
+</ul>
+<h3 id="3-7、组件图"><a href="#3-7、组件图" class="headerlink" title="3.7、组件图"></a>3.7、组件图</h3><ul>
+<li>【概念】描绘了系统中组件提供的、需要的接口、端口等，以及它们之间的关系。</li>
+<li>【目的】用来展示各个组件之间的依赖关系。</li>
+</ul>
+<h3 id="3-8、部署图"><a href="#3-8、部署图" class="headerlink" title="3.8、部署图"></a>3.8、部署图</h3><ul>
+<li>【概念】描述了系统内部的软件如何分布在不同的节点上。</li>
+<li>【目的】用来表示<strong>软件和硬件的映射关系</strong>。</li>
+</ul>
+<h3 id="3-9、活动图"><a href="#3-9、活动图" class="headerlink" title="3.9、活动图"></a>3.9、活动图</h3><ul>
+<li>【概念】描述了具体业务用例的<strong>实现流程</strong>。</li>
+<li>【目的】用来表示用例实现的工作流程。</li>
+<li>描述了登录查看订单的流程图</li>
+</ul>
+<p><img src="/img/23/4.jpg"></p>
+<h3 id="3-10、状态机图"><a href="#3-10、状态机图" class="headerlink" title="3.10、状态机图"></a>3.10、状态机图</h3><ul>
+<li>【概念】状态机图对**<code>一个单独对象</code>**的行为建模，指明对象在它的整个生命周期里，响应不同事件时，执行相关事件的顺序。</li>
+<li>【目的】用来表示指定对象，在整个生命周期，响应不同事件的不同状态。</li>
+<li>图中描述了，门在其生命周期内所经历的状态。</li>
+</ul>
+<p><img src="/img/23/5.jpg"></p>
+<h3 id="3-11、时序图"><a href="#3-11、时序图" class="headerlink" title="3.11、时序图"></a>3.11、时序图</h3><ul>
+<li>【概念】时序图被用来显示随时间变化，<strong>一个或多个元素的值或状态的更改</strong>。也显示时控事件之间的交互和管理它们的时间和期限约束。</li>
+<li>【目的】用来表示元素状态或者值随时间的变化而变化的视图。</li>
+</ul>
+<p><img src="/img/23/8.jpg"></p>
+<h3 id="3-12、序列图"><a href="#3-12、序列图" class="headerlink" title="3.12、序列图"></a>3.12、序列图</h3><ul>
+<li>【概念】序列图根据<strong>时间序列</strong>展示**<code>对象如何进行协作</code>**。它展示了在用例的特定场景中，对象如何与其他对象交互。</li>
+<li>【目的】通过描述对象之间发送消息的时间顺序显示多个对象之间的动态协作</li>
+<li>图中展示了一个线上书店的通讯图，方框和小人表示生命线，不同生命线之间可以传递消息，消息前面的数字可以表达序列顺序。</li>
+</ul>
+<p><img src="/img/23/6.jpg"></p>
+<h3 id="3-13、通讯图（协作图）"><a href="#3-13、通讯图（协作图）" class="headerlink" title="3.13、通讯图（协作图）"></a>3.13、通讯图（协作图）</h3><ul>
+<li>【概念】描述了收发消息的对象的组织关系，强调对象之间的合作关系而不是时间顺序。</li>
+<li>【目的】用来显示<strong>不同对象的关系</strong></li>
+</ul>
+<p><img src="/img/23/7.jpg"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/28/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99%E5%92%8CUML%E7%AE%80%E4%BB%8B/">http://example.com/2021/06/28/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%A7%84%E5%88%99%E5%92%8CUML%E7%AE%80%E4%BB%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/14.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/22/JVM/JVM%20(%20%E4%B8%89%20)%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%97%E8%8A%82%E7%A0%81/"><img class="prev-cover" src="/img/cover/21.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JVM(三):JVM类加载和对象加载</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/29/23%E7%A7%8D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><img class="next-cover" src="/img/cover/15.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">设计模式:创建型模式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/30/23种设计模式/23种设计模式总结/" title="设计模式:总结"><img class="cover" src="/img/cover/18.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-30</div><div class="title">设计模式:总结</div></div></a></div><div><a href="/2021/06/29/23种设计模式/创建型模式/" title="设计模式:创建型模式"><img class="cover" src="/img/cover/15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-29</div><div class="title">设计模式:创建型模式</div></div></a></div><div><a href="/2021/06/29/23种设计模式/结构型模式/" title="设计模式:结构型模式"><img class="cover" src="/img/cover/16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-29</div><div class="title">设计模式:结构型模式</div></div></a></div><div><a href="/2021/06/29/23种设计模式/行为型模式/" title="设计模式:行为型模式"><img class="cover" src="/img/cover/17.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-29</div><div class="title">设计模式:行为型模式</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-text">1、概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-text">1.1、概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">1.2、分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E4%B8%83%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-text">2、七大设计原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="toc-text">2.1、单一职责原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99"><span class="toc-text">2.2、接口隔离原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E4%BE%9D%E8%B5%96%E5%80%92%E8%BD%AC%E5%8E%9F%E5%88%99"><span class="toc-text">2.3、依赖倒转原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8D%A2%E5%8E%9F%E5%88%99"><span class="toc-text">2.4、里氏替换原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99"><span class="toc-text">2.5、开闭原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6%E3%80%81%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99"><span class="toc-text">2.6、迪米特法则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7%E3%80%81%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99"><span class="toc-text">2.7、合成复用原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">2.8、总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81UML%E5%9B%BE%E7%AE%80%E4%BB%8B"><span class="toc-text">3、UML图简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E5%88%86%E7%B1%BB"><span class="toc-text">3.2、分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81%E7%94%A8%E4%BE%8B%E5%9B%BE"><span class="toc-text">3.3、用例图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81%E7%B1%BB%E5%9B%BE"><span class="toc-text">3.4、类图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5%E3%80%81%E5%AF%B9%E8%B1%A1%E5%9B%BE"><span class="toc-text">3.5、对象图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6%E3%80%81%E5%8C%85%E5%9B%BE"><span class="toc-text">3.6、包图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7%E3%80%81%E7%BB%84%E4%BB%B6%E5%9B%BE"><span class="toc-text">3.7、组件图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8%E3%80%81%E9%83%A8%E7%BD%B2%E5%9B%BE"><span class="toc-text">3.8、部署图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9%E3%80%81%E6%B4%BB%E5%8A%A8%E5%9B%BE"><span class="toc-text">3.9、活动图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10%E3%80%81%E7%8A%B6%E6%80%81%E6%9C%BA%E5%9B%BE"><span class="toc-text">3.10、状态机图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-11%E3%80%81%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="toc-text">3.11、时序图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-12%E3%80%81%E5%BA%8F%E5%88%97%E5%9B%BE"><span class="toc-text">3.12、序列图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-13%E3%80%81%E9%80%9A%E8%AE%AF%E5%9B%BE%EF%BC%88%E5%8D%8F%E4%BD%9C%E5%9B%BE%EF%BC%89"><span class="toc-text">3.13、通讯图（协作图）</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
