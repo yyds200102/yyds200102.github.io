@@ -145,14 +145,14 @@
     if (fontSizeVal !== undefined) {
       document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
     }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/22.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JVM(一):内存结构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-22T00:53:03.000Z" title="发表于 2021-06-22 08:53:03">2021-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-22T00:56:05.000Z" title="更新于 2021-06-22 08:56:05">2021-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JVM(一):内存结构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、程序计数器"><a href="#1、程序计数器" class="headerlink" title="1、程序计数器"></a>1、程序计数器</h2><ul>
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/22.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JVM(一):内存结构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-22T00:53:03.000Z" title="发表于 2021-06-22 08:53:03">2021-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-22T00:56:05.000Z" title="更新于 2021-06-22 08:56:05">2021-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>18分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JVM(一):内存结构"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、程序计数器"><a href="#1、程序计数器" class="headerlink" title="1、程序计数器"></a>1、程序计数器</h2><ul>
 <li>栈、本地方法栈、程序计数器100%不会有垃圾</li>
 <li>JVM调优99%在调整堆(方法区属于特殊的堆)</li>
 <li>一般插件都是在执行引擎上动手脚</li>
 </ul>
 <p><img src="/img/JVM/1.jpg"></p>
 <p><strong>Program Counter Register 程序计数器（寄存器）</strong></p>
-<p><strong>作用：</strong>存放<strong>JVM下一条指令的地址</strong>（本地方法无法定位地址）</p>
+<p><strong>作用：</strong>存放<strong>JVM当前执行指令的地址</strong>（本地方法无法定位地址为空）</p>
 <ul>
 <li>每条JVM指令都会交给JVM解释器，解释器把字节码变成机器码，让CPU执行，然后此时<code>下一条 jvm 指令的执行地址行号</code>会被放入程序计数器中，然后解释器根据地址去取指令并执行。</li>
 <li>多线程的环境下，如果两个线程发生了上下文切换，那么程序计数器会记录线程下一条指令的地址行号，以便线程切换回来继续执行命令。</li>
@@ -169,14 +169,22 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 左边是JVM指令(二进制字节码)      右边是Java源代码</span></span><br><span class="line"><span class="number">0</span>: getstatic #<span class="number">20</span>        <span class="comment">// PrintStream out = System.out; </span></span><br><span class="line"><span class="number">3</span>: astore_1             <span class="comment">// -- </span></span><br><span class="line"><span class="number">4</span>: aload_1              <span class="comment">// out.println(1); </span></span><br><span class="line"><span class="number">5</span>: iconst_1             <span class="comment">// -- </span></span><br><span class="line"><span class="number">6</span>: invokevirtual #<span class="number">26</span>    <span class="comment">// -- </span></span><br><span class="line"><span class="number">9</span>: aload_1              <span class="comment">// out.println(2); </span></span><br><span class="line"><span class="number">10</span>: iconst_2            <span class="comment">// -- </span></span><br><span class="line"><span class="number">11</span>: invokevirtual #<span class="number">26</span>   <span class="comment">// -- </span></span><br><span class="line"><span class="number">14</span>: aload_1             <span class="comment">// out.println(3); </span></span><br><span class="line"><span class="number">15</span>: iconst_3            <span class="comment">// -- </span></span><br><span class="line"><span class="number">16</span>: invokevirtual #<span class="number">26</span>   <span class="comment">// -- </span></span><br><span class="line"><span class="number">19</span>: aload_1             <span class="comment">// out.println(4); </span></span><br><span class="line"><span class="number">20</span>: iconst_4            <span class="comment">// -- </span></span><br><span class="line"><span class="number">21</span>: invokevirtual #<span class="number">26</span>   <span class="comment">// -- </span></span><br><span class="line"><span class="number">24</span>: aload_1             <span class="comment">// out.println(5); </span></span><br><span class="line"><span class="number">25</span>: iconst_5            <span class="comment">// -- </span></span><br><span class="line"><span class="number">26</span>: invokevirtual #<span class="number">26</span>   <span class="comment">// -- </span></span><br><span class="line"><span class="number">29</span>: <span class="keyword">return</span></span><br><span class="line"><span class="comment">//     </span></span><br></pre></td></tr></table></figure>
 
-<h2 id="2、虚拟机栈（线程运行时需要的内存空间）"><a href="#2、虚拟机栈（线程运行时需要的内存空间）" class="headerlink" title="2、虚拟机栈（线程运行时需要的内存空间）"></a>2、虚拟机栈（线程运行时需要的内存空间）</h2><h3 id="2-1、定义"><a href="#2-1、定义" class="headerlink" title="2.1、定义"></a>2.1、定义</h3><p><strong>概念：</strong></p>
+<h2 id="2、虚拟机栈（线程运行时需要的内存空间）"><a href="#2、虚拟机栈（线程运行时需要的内存空间）" class="headerlink" title="2、虚拟机栈（线程运行时需要的内存空间）"></a>2、虚拟机栈（线程运行时需要的内存空间）</h2><h3 id="2-1、定义"><a href="#2-1、定义" class="headerlink" title="2.1、定义"></a>2.1、定义</h3><blockquote>
+<p>栈的概念</p>
+</blockquote>
 <ul>
-<li>每个线程运行需要的内存空间，称为虚拟机栈，栈是**<code>线程私有</code>**的</li>
-<li>每个栈由多个栈帧（Frame）组成，对应着每次<code>调用方法</code>时所占用的内存（参数、变量等）</li>
+<li>每个线程运行需要的内存空间，称为虚拟机栈，栈是<code>线程私有</code>的（保护局部变量）；每个栈由多个栈帧（Frame）组成，对应着每次<code>调用方法</code>时所占用的内存（参数、变量等）</li>
 <li>每个线程只能有一个<code>活动栈帧</code>，对应着当前正在执行的<code>方法</code>，每⼀次函数调用都会有⼀个对应的栈帧被压⼊ Java 栈，每⼀个函数调用结束后（或抛出异常导致结束），都会有⼀个栈帧被弹出</li>
 <li>先进后出，main方法最先执行，最晚结束</li>
+<li>内存大小是否能够扩展由具体的JVM决定</li>
 </ul>
-<p><strong>栈帧的信息：</strong>局部变量表(编译期可知的各种基本数据类型、对象引用)、操作数栈、动态链接、方法出口信息。</p>
+<blockquote>
+<p>栈帧的信息</p>
+</blockquote>
+<ul>
+<li>局部变量表（编译期可知的各种<code>基本数据类型</code>、对象引用（不一定是对象起始地址）、<code>下一条字节码指令地址</code>)；除了Long Double 2个字节，其他都是1字节</li>
+<li>操作数栈、动态链接、方法出口信息。</li>
+</ul>
 <p><img src="/img/JVM/2.jpg"></p>
 <h3 id="2-2、几个问题"><a href="#2-2、几个问题" class="headerlink" title="2.2、几个问题"></a>2.2、几个问题</h3><ol>
 <li><p>垃圾回收是否涉及栈内存？</p>
@@ -186,7 +194,7 @@
 </li>
 <li><p>栈内存分配越大越好吗？</p>
 <ul>
-<li>不是，栈内存越大，每个线程的栈就越大，但是可执行的线程数就会越少。</li>
+<li>不是，栈内存越大，每个线程的栈就越大，但是可执行的线程数就会越少。线程初始会申请栈内存，内存不足会OOM。</li>
 </ul>
 </li>
 <li><p>方法内的局部变量是否线程安全？</p>
@@ -199,10 +207,12 @@
 </li>
 </ol>
 <h3 id="2-3、内存溢出"><a href="#2-3、内存溢出" class="headerlink" title="2.3、内存溢出"></a>2.3、内存溢出</h3><ul>
-<li>SOF：栈帧太多或者栈帧太大，超过当前线程的栈内存的实际大小</li>
-<li>OOM：整个栈可能会动态扩展，当栈动态扩展而jVM内存不足时，会OOM</li>
+<li>SOF：栈帧太多超过限制；或者不允许动态扩展的JVM新栈帧没内存分配。</li>
+<li>OOM：线程初次申请栈内存，内存不够分；或者允许动态扩展的JVM当新栈帧没内存分配时会申请扩展栈内存，如果栈内存不足，会OOM。</li>
 </ul>
-<h3 id="2-4、线程运行诊断"><a href="#2-4、线程运行诊断" class="headerlink" title="2.4、线程运行诊断"></a>2.4、线程运行诊断</h3><p><strong>案例一：cpu 占用过多</strong></p>
+<p><strong>注意：</strong>HotSpot不允许栈扩展；堆一般都可以扩展，从参数就可以看出。</p>
+<h3 id="2-4、栈的内存回收"><a href="#2-4、栈的内存回收" class="headerlink" title="2.4、栈的内存回收"></a>2.4、栈的内存回收</h3><p>当程序执行关闭，栈帧会被弹出，所以不涉及垃圾回收。</p>
+<h3 id="2-5、线程运行诊断"><a href="#2-5、线程运行诊断" class="headerlink" title="2.5、线程运行诊断"></a>2.5、线程运行诊断</h3><p><strong>案例一：cpu 占用过多</strong></p>
 <p><strong>描述：</strong>Linux 环境下运行某些程序的时候，可能导致 CPU 的占用过高，这时需要定位占用 CPU 过高的线程</p>
 <ol>
 <li>输入 top 命令，查看是哪个进程占用 CPU 过高</li>
@@ -215,21 +225,25 @@
 <p><img src="/img/JVM/3.jpg"></p>
 <p><strong>案例二：线程很长时间未响应</strong></p>
 <p>同上，排查异常情况</p>
-<h3 id="2-5、本地方法栈"><a href="#2-5、本地方法栈" class="headerlink" title="2.5、本地方法栈"></a>2.5、本地方法栈</h3><p><img src="/img/JVM/4.jpg"></p>
+<h3 id="2-6、本地方法栈"><a href="#2-6、本地方法栈" class="headerlink" title="2.6、本地方法栈"></a>2.6、本地方法栈</h3><p><img src="/img/JVM/4.jpg"></p>
 <p>调用<strong>本地方法</strong>时需要使用本地方法栈</p>
 <p>本地方法：native修饰的方法，底层调用的是C/C++方法等</p>
 <p><strong>错误：</strong>同样有OSF和OOM</p>
-<h2 id="3、堆"><a href="#3、堆" class="headerlink" title="3、堆"></a>3、堆</h2><h3 id="3-1、定义："><a href="#3-1、定义：" class="headerlink" title="3.1、定义："></a>3.1、定义：</h3><p><strong>Heap 堆</strong></p>
-<ul>
-<li>通过new关键字创建的<strong>对象和数组</strong>都会被放在堆中，在堆里面分配内存。</li>
-</ul>
-<p><strong>特点</strong></p>
+<h2 id="3、堆"><a href="#3、堆" class="headerlink" title="3、堆"></a>3、堆</h2><h3 id="3-1、定义："><a href="#3-1、定义：" class="headerlink" title="3.1、定义："></a>3.1、定义：</h3><p><strong>Heap 堆</strong>：new关键字创建的<strong>对象和数组</strong>；类的Class对象 都存储在这里</p>
+<blockquote>
+<p>特点</p>
+</blockquote>
 <ul>
 <li>它是所有<code>线程共享</code>，堆内存中的对象都需要考虑<code>线程安全</code>问题</li>
+<li>逻辑上包括方法区，内存连续，但是实际不一定</li>
 <li>有垃圾回收机制</li>
+<li>可以动态扩展</li>
 </ul>
-<p><strong>注意：</strong>从jdk 1.7开始已经默认开启逃逸分析，如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。</p>
-<h3 id="3-2、堆内存溢出"><a href="#3-2、堆内存溢出" class="headerlink" title="3.2、堆内存溢出"></a>3.2、堆内存溢出</h3><p><strong>OOM错误：</strong></p>
+<p><strong>注意：</strong>随着JIT编译期的发展与逃逸分析技术逐渐成熟，栈上分配、标量替换优化技术将会导致⼀些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么绝对了。从jdk 1.7开始已经默认开启<strong>逃逸分析</strong>，如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。</p>
+<h3 id="3-2、线程私有区域"><a href="#3-2、线程私有区域" class="headerlink" title="3.2、线程私有区域"></a>3.2、线程私有区域</h3><p><strong>概念：</strong>堆中的线程私有缓存区域 TLAB（Thread Local Allocation Buffer)</p>
+<p><strong>原因：</strong>并发线程下对象分配可能会产生问题，比如地址重复分配。</p>
+<p><strong>作用：</strong>每个线程有字节的 私有缓存区域TLAB，优先在此处分配内存，如果内存分配完了，JVM就会尝试着通过使用加锁机制确保数据操作的原子性，从而直接在Eden空间中分配内存</p>
+<h3 id="3-3、堆内存溢出"><a href="#3-3、堆内存溢出" class="headerlink" title="3.3、堆内存溢出"></a>3.3、堆内存溢出</h3><p><strong>OOM错误：</strong></p>
 <ul>
 <li>java.lang.OutOfMemoryError: Java heap space  堆内存满了，堆内存不够</li>
 <li>即 新生区 + 老年区 大小等于总堆内存</li>
@@ -240,7 +254,7 @@
 <p><strong>修改堆空间大小：</strong>-Xmx1024m 指定最大大小  -Xms512m 指定初始大小</p>
 <p>-Xms1024m -Xmx1024m -XX:+PrintGCDetails</p>
 <p><img src="/img/JVM/5.jpg"></p>
-<h3 id="3-3、堆内存诊断"><a href="#3-3、堆内存诊断" class="headerlink" title="3.3、堆内存诊断"></a>3.3、堆内存诊断</h3><ol>
+<h3 id="3-4、堆内存诊断"><a href="#3-4、堆内存诊断" class="headerlink" title="3.4、堆内存诊断"></a>3.4、堆内存诊断</h3><ol>
 <li>JPS + JMap<ul>
 <li>jps 工具：查看当前系统中有哪些 java 进程 直接jps</li>
 <li>jmap 工具：查看堆内存占用情况 jmap - heap 进程id</li>
@@ -257,43 +271,73 @@
 <li>使用 jconsole 进行 Gc 回收之后，发现老年代仍然占用很高</li>
 <li>使用 jvisualvm 命令进入，监视里面点击堆dump，点击右边的查找，找出占用内存大的应用，点击对象然后查看对象的情况</li>
 </ul>
-<h3 id="3-4、垃圾回收"><a href="#3-4、垃圾回收" class="headerlink" title="3.4、垃圾回收"></a>3.4、垃圾回收</h3><p>垃圾回收主要发生在堆里，因为几乎所有的对象都在堆中分配。</p>
+<h3 id="3-5、垃圾回收"><a href="#3-5、垃圾回收" class="headerlink" title="3.5、垃圾回收"></a>3.5、垃圾回收</h3><p>第二节详细介绍</p>
 <h2 id="4、方法区："><a href="#4、方法区：" class="headerlink" title="4、方法区："></a>4、方法区：</h2><h3 id="4-1、定义"><a href="#4-1、定义" class="headerlink" title="4.1、定义"></a>4.1、定义</h3><ol>
-<li><p>方法区被所有 Java 虚拟机线程之间**<code>共享</code>**的方法区域。</p>
+<li><p>方法区被所有 Java 虚拟机线程之间<code>共享</code>的方法区域，在<code>虚拟机启动时</code>创建的。</p>
 </li>
-<li><p>它存储每个<strong>类的结构</strong>，常量、静态变量、构造函数和普通方法、即时编译器编译后的代码以及运行时常量池等。</p>
+<li><p>尽管方法区域在逻辑上是堆的一部分，但是并不强制要求，而且名字也叫做<strong>非堆</strong>。</p>
 </li>
-<li><p>方法区是在**<code>虚拟机启动时</code>**创建的。</p>
+<li><p>方法区的大小和堆一样可以<code>动态扩展</code></p>
 </li>
-<li><p>尽管方法区域<strong>在逻辑上是堆的一部分</strong>，但是并不强制要求，而且名字也叫做<strong>非堆</strong>。</p>
-</li>
-<li><p><strong>HotSpot</strong>（其他不一定）使用永久代实现方法区，在JDK1.8时移除，采用**<code>元空间</code>**实现（不再占用堆的空间，在本地内存占用）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">整个永久代有⼀个 JVM 本身设置固定⼤⼩上限，无法进⾏调整，⽽元空间使用的是直接内存，受本机可用内存的限制，虽然元空间仍旧可能溢出，但是比原来出现的几率会更⼩。</span><br><span class="line"><span class="comment">// 元空间溢出仍然是OOM，因为逻辑上是堆的一部分</span></span><br></pre></td></tr></table></figure></li>
-<li><p>也存在垃圾回收，但是较少可以忽略</p>
-</li>
+<li><p><strong>HotSpot</strong>（其他不一定）使用永久代实现方法区，在JDK1.8时移除，采用<code>元空间</code>实现（不再占用堆的空间，在本地内存占用）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">整个永久代有⼀个 JVM 本身设置固定⼤小上限，无法进⾏调整，⽽元空间使用的是直接内存，受本机可用内存的限制，虽然元空间仍旧可能溢出，但是比原来出现的几率会更小。</span><br><span class="line"><span class="comment">// 元空间溢出仍然是OOM，因为逻辑上是堆的一部分</span></span><br><span class="line">    </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
 </ol>
-<p><img src="/img/JVM/6.jpg"></p>
-<h3 id="4-2、方法区内存溢出"><a href="#4-2、方法区内存溢出" class="headerlink" title="4.2、方法区内存溢出"></a>4.2、方法区内存溢出</h3><ul>
-<li>1.8 之前会导致**<code>永久代</code>**内存溢出 OOM<ul>
-<li>使用 -XX:MaxPermSize=8m 指定永久代内存大小</li>
+<blockquote>
+<p>存储的数据结构</p>
+</blockquote>
+<ul>
+<li>已经被虚拟机记载的<code>类的信息</code></li>
+<li>常量</li>
+<li>静态变量：<code>JDK1.7之后被存放到Class对象里面，</code>在堆中</li>
+<li>即时编译器编译后的代码</li>
+<li>运行时常量池等</li>
+</ul>
+<blockquote>
+<p>为什么要将永久代 (PermGen) 替换为元空间 (MetaSpace) 呢</p>
+</blockquote>
+<ol>
+<li>永久代使用堆内存，元空间使用的是操作系统内存，OOM概率更更小。</li>
+<li>元空间里面存放的是<strong>类的元数据</strong>，很少垃圾回收而又必须存在，所以放在直接内存更好。</li>
+<li>永久代本来就是逻辑上的一个东西，只是换一个叫法。</li>
+</ol>
+<h3 id="4-2、垃圾回收"><a href="#4-2、垃圾回收" class="headerlink" title="4.2、垃圾回收"></a>4.2、垃圾回收</h3><p>JVM规范<code>不要求实现</code>方法区的垃圾回收，但是也可以实现，以下是HotSpot的实现</p>
+<blockquote>
+<p>回收时机</p>
+</blockquote>
+<ul>
+<li><strong>永久代：</strong>内存大小到达-XX:PermSize 时<code>触发 FullGC</code>、Full GC 时触发垃圾回收。</li>
+<li><strong>元空间：</strong>内存大小到达-XX:MetaspaceSize时<code>触发 FullGC</code>、Full GC 时触发垃圾回收。</li>
+</ul>
+<p><strong>注意：</strong>这些都是标准值，JVM会根据回收时的标准值大小动态跳转允许的最大值；为了减少 Full GC 不能把标准值调整的过低。</p>
+<blockquote>
+<p>回收内容</p>
+</blockquote>
+<ul>
+<li><strong>常量回收</strong>：对象没有被引用则会被回收。</li>
+<li><strong>类的卸载：</strong>无用的类会被允许回收，注意不是一定。<ul>
+<li>所有实例都被回收</li>
+<li>加载该类的 ClassLoader 已经被回收。</li>
+<li>该类的Class对象没有在任何地方被引用，⽆法在任何地方通过反射访问该类的方法。（注意Class对象被JVM引用，永远不会被回收）</li>
 </ul>
 </li>
-<li>1.8 之后会导致**<code>元空间</code>**内存溢出 OOM<ul>
-<li>使用 -XX:MaxMetaspaceSize=8m 指定元空间大小</li>
 </ul>
-</li>
+<blockquote>
+<p>方法区内存溢出</p>
+</blockquote>
+<ul>
+<li>JDK1.6，可以不断的创建字符串，因为字符串常量池在方法区中，所以 永久代 会OOM</li>
+<li>JDK1.7，字符串常量池被移动到堆中，想 永久代OOM 必须大量创建字节码类，比如使用 Cglib </li>
+<li>JDK1.8，想要元空间OOM 可以调小元空间的参数值。</li>
 </ul>
-<h3 id="4-3、各种常量池剖析"><a href="#4-3、各种常量池剖析" class="headerlink" title="4.3、各种常量池剖析"></a>4.3、各种常量池剖析</h3><p><strong>常量池：</strong>每个class文件都有类的版本、字段、方法、接口等描述信息，除了这些之外，还有常量池表。常量池用于存放编译期间生成的各种字面量和符号引用。</p>
-<p><strong>运行时常量池：</strong>当一个类被加载时，就会为其产生对应的运行时常量池，其中存放常量池的信息，以及程序执行期间生成的常量。运行时常量池中有两种类型，分别是symbolic references符号引用和static constants静态常量。</p>
-<p><strong>注意：</strong>运行时常量池位于方法区，存在OOM的可能。运行时常量池逻辑包含字符串常量池。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String site=&quot;zhangsan&quot;</span><br><span class="line">static constants静态常量：右边的&quot;zhangsan&quot;,不会发生改变</span><br><span class="line">symbolic references符号引用，左边的&quot;site&quot;,需要在运行期间进行解析</span><br></pre></td></tr></table></figure>
-
-<p><strong>字符串常量池：</strong>JDK7之前在方法区的运行时常量池中，JDK7开始<strong>被单独拿到堆</strong>；当类加载的时候，常量池的字符串文本就会加载进入字符串常量池中</p>
-<p><strong>原因：</strong>方法区的永久代回收要等到FullGC，频率太低，所以容易导致内存不够用。</p>
-<p>注意：</p>
+<h3 id="4-3、常量池"><a href="#4-3、常量池" class="headerlink" title="4.3、常量池"></a>4.3、常量池</h3><p><strong>常量池：</strong>每个class文件都有类的版本、字段、方法、接口等描述信息，除了这些之外，还有<code>常量池表</code>。常量池用于存放编译期间生成的各种字面量和符号引用。</p>
+<p><strong>运行时常量池：</strong>当一个类被<strong>加载</strong>时，就会为其产生对应的运行时常量池。其中存放常量池的信息，以及程序执行期间<code>动态生成</code>的常量（intern()方法）。运行时常量池是方法区的一部分，存在OOM的可能。运行时常量池<code>逻辑包含字符串常量池</code>。</p>
+<p><strong>字符串常量池：</strong>JDK7之前在方法区的运行时常量池中，JDK7开始<strong>被单独拿到堆</strong>；当类加载的时候，常量池的字符串文本就会加载进入字符串常量池中。</p>
+<blockquote>
+<p>注意</p>
+</blockquote>
 <ul>
 <li>运行时常量池自始至终在方法区，JDK7在方法区（堆），JDK8在元空间</li>
-<li>字符串常量池JDK7之前在方法区的运行时常量池，JDK7开始单独放到堆中</li>
+<li>字符串常量池JDK7之前在方法区的运行时常量池，JDK7开始单独放到堆中。因为方法区的永久代回收要等到FullGC，频率太低，所以容易导致内存不够用。</li>
 </ul>
 <h3 id="4-4、StringTable字符串常量池"><a href="#4-4、StringTable字符串常量池" class="headerlink" title="4.4、StringTable字符串常量池"></a>4.4、StringTable字符串常量池</h3><p><strong>存储</strong></p>
 <ul>
@@ -313,11 +357,11 @@
 <li>字符串常量拼接的原理是**<code>编译器优化</code>**，所以结果在常量池里</li>
 </ul>
 <p><strong>延迟初始化：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;1&quot;);  // 执行到才会放入串池</span><br><span class="line">System.out.println(&quot;2&quot;);  // 执行到才会放入串池</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">&quot;1&quot;</span>);  <span class="comment">// 执行到才会放入串池</span></span><br><span class="line">System.out.println(<span class="string">&quot;2&quot;</span>);  <span class="comment">// 执行到才会放入串池</span></span><br></pre></td></tr></table></figure>
 
-<p><strong>intern方法（1.8）：</strong>假设 字符串str调用</p>
+<p><strong>intern方法（1.7）：</strong>假设 字符串str调用</p>
 <ul>
-<li>若字符串常量池中没有a，就会<strong>直接添加到常量池</strong>中，返回常量池的对象</li>
+<li>若字符串常量池中没有a，就会<strong>直接添加到常量池</strong>中（因为常量池就在堆中），返回常量池的对象</li>
 <li>若字符串常量池中有a，就会**<code>添加失败</code>**，不过仍然返回常量池的对象</li>
 </ul>
 <p><strong>intern方法（1.6）：</strong>假设 字符串str调用</p>
@@ -333,7 +377,7 @@
 <h3 id="4-5、StringTable垃圾回收"><a href="#4-5、StringTable垃圾回收" class="headerlink" title="4.5、StringTable垃圾回收"></a>4.5、StringTable垃圾回收</h3><p>-Xmx10m 指定堆内存大小<br>-XX:+PrintStringTableStatistics 打印字符串常量池信息<br>-XX:+PrintGCDetails<br>-verbose:gc 打印 gc 的次数，耗费时间等信息</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 演示 StringTable 垃圾回收</span></span><br><span class="line"><span class="comment"> * -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Code_05_StringTableTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000</span>; j++) &#123; <span class="comment">// j = 100, j = 10000</span></span><br><span class="line">                String.valueOf(j).intern();</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="4-6、StringTable性能调优"><a href="#4-6、StringTable性能调优" class="headerlink" title="4.6、StringTable性能调优"></a>4.6、StringTable性能调优</h3><p><strong>一：</strong>上面说过StringTable是由HashTable实现的，所以可以适当增加HashTable桶的个数，来减少字符串放入串池所需要的时间</p>
+<h3 id="4-6、StringTable性能调优"><a href="#4-6、StringTable性能调优" class="headerlink" title="4.6、StringTable性能调优"></a>4.6、StringTable性能调优</h3><p><strong>一：</strong>上面说过StringTable是由Hash表实现的，所以可以适当增加HashTable桶的个数，来减少字符串放入串池所需要的时间</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:StringTableSize=桶个数（最少设置为 <span class="number">1009</span> 以上）</span><br></pre></td></tr></table></figure>
 
 <p><strong>二：</strong>通过 intern 方法</p>
@@ -342,6 +386,7 @@
 <li>常见于 NIO 操作时，用于数据缓冲区</li>
 <li>分配回收成本较高，但读写性能高</li>
 <li>由系统直接管理，不受 JVM 内存回收管理，但是仍然可能导致OOM</li>
+<li>默认与Java堆内存一致，也可以999999999999999999999999999999999999999999999自己指定</li>
 </ul>
 <h3 id="5-2、直接内存的优点"><a href="#5-2、直接内存的优点" class="headerlink" title="5.2、直接内存的优点"></a>5.2、直接内存的优点</h3><p><strong>文件读写流程</strong></p>
 <p><img src="/img/JVM/7.jpg"></p>
@@ -349,7 +394,7 @@
 <p><strong>使用了 DirectBuffer 文件读取流程</strong></p>
 <p>直接内存是操作系统和 Java 代码**<code>都可以访问</code>**的一块区域，无需将代码从系统内存复制到 Java 堆内存，从而提高了效率</p>
 <p><img src="/img/JVM/8.jpg"></p>
-<h3 id="5-3、直接内存的内存回收"><a href="#5-3、直接内存的内存回收" class="headerlink" title="5.3、直接内存的内存回收"></a>5.3、直接内存的内存回收</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//通过ByteBuffer申请1M的直接内存</span><br><span class="line">ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1M);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="5-3、直接内存的内存回收"><a href="#5-3、直接内存的内存回收" class="headerlink" title="5.3、直接内存的内存回收"></a>5.3、直接内存的内存回收</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过ByteBuffer申请1M的直接内存</span></span><br><span class="line">ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1M);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> _1GB = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">    <span class="comment">//通过ByteBuffer申请1M的直接内存</span></span><br><span class="line">    ByteBuffer byteBuffer = ByteBuffer.allocateDirect(_1GB);</span><br><span class="line">    System.out.println(<span class="string">&quot;分配完毕&quot;</span>);</span><br><span class="line">    System.in.read();</span><br><span class="line">    System.out.println(<span class="string">&quot;开始释放&quot;</span>);</span><br><span class="line">    byteBuffer = <span class="keyword">null</span>;</span><br><span class="line">    System.gc();   <span class="comment">// 发现内存被释放了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -357,10 +402,50 @@
 <p>释放原理总结</p>
 </blockquote>
 <ul>
-<li>使用了 Unsafe 类来完成直接内存的分配回收，回收需要主动调用freeMemory 方法（JDK帮忙做了）</li>
-<li>ByteBuffer 的实现内部使用了 Cleaner（虚引用）来检测 ByteBuffer 。一旦ByteBuffer 被垃圾回收，那么会由 ReferenceHandler（守护线程） 来调用 Cleaner 的 clean 方法调用 freeMemory 来释放内存</li>
+<li>使用了 <strong>Unsafe 类</strong>来完成直接内存的分配回收，回收需要主动调用freeMemory 方法（JDK帮忙做了）</li>
+<li>ByteBuffer 的实现内部使用<strong>了 Cleaner（虚引用）</strong>来检测 ByteBuffer 。一旦ByteBuffer 被垃圾回收，那么会由 ReferenceHandler（守护线程） 来调用 Cleaner 的 clean 方法调用 freeMemory 来释放内存</li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">http://example.com/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/22.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/21/JavaSE/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A6%82%E8%BF%B0/"><img class="prev-cover" src="/img/cover/18.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JAVASE知识精简</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><img class="next-cover" src="/img/cover/20.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JVM(二):垃圾回收</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/22/JVM/JVM ( 二 ) 垃圾回收/" title="JVM(二):垃圾回收"><img class="cover" src="/img/cover/20.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(二):垃圾回收</div></div></a></div><div><a href="/2021/06/22/JVM/JVM ( 三 ) 类加载和字节码/" title="JVM(三):JVM类加载和对象加载"><img class="cover" src="/img/cover/21.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(三):JVM类加载和对象加载</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-text">1、程序计数器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%88%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%EF%BC%89"><span class="toc-text">2、虚拟机栈（线程运行时需要的内存空间）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">2.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-text">2.2、几个问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">2.3、内存溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%AF%8A%E6%96%AD"><span class="toc-text">2.4、线程运行诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">2.5、本地方法栈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%A0%86"><span class="toc-text">3、堆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="toc-text">3.1、定义：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">3.2、堆内存溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81%E5%A0%86%E5%86%85%E5%AD%98%E8%AF%8A%E6%96%AD"><span class="toc-text">3.3、堆内存诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">3.4、垃圾回收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%96%B9%E6%B3%95%E5%8C%BA%EF%BC%9A"><span class="toc-text">4、方法区：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">4.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81%E6%96%B9%E6%B3%95%E5%8C%BA%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">4.2、方法区内存溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81%E5%90%84%E7%A7%8D%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%89%96%E6%9E%90"><span class="toc-text">4.3、各种常量池剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81StringTable%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">4.4、StringTable字符串常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5%E3%80%81StringTable%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">4.5、StringTable垃圾回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6%E3%80%81StringTable%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">4.6、StringTable性能调优</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-text">5、直接内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">5.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">5.2、直接内存的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E7%9A%84%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-text">5.3、直接内存的内存回收</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+<blockquote>
+<p>OOM</p>
+</blockquote>
+<p>直接内存并不是虚拟机运行时数据区的⼀部分，也不是虚拟机规范中定义的内存区域，但是这部分内存也被频繁地使用。而且也可能导致<strong>OutOfMemoryError</strong> <strong>错误出现。</strong></p>
+<p><strong>注意：</strong>JVM会在申请前计算够不够分配，不够抛出OOM，够了才会申请，</p>
+<h2 id="6、对象创建的过程"><a href="#6、对象创建的过程" class="headerlink" title="6、对象创建的过程"></a>6、对象创建的过程</h2><h3 id="6-1、类加载检查"><a href="#6-1、类加载检查" class="headerlink" title="6.1、类加载检查"></a>6.1、类加载检查</h3><p>虚拟机遇到⼀条 new 指令时，⾸先将去检查这个指令的参数是否能在常量池中定位到<code>这个类的符号引⽤</code>，并且检查这个符号引⽤代表的类<code>是否已被加载过、解析和初始化过</code>。如果没有，那必须先执行相应的类加载过程。</p>
+<p><strong>注意：</strong>在类加载的初始化阶段，为一些成员变量初始化时可能会触发此过程。</p>
+<h3 id="6-2、分配内存"><a href="#6-2、分配内存" class="headerlink" title="6.2、分配内存"></a>6.2、分配内存</h3><p>虚拟机将为新生对象<strong>分配内存</strong>。对象所需的内存大小类加载完成后便可确定，为对象分配空间的任务等同于把⼀块确定大小的内存从 Java 堆中划分出来。有两种分配方式，根据Java内存是否整齐来决定，取决于GC 收集器的算法是”标记-清除”，还是”标记-整理”（也称作”标记-压缩”），值得注意的是，复制算法内存也是规整的。</p>
+<ul>
+<li><strong>指针碰撞：</strong>整理内存，把没有的内存整理到一起，再分配内存</li>
+<li><strong>空闲列表：</strong>虚拟机维护一个列表，记录哪些位置可用，分配内存</li>
+</ul>
+<blockquote>
+<p>内存分配并发问题</p>
+</blockquote>
+<p>作为虚拟机来说，必须要保证线程是安全的，否则可能出现内存被多次分配的情况，通常来讲，虚拟机采用<code>两种方式</code>一起来保证线程安全</p>
+<ul>
+<li><strong>TLAB本地线程分配缓冲：</strong>为每⼀个线程预先在 Eden 区分配⼀块内存，JVM 在给线程中的对象分配内存时，首先先在 TLAB 分配，当对象大于 TLAB 中的剩余内存或 TLAB 的内存已用尽时，使用上述的 CAS 进行内存分配</li>
+<li>CAS + 失败重试</li>
+</ul>
+<h3 id="6-3、初始化零值"><a href="#6-3、初始化零值" class="headerlink" title="6.3、初始化零值"></a>6.3、初始化零值</h3><p>对于基本类型需要初始化零值或者false等。</p>
+<h3 id="6-4、设计对象头"><a href="#6-4、设计对象头" class="headerlink" title="6.4、设计对象头"></a>6.4、设计对象头</h3><p>通过Class对象获取方法区中该类的元信息，如对象的哈希码、对象的 GC 分代年龄、偏向锁信息等，这些信息存放在对象头中。</p>
+<h3 id="6-5、执行init方法"><a href="#6-5、执行init方法" class="headerlink" title="6.5、执行init方法"></a>6.5、执行init方法</h3><p>执行对象的 &lt; init &gt; 方法 按照程序员的意愿进行初始化（和第三节的一致）。</p>
+<blockquote>
+<p>扩展一：对象访问的定位方式</p>
+</blockquote>
+<p>对象的访问方式有虚拟机实现而定，⽬前主流的访问方式有使用<strong>句柄、直接指针</strong>两种：</p>
+<ul>
+<li>句柄：Java堆中将会划分出⼀块内存来作为句柄池，reference 中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据<code>各自的具体地址</code>信息。</li>
+<li>直接指针： Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，而reference 中存储的直接就是对象的地址。</li>
+</ul>
+<p><strong>总结：</strong>一般情况访问对象更频繁，而使用句柄需要多一次转发操作，所以HotSpot采用第二种方式。</p>
+<ul>
+<li> 句柄  ———–&gt;   找到句柄池    ———-&gt; 找到对象实例、类信息（方法区）</li>
+<li>直接指针     ————-&gt;        找到对象实例       ———————&gt;   找到类信息（方法区）</li>
+</ul>
+<blockquote>
+<p>扩展二：对象头</p>
+</blockquote>
+<p>可以参考并发下的</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/">http://example.com/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/22.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/21/JavaSE/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A6%82%E8%BF%B0/"><img class="prev-cover" src="/img/cover/18.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JAVASE知识精简</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><img class="next-cover" src="/img/cover/20.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JVM(二):堆内存回收</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/22/JVM/JVM ( 二 ) 垃圾回收/" title="JVM(二):堆内存回收"><img class="cover" src="/img/cover/20.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(二):堆内存回收</div></div></a></div><div><a href="/2021/06/22/JVM/JVM ( 三 ) 类加载和字节码/" title="JVM(三):JVM类加载和对象加载"><img class="cover" src="/img/cover/21.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(三):JVM类加载和对象加载</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="toc-text">1、程序计数器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%88%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E6%97%B6%E9%9C%80%E8%A6%81%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%EF%BC%89"><span class="toc-text">2、虚拟机栈（线程运行时需要的内存空间）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">2.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-text">2.2、几个问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">2.3、内存溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E6%A0%88%E7%9A%84%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-text">2.4、栈的内存回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C%E8%AF%8A%E6%96%AD"><span class="toc-text">2.5、线程运行诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">2.6、本地方法栈</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%A0%86"><span class="toc-text">3、堆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%AE%9A%E4%B9%89%EF%BC%9A"><span class="toc-text">3.1、定义：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E7%BA%BF%E7%A8%8B%E7%A7%81%E6%9C%89%E5%8C%BA%E5%9F%9F"><span class="toc-text">3.2、线程私有区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA"><span class="toc-text">3.3、堆内存溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81%E5%A0%86%E5%86%85%E5%AD%98%E8%AF%8A%E6%96%AD"><span class="toc-text">3.4、堆内存诊断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">3.5、垃圾回收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%96%B9%E6%B3%95%E5%8C%BA%EF%BC%9A"><span class="toc-text">4、方法区：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">4.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">4.2、垃圾回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">4.3、常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81StringTable%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">4.4、StringTable字符串常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5%E3%80%81StringTable%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">4.5、StringTable垃圾回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6%E3%80%81StringTable%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">4.6、StringTable性能调优</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98"><span class="toc-text">5、直接内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-text">5.1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">5.2、直接内存的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E7%9A%84%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-text">5.3、直接内存的内存回收</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">6、对象创建的过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%A3%80%E6%9F%A5"><span class="toc-text">6.1、类加载检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2%E3%80%81%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="toc-text">6.2、分配内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%B6%E5%80%BC"><span class="toc-text">6.3、初始化零值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4%E3%80%81%E8%AE%BE%E8%AE%A1%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-text">6.4、设计对象头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5%E3%80%81%E6%89%A7%E8%A1%8Cinit%E6%96%B9%E6%B3%95"><span class="toc-text">6.5、执行init方法</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")

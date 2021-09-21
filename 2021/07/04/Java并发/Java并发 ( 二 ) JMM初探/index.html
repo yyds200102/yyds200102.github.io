@@ -1,0 +1,452 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Java并发(二):JMM初探 | Notes</title><meta name="keywords" content="JUC"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="关于Java并发的简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发(二):JMM初探">
+<meta property="og:url" content="http://example.com/2021/07/04/Java%E5%B9%B6%E5%8F%91/Java%E5%B9%B6%E5%8F%91%20(%20%E4%BA%8C%20)%20JMM%E5%88%9D%E6%8E%A2/index.html">
+<meta property="og:site_name" content="Notes">
+<meta property="og:description" content="关于Java并发的简介">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/cover/8.jpg">
+<meta property="article:published_time" content="2021-07-04T00:53:05.000Z">
+<meta property="article:modified_time" content="2021-07-04T00:53:05.000Z">
+<meta property="article:author" content="Bug">
+<meta property="article:tag" content="JUC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/cover/8.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/07/04/Java%E5%B9%B6%E5%8F%91/Java%E5%B9%B6%E5%8F%91%20(%20%E4%BA%8C%20)%20JMM%E5%88%9D%E6%8E%A2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Bug","link":"链接: ","source":"来源: Notes","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java并发(二):JMM初探',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-04 08:53:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/8.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java并发(二):JMM初探</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-04T00:53:05.000Z" title="发表于 2021-07-04 08:53:05">2021-07-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-04T00:53:05.000Z" title="更新于 2021-07-04 08:53:05">2021-07-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java并发(二):JMM初探"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、线程上下文切换"><a href="#1、线程上下文切换" class="headerlink" title="1、线程上下文切换"></a>1、线程上下文切换</h2><p><strong>多线程原理：</strong>即使是单核处理器也支持多线程执行代码，可以通过CPU给每个线程分配CPU时间片来实现这个机制，由于时间片时间很短，所以感觉是多个线程同时执行的。</p>
+<p><strong>上下文切换：</strong>CPU通过时间片分配执行多线程，当前任务执行一个时间片后会切换到下一个任务，但是切换前会保存上一个任务的状态，下一次继续执行当前任务时会从保存的状态处继续执行任务。<strong>任务从当前任务保存到下一个任务加载的过程就是上下文的切换。</strong></p>
+<p><strong>注意：</strong>单核CPU执行多线程任务一定会触发线程上下文切换，因为一个CPU⽽⼀个 CPU 核心在任意时刻只能被⼀个线程使用，多核CPU执行多线程任务时，若CPU能满足所有线程的需要，就会并行执行任务而没有线程上下文切换(但是一般情况不可能)，当CPU不够所有线程需要时，也会发生线程上下文切换。</p>
+<h3 id="1-1、多线程一定更快么"><a href="#1-1、多线程一定更快么" class="headerlink" title="1.1、多线程一定更快么"></a>1.1、多线程一定更快么</h3><p><strong>不一定，因为上下文切换需要消耗时间</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> count = <span class="number">100001</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">concurrency</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">                    a = a + <span class="number">5</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.start();</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            b--;</span><br><span class="line">        &#125;</span><br><span class="line">        thread.join();</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() - start;</span><br><span class="line">        System.out.println(<span class="string">&quot;多线程方式&quot;</span>+time);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">serial</span><span class="params">()</span>  </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            a = a + <span class="number">5</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            b--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis() - start;</span><br><span class="line">        System.out.println(<span class="string">&quot;普通方式&quot;</span>+time);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        serial();</span><br><span class="line">        concurrency();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">普通方式<span class="number">3</span></span><br><span class="line">多线程方式<span class="number">8</span></span><br><span class="line"><span class="comment">// count为1000000001时</span></span><br><span class="line">普通方式<span class="number">1492</span></span><br><span class="line">多线程方式<span class="number">664</span>    </span><br></pre></td></tr></table></figure>
+
+<p>使用工具测出，1秒中发生1000多次上下文切换。</p>
+<h3 id="1-2、减少上下文切换"><a href="#1-2、减少上下文切换" class="headerlink" title="1.2、减少上下文切换"></a>1.2、减少上下文切换</h3><ul>
+<li>无锁并发编程：CAS + volatile 多线程竞争时，会引起上下文切换，可以使用一些办法避免使用锁，如不同的线程 按照Hash算法<strong>处理不同的区域</strong>，一个数据只能有一个线程处理。</li>
+<li>尽量少的创建线程</li>
+<li>协程，在单线程里面实现多任务的调度</li>
+</ul>
+<h3 id="1-3、死锁"><a href="#1-3、死锁" class="headerlink" title="1.3、死锁"></a>1.3、死锁</h3><p><strong>死锁演示：</strong></p>
+<ol>
+<li>线程t1 执行 占有对象A，线程t2 执行 占有对象B</li>
+<li>线程t1 接着执行需要对象B ，但是无法获取，于是线程 t1 等待</li>
+<li>线程t2 接着执行需要对象A ，但是无法获取，于是线程 t2 等待</li>
+<li>线程 t1 和 t2 将会无限的等待下去。</li>
+</ol>
+<p><strong>实际开发</strong>：实际开发中不会写出这么愚蠢的代码，但是有可能出现以下情形</p>
+<ul>
+<li>t1 拿到资源A（锁）之后，因为异常情况而没有释放</li>
+<li>t1 拿到资源A （锁）之后，释放的时候抛出异常，没有释放成功</li>
+</ul>
+<p><strong>避免死锁：</strong></p>
+<ul>
+<li>避免一个线程获取多个锁</li>
+<li>避免一个线程在锁内占用多个资源</li>
+<li>尝试使用<strong>定时锁</strong>，使用lock.trylock(timeout) 来替代内部锁机制</li>
+<li>对于数据库锁，加锁和释放必须在一个数据库连接中，否则会出现解锁失效的问题。</li>
+</ul>
+<h3 id="1-4、资源限制的挑战"><a href="#1-4、资源限制的挑战" class="headerlink" title="1.4、资源限制的挑战"></a>1.4、资源限制的挑战</h3><p><strong>资源限制：</strong>程序的执行速度受限于软件或者硬件资源，如网站带宽2M/s，即使再多的线程，速度也不会变快。</p>
+<p><strong>问题：</strong>代码串行变成并发执行，但是如果将某段串行的代码并发执行，那么由于资源受限，反而会执行的更慢，因为<strong>增加了上下文切换和资源调度</strong>的时间，</p>
+<p><strong>解决：</strong>考虑集群并行执行程序，单机的资源有限，就让程序在多机上运行，如不同的任务通过算法选择一台机器执行程序</p>
+<p><strong>资源受限的情况下并发：</strong>根据不同的资源限制调整程序的并发度，比如下载文件程序依赖两个资源：带宽和硬盘读写。有数据库操作时，涉及数据库连接数，如果SQL执行的快，而线程的数量比数据库连接数大很多时，某些线程会堵塞，等待数据库连接。</p>
+<h2 id="2、可见性"><a href="#2、可见性" class="headerlink" title="2、可见性"></a>2、可见性</h2><h3 id="2-1、退不出的循环"><a href="#2-1、退不出的循环" class="headerlink" title="2.1、退不出的循环"></a>2.1、退不出的循环</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">boolean</span> run = <span class="keyword">true</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">while</span> (run)&#123;</span><br><span class="line">            <span class="comment">// 加上之后，就会重新刷新变量以为print是 synchronized</span></span><br><span class="line"><span class="comment">//          System.out.println(&quot;执行代码&quot;);</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">    run = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img%5CThread%5C15.jpg"></p>
+<p>每个线程都有自己的工作内存，频繁地从主存中读取run的值，jit即时编译器会将run的值缓存至自己工作内存中的高速缓存中，减少对主存中run的访问以提高效率，当主线程更新run的值时，t线程并不会更新里面的值。</p>
+<h3 id="2-2、volatile可见性保证"><a href="#2-2、volatile可见性保证" class="headerlink" title="2.2、volatile可见性保证"></a>2.2、volatile可见性保证</h3><p><strong>概念：</strong>用来修饰成员变量和静态成员变量（<strong>放在主存中的变量</strong>），保证所有线程看到某个变量的值都是一致的，保证了共享变量的”可见性”，同时不会引起线程上下文的切换。</p>
+<p><strong>注意：</strong>volatile不能保证原子性。</p>
+<p><strong>实现原理：</strong>每次操作完数据，JVM会发送一条Lock前缀的指令</p>
+<ol>
+<li>Lock前缀的指令会引起处理器缓存写回到主存</li>
+<li>一个处理器缓存写回到主存，会导致其他处理器的缓存失效。</li>
+</ol>
+<p><strong>效果</strong>：volatile的修饰的变量具有可见性</p>
+<ol>
+<li>写一个volatile的变量，JMM会把该线程的本地内存的<code>共享变量</code>值强制刷新回主存。</li>
+<li>读一个volatile的变量，JMM会把该线程的本地内存的<code>共享变量</code>置为无效，从主存获取值。</li>
+</ol>
+<blockquote>
+<p>犹豫模式</p>
+</blockquote>
+<p><strong>定义：</strong>Balking （犹豫）模式用在一个线程发现另一个线程或本线程已经做了某一件相同的事，那么本线程就无需再做了，直接结束返回。有点类似于单例。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> done = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">if</span> (done)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;不用执行了&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            done= <span class="keyword">true</span>;</span><br><span class="line">            System.out.println(<span class="string">&quot;执行业务代码&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3、synchronized保证可见性"><a href="#2-3、synchronized保证可见性" class="headerlink" title="2.3、synchronized保证可见性"></a>2.3、synchronized保证可见性</h3><p><strong>原理：</strong>和volatile基本一致，可以<strong>保证代码块内部变量的可见性</strong></p>
+<ol>
+<li>volatile的每次读，就相当于synchronized的加锁，会强制从主存读取共享变量</li>
+<li>volatile的每次写，就相当于synchronized的解锁，会强制把共享变量刷新会主存</li>
+</ol>
+<h3 id="2-4、总结"><a href="#2-4、总结" class="headerlink" title="2.4、总结"></a>2.4、总结</h3><ol>
+<li>synchronized 是属于重量级操作，性能相对更低。</li>
+<li>volatile的是轻量级操作</li>
+</ol>
+<h2 id="3、原子性"><a href="#3、原子性" class="headerlink" title="3、原子性"></a>3、原子性</h2><h3 id="3-1、原子性的定义"><a href="#3-1、原子性的定义" class="headerlink" title="3.1、原子性的定义"></a>3.1、原子性的定义</h3><p><strong>原子性：</strong>一个操作具有原子操作，即每个操作直接不可分割，那么我们称它具有原子性</p>
+<blockquote>
+<p>多线程非原子性操作带来的问题</p>
+</blockquote>
+<p>自增 和 自减的指令</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">getstatic i   <span class="comment">//  1 获取静态变量i的值</span></span><br><span class="line">iconst_1      <span class="comment">//  2  准备常量1</span></span><br><span class="line">iadd          <span class="comment">//  3  自增</span></span><br><span class="line">putstatic i   <span class="comment">//  4   将修改后的值存入静态变量i</span></span><br><span class="line">    </span><br><span class="line">getstatic i  <span class="comment">//  5 获取静态变量i的值</span></span><br><span class="line">iconst_1     <span class="comment">//  6 准备常量1</span></span><br><span class="line">isub         <span class="comment">//  7 自减</span></span><br><span class="line">putstatic i  <span class="comment">//  8 将修改后的值存入静态变量i</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 由于线程上下文的切换，导致多个指令之间交错执行，最终导致结果不一致。</span></span><br></pre></td></tr></table></figure>
+
+<p>在JAVA看起来只有一行代码，但是CPU执行却需要多条指令，假设变量 a 为0 执行，该命令</p>
+<ol>
+<li>正常情况：执行 1 2 3 4 5 6 7 8 ，结果为0</li>
+<li>指令交错执行：1  2   3   5 6 7 8 4 ，可以看到先自增，但是不把自增结果 1修改回去，此时 a 的值还是 0 ，然后又执行 5678 把a 修改为了 -1 ，最后执行 4 ，a 变为了 1，这与我们想要的结果完全不符合。</li>
+</ol>
+<h3 id="3-2、volatile不具有原子性"><a href="#3-2、volatile不具有原子性" class="headerlink" title="3.2、volatile不具有原子性"></a>3.2、volatile不具有原子性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Thread t1 = <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;<span class="number">20000</span>;i++)&#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    Thread t2 =<span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;<span class="number">20000</span>;i++)&#123;</span><br><span class="line">            count--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    t1.start();</span><br><span class="line">    t2.start();</span><br><span class="line">    t1.join();</span><br><span class="line">    t2.join();</span><br><span class="line">    System.out.println(<span class="string">&quot;count的值是&quot;</span>+count);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果不为0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-3、synchronized原子性保证"><a href="#3-3、synchronized原子性保证" class="headerlink" title="3.3、synchronized原子性保证"></a>3.3、synchronized原子性保证</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test06</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">50000</span>; j++) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (list)&#123;</span><br><span class="line">                    list.add(<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;线程1&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">50000</span>; j++) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (list)&#123;</span><br><span class="line">                    list.add(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;线程2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 锁不住基本类型的包装类：Integer用synchorized锁不住的原因：Integer每次变化都是用一个新对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-4、CAS原子性保证"><a href="#3-4、CAS原子性保证" class="headerlink" title="3.4、CAS原子性保证"></a>3.4、CAS原子性保证</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test06</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> AtomicInteger atomic = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 让atmoic进行CAS自增</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">count</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> i = atomic.get();</span><br><span class="line">            <span class="keyword">boolean</span> flag = atomic.compareAndSet(i,i+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (flag)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Test06 test = <span class="keyword">new</span> Test06();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j++) &#123;</span><br><span class="line">                    test.count();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).start();</span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        System.out.println(test.atomic);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、有序性"><a href="#4、有序性" class="headerlink" title="4、有序性"></a>4、有序性</h2><h3 id="4-1、重排序优化"><a href="#4-1、重排序优化" class="headerlink" title="4.1、重排序优化"></a>4.1、重排序优化</h3><blockquote>
+<p>鱼罐头加工优化</p>
+</blockquote>
+<p><img src="/img%5CThread%5C16.jpg"></p>
+<p>工人借助机器，把每条鱼的步骤执行分离开，保证每个机器都能被充分利用。</p>
+<blockquote>
+<p>CPU指令优化：指令流水技术</p>
+</blockquote>
+<p><strong>概念：</strong>现代处理器会设计为一个时钟周期完成一条执行时间最长的CPU指令。为什么这么做呢？指令可以划分为一个更小的阶段，例如每条指令都可以分为： 取指令 — 指令译码 — 执行指令 —–  内存访问  —- 数据写回   5个步骤</p>
+<p><strong>重排序：</strong>CPU利用重排序的思想，把不同指令的不同部分组合起来一块执行，提高效率。</p>
+<p>现代处理器支持多级指令流水线，例如同时支持  <code>取指令 -- 指令译码 -- 执行指令 -- 内存访问 -- 数据写回</code> 的处理器，就可以称之为 <strong>五级指令流水线</strong>，这时CPU可以在一个时钟周期里面，同时运行五条指令的不同阶段（相当于一条执行时间最长的浮渣指令），通过这个技术，虽然不能缩短单条指令的执行时间，但是提高了指令的吞吐率。</p>
+<p><img src="/img%5CThread%5C17.jpg"></p>
+<blockquote>
+<p>重排序后果</p>
+</blockquote>
+<p>导致指令的顺序被打乱了，所以部分指令重排序会被静止，JMM就保证了单线程条件下，重排序不会影响结果</p>
+<h3 id="4-2、重排序带来的问题"><a href="#4-2、重排序带来的问题" class="headerlink" title="4.2、重排序带来的问题"></a>4.2、重排序带来的问题</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">boolean</span> ready = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1 执行此方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actor1</span><span class="params">(Result r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ready) &#123;</span><br><span class="line">        r.r1 = num + num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        r.r1 = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 线程2 执行此方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actor2</span><span class="params">(Result r)</span> </span>&#123;</span><br><span class="line">    num = <span class="number">2</span>;</span><br><span class="line">    ready = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果可能的情况</p>
+<ul>
+<li>情况1：线程1 先执行，这时 ready = false，所以进入 else 分支结果为 1</li>
+<li>情况2：线程2 先执行 num = 2，但没来得及执行 ready = true，线程1 执行，还是进入 else 分支，结果为1</li>
+<li>情况3：线程2 执行到 ready = true，线程1 执行，这回进入 if 分支，结果为 4（因为 num 已经执行过了）</li>
+<li>情况4：:线程2 执行 ready = true，切换到线程1，进入 if 分支，相加为 0，再切回线程2 执行 num = 2。</li>
+</ul>
+<p>这种现象叫做指令重排，是 JIT 编译器在运行时的一些优化，这个现象需要通过大量测试才能复现，可以使用jcstress工具进行测试。</p>
+<p><strong>总结：</strong>重排序导致某些条件判断与我们的预期不符合，导致程序进入错误的分支。</p>
+<h3 id="4-3、volatile解决重排序"><a href="#4-3、volatile解决重排序" class="headerlink" title="4.3、volatile解决重排序"></a>4.3、volatile解决重排序</h3><p>volatile 的底层实现原理是内存屏障，Memory Barrier（Memory Fence），会禁止部分重排序</p>
+<ol>
+<li>对 volatile 变量的写指令后会加入写屏障</li>
+<li>对 volatile 变量的读指令前会加入读屏障</li>
+</ol>
+<blockquote>
+<p>不能解决指令交错：非原子性的原因</p>
+</blockquote>
+<ol>
+<li>写屏障仅仅是保证之后的读能够读到最新的结果，但不能保证其它线程的读跑到它前面去</li>
+<li>而有序性的保证也只是保证了本线程内相关代码不被重排序</li>
+</ol>
+<h3 id="4-4、synchronized解决重排序"><a href="#4-4、synchronized解决重排序" class="headerlink" title="4.4、synchronized解决重排序"></a>4.4、synchronized解决重排序</h3><p>synchronized解决重排序的问题很简单，加上synchronized之后，这两个方法之间就相当于串行执行，相当于单线程执行。而JMM保证了单线程执行下的程序正确性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 线程1 执行此方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">actor1</span><span class="params">(Result r)</span> </span>&#123;</span><br><span class="line">    ...........</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 线程2 执行此方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">actor2</span><span class="params">(Result r)</span> </span>&#123;</span><br><span class="line">    .........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5、CAS深入"><a href="#5、CAS深入" class="headerlink" title="5、CAS深入"></a>5、CAS深入</h2><h3 id="5-1、无锁并发"><a href="#5-1、无锁并发" class="headerlink" title="5.1、无锁并发"></a>5.1、无锁并发</h3><blockquote>
+<p>银行问题</p>
+</blockquote>
+<p>接口里面的demo方法会创建100个线程，并且执行 扣 10元的操作。现在希望完善存钱和取钱的方法达到线程安全</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">    <span class="function">Integer <span class="title">getBalance</span><span class="params">()</span></span>;            <span class="comment">// 取款</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">withdraw</span><span class="params">(Integer amount)</span></span>;   <span class="comment">// 存款</span></span><br><span class="line">    <span class="comment">// 启动1000个线程。每个线程扣10元</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">demo</span><span class="params">(Account account)</span> </span>&#123;</span><br><span class="line">        List&lt;Thread&gt; ts = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">long</span> start = System.nanoTime();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">            ts.add(<span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">                account.withdraw(<span class="number">10</span>);</span><br><span class="line">            &#125;));</span><br><span class="line">        &#125;</span><br><span class="line">        ts.forEach(Thread::start);</span><br><span class="line">        ts.forEach(t -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                t.join();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">long</span> end = System.nanoTime();</span><br><span class="line">        System.out.println(account.getBalance() + <span class="string">&quot; cost: &quot;</span> + (end-start)/<span class="number">1000_000</span> + <span class="string">&quot; ms&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接口实现：使用CAS方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AccountSafe</span> <span class="keyword">implements</span> <span class="title">Account</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    AtomicInteger accounts;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getBalance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  accounts.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">withdraw</span><span class="params">(Integer amount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            Integer now = accounts.get();</span><br><span class="line">            Integer result = now - amount;</span><br><span class="line">            <span class="keyword">if</span>(accounts.compareAndSet(now, result))&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2、CAS为什么能够无锁并发"><a href="#5-2、CAS为什么能够无锁并发" class="headerlink" title="5.2、CAS为什么能够无锁并发"></a>5.2、CAS为什么能够无锁并发</h3><ol>
+<li>compareAndSet，保证修改的过程中，accounts没有被其他的线程动过</li>
+<li>volatile：AtomicInteger类里面维护的变量value，使用volatile修饰的，CAS 必须借助 volatile 才能读取到共享变量的最新值来实现【比较并交换】的效果。</li>
+</ol>
+<h3 id="5-3、ABA问题"><a href="#5-3、ABA问题" class="headerlink" title="5.3、ABA问题"></a>5.3、ABA问题</h3><p><strong>描述：</strong>CAS判断操作，是通过值有没有变化，但是可能出现 A—&gt; B  — &gt;A 的情况，CAS认为没有变化，但是实际上已经发生了改变</p>
+<p><strong>解决：</strong>使用JDK1.5开始提供的AtomicStampedReference原子引用类型，把数据包装到原子引用类型里面，通过原子引用类型操作变量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String str = <span class="string">&quot;张三&quot;</span>;</span><br><span class="line">        <span class="comment">// 把str放到原子引用类型AtomicStampedReference里面</span></span><br><span class="line">        AtomicStampedReference a = <span class="keyword">new</span> AtomicStampedReference(str,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> stamp = a.getStamp();</span><br><span class="line">        a.set(<span class="string">&quot;李四&quot;</span>,a.getStamp()+<span class="number">1</span>);</span><br><span class="line">        a.set(<span class="string">&quot;张三&quot;</span>,a.getStamp()+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span>(a.getStamp()==stamp) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;是原来哪个对象&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;对象已经被修改&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 输出对象已经被修改</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>循环开销大</p>
+</blockquote>
+<p><strong>描述：</strong>CAS可能会一直自旋，可以CPU带来很大的执行开销。</p>
+<blockquote>
+<p>只能保证一个共享变量的原子操作</p>
+</blockquote>
+<p><strong>描述：</strong>对一个共享变量操作时，可以进行CAS，但是对于多个变量进行处理就不行。</p>
+<p><strong>解决：</strong></p>
+<ul>
+<li>使用锁</li>
+<li>使用JDK1.5中的AtomicReference引用类型类，把多个变量封装到一个引用类型里面</li>
+</ul>
+<h3 id="5-4、CAS和锁的踪迹"><a href="#5-4、CAS和锁的踪迹" class="headerlink" title="5.4、CAS和锁的踪迹"></a>5.4、CAS和锁的踪迹</h3><ol>
+<li>CAS 是基于乐观锁的思想：最乐观的估计，不怕别的线程来修改共享变量，就算改了也没关系，我吃亏点再重试呗。</li>
+<li>synchronized 是基于悲观锁的思想：最悲观的估计，得防着其它线程来修改共享变量，我上了锁你们都别想改，我改完了解开锁，你们才有机会。</li>
+<li>CAS 体现的是无锁并发、无阻塞并发，请仔细体会这两句话的意思<ol>
+<li>因为没有使用 synchronized，所以线程不会陷入阻塞，这是效率提升的因素之一</li>
+<li>但如果竞争激烈(写操作多)，可以想到重试必然频繁发生，反而效率会受影响</li>
+</ol>
+</li>
+</ol>
+<h2 id="6、synchronized优化"><a href="#6、synchronized优化" class="headerlink" title="6、synchronized优化"></a>6、synchronized优化</h2><p>过去都称为重量级锁，但是在JDK1.6之后优化了（引入轻量级锁和偏向锁），有些情况下并不是那么重了。</p>
+<p><strong>锁的对象：</strong>当一个线程访问同步代码块时必须获得锁，退出或者抛出异常必须释放锁。</p>
+<ul>
+<li>普通同步方法：锁的是实例对象</li>
+<li>静态同步方法：锁的是当前类的Class对象</li>
+<li>同步方法块：锁的是synchorized括号里配置的对象。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">注意：线程A锁 类Demo的普通方法,线程B 锁类Demo的静态方法，二者不会互斥 </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>同步实现原理</p>
+</blockquote>
+<p><strong>同步代码块实现原理</strong>：基于<code>进入和退出Monitor对象</code></p>
+<p><strong>Monitor对象：</strong>对象监听器，每个对象都有一个monitor与之关联。锁住了一个对象，就是获得对象相关联的监视器。</p>
+<ul>
+<li>monitorenter指令：在编译后插入到同步代码块的开始位置，让锁计数器数值加1。</li>
+<li>monitorexit指令：插入到同步代码块的结束处和异常处，让锁计数器数值减1。</li>
+<li>JVM保证每个monitorenter都必须有一个monitorexit与之匹配。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ol>
+<li>锁计数器数值初始为0，表示可以获取锁；大于0表示已经被占用；能不断累加，这也是可重入的体现。思想和 JUC 的AQS 一样。</li>
+<li>wait 和notify 等方法也依赖于 monitor 对象，这也是为什么wait 需要获得锁的原因</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">加锁反编译为Class之后发现：synchronized锁住和释放就是  monitorenter 和  monitorexit指令</span><br></pre></td></tr></table></figure>
+
+<p><strong>同步方法实现原理：</strong>基于ACC_SYNCHRONIZED 标识。</p>
+<p>JVM会调用指令读取运行时常量池中方法的 ACC_SYNCHRONIZED 标志。该标识指明了该方法是⼀个同步方法。这样对象监视器一次只会让一个线程执行同步方法。</p>
+<p>二者本质都是<strong>对象监视器</strong> monitor 的获取</p>
+<blockquote>
+<p>对象头</p>
+</blockquote>
+<p>Klass Word为指针，指向对应的Class对象；Mark Word 存储锁信息</p>
+<p><img src="/img%5CThread%5C12.jpg"></p>
+<p><strong>Java对象头</strong>：synchorized的锁信息是存在Java对象头里，数组类型3字宽，其他2字宽。Mark Word存储锁信息，来标记是哪个线程获得了该锁，下面是Mark Word存的数据。</p>
+<ul>
+<li>偏向锁：存放线程ID</li>
+<li>轻量级锁：指向栈中锁记录的指针</li>
+<li>重量级锁：指向互斥量的指针</li>
+</ul>
+<p><img src="/img%5CThread%5C13.jpg"></p>
+<p><strong>锁的优化：</strong>Java1.6对synchorized进行了优化</p>
+<p><strong>锁的升级：</strong>JavaSE1.6中，锁有四种状态，级别从低到高依次为 无锁—&gt; 偏向锁 —&gt; 轻量级锁 —&gt; 重量级锁，<code>锁可以升级但是不能降级</code>。</p>
+<p><img src="/img%5CThread%5C26.jpg"></p>
+<blockquote>
+<p>偏向锁</p>
+</blockquote>
+<p><strong>缘由：</strong>HotSpot作者发现，大多数情况下，锁很少存在竞争情况，大多数情况下，锁都是一个线程多次释放和获得，所以为了让线程获得锁的代价更低，引入了偏向锁</p>
+<p><strong>方案：</strong></p>
+<ul>
+<li><strong>无锁情况获取：</strong>直接获得锁，并在对象头和栈帧的锁记录锁偏向的线程ID（CAS方式）</li>
+<li><strong>有锁情况获取：</strong>任意线程获取锁时，会比较是否为偏向锁<code>是否有本线程的ID</code>，如果有表示已经占有了锁；如果没有，则看当前<code>是否还是偏向锁</code>，若是则会尝试<code>让偏向锁指向自己的线程ID</code>，若不是则属于竞争其他锁的情况。</li>
+<li><strong>锁的释放：</strong>当有其他线程竞争锁时，系统会判断持有锁线程<code>是否存活</code>，<ul>
+<li>若不存活，则把对象头设置为无锁状态，然后当前线程获得锁（还是偏向锁，CAS记录ID）；</li>
+<li>若存活，则JVM会在<code>持有偏向锁的线程执行完成之后</code>进行锁的升级，把对象头的 Mark Word 拷贝到当前线程栈中的锁记录中，然后把对象头的 Mark Word 中锁记录的指针执行 自己，若成功表面竞争到了轻量级锁。</li>
+</ul>
+</li>
+</ul>
+<p><strong>关闭锁：</strong>  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:BiasedLockingStartupDelay=<span class="number">0</span>  <span class="comment">// 偏向锁生效有延迟，该方法关闭延迟</span></span><br><span class="line">-XX:UseBiasedLocking=<span class="keyword">false</span>       <span class="comment">// 关闭后程序默认进入轻量级锁状态    </span></span><br></pre></td></tr></table></figure>
+
+<p><strong>总结：</strong>偏向锁就是线程A持有锁，不正常释放，直到线程B来获取锁时，才让线程A释放锁</p>
+<ul>
+<li>加锁：让对象头记录本线程的ID</li>
+<li>释放锁：先清空ID，在记录成新的线程的ID</li>
+</ul>
+<blockquote>
+<p>轻量级锁</p>
+</blockquote>
+<ul>
+<li><strong>加锁</strong>：<ol>
+<li>执行同步代码块之前，<strong>栈中创建</strong>锁记录（Lock Record）对象，储存对象的Mark Word和对象引用reference。</li>
+<li>把锁记录中的对象引用reference 指向 <code>要锁住的那个对象</code>，把对象头中的Mark Word复制到锁记录中（称为Diasplaced Mark Word）。</li>
+<li>使用 <code>CAS</code> 的方式尝试把  要锁住的对象 的对象头的 Mark Word 替换，让对象的对象头储存的就是锁记录的地址和状态，成功则获得了锁。</li>
+<li>失败，则会直接膨胀成为重量级锁（将Mark Word指向重量级锁Monitor的指针，然后挂起本线程）</li>
+</ol>
+</li>
+<li><strong>解锁：</strong><ol>
+<li>如果获取的是取值为 null 的锁记录 ，表示有重入，这时重置锁记录，表示重入计数减一</li>
+<li>获取的锁记录取值不为 null，那么使用cas将Mark Word的值恢复给对象。<ul>
+<li>成功，表示成功释放锁</li>
+<li>失败，表示在当前线程持有锁的这段时间内，其他线程也竞争过锁，并且发生了锁升级为重量锁，这时需要去Monitor的等待队列中唤醒一个线程去重新竞争锁。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>总结：</strong> <code>使用CAS获取锁</code>，如果释放时竞争激烈，就把锁升级成重量级锁。</p>
+<ul>
+<li>加锁：先把对象头的信息备份，然后让对象头的信息更换为当前线程的信息</li>
+<li>解锁：把备份还原</li>
+</ul>
+<blockquote>
+<p>重量级锁</p>
+</blockquote>
+<p><strong>自旋：</strong>重量级锁竞争的时候，还可以使用自旋来进行优化，如果当前线程自旋成功（即在自旋的时候持锁的线程释放了锁），那么当前线程就可以不用进行上下文切换就获得了锁</p>
+<p><strong>加锁和释放：</strong>即线程的阻塞和唤醒，这个操作是借助操作系统的系统调用来实现的，常见的 Linux 下就是利用 pthread 的 mutex 来实现的，所以消耗资源大。</p>
+<p><strong>注意：</strong>自旋会占用 CPU 时间，单核 CPU 自旋就是浪费，多核 CPU 自旋才能发挥优势。在 Java 6 之后自旋锁是自适应的，比如对象刚刚的一次自旋操作成功过，那么认为这次自旋成功的可能性会高，就多自旋几次；反之，就少自旋甚至不自旋，总之，比较智能。Java 7 之后不能控制是否开启自旋功能</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>偏向锁和轻量级锁是为了针对特定环境下，没有多线程竞争时，没必要用重量锁消耗资源。</p>
+<p>一旦竞争激烈一点，就会立即升级为重量级锁，重量级锁会进行轻度自旋来优化效率。</p>
+<h2 id="7、JMM三大特性总结"><a href="#7、JMM三大特性总结" class="headerlink" title="7、JMM三大特性总结"></a>7、JMM三大特性总结</h2><ul>
+<li>原子性：保证指令不会受到<code>线程上下文切换</code>的影响</li>
+<li>可见性 ：保证指令不会受 cpu 缓存的影响</li>
+<li>有序性 ：保证指令不会受 cpu 指令并行优化的影响</li>
+</ul>
+<p><strong>synchronized ：</strong>保证原子性和可见性</p>
+<p><strong>volatile：</strong>保证了可见性，防止了指令重排</p>
+<p>二者都能保证有序性：</p>
+<ul>
+<li>synchronized ：通过同步机制，保证代码块之间的有序进行</li>
+<li>volatile：通过禁止部分指令重排，保证代码执行顺序</li>
+</ul>
+<h2 id="8、例题"><a href="#8、例题" class="headerlink" title="8、例题"></a>8、例题</h2><blockquote>
+<p>犹豫模式习题</p>
+</blockquote>
+<p>希望 doInit() 方法仅被调用一次，下面的实现是否有问题，为什么？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestVolatile</span> </span>&#123;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">boolean</span> initialized = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialized) &#123;    <span class="comment">// 1</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        doInit();             <span class="comment">// 2</span></span><br><span class="line">        initialized = <span class="keyword">true</span>;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doInit</span><span class="params">()</span> </span>&#123;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p><strong>总结：</strong>有问题，有可能线程2执行完2，但是没有修改状态 ，于是线程1通过判断接着创建对象。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/07/04/Java%E5%B9%B6%E5%8F%91/Java%E5%B9%B6%E5%8F%91%20(%20%E4%BA%8C%20)%20JMM%E5%88%9D%E6%8E%A2/">http://example.com/2021/07/04/Java%E5%B9%B6%E5%8F%91/Java%E5%B9%B6%E5%8F%91%20(%20%E4%BA%8C%20)%20JMM%E5%88%9D%E6%8E%A2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JUC/">JUC</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/8.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/07/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/(%20%E5%8D%81%20)%20%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"><img class="prev-cover" src="/img/cover/14.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">数据结构和算法(十):排序算法</div></div></a></div><div class="next-post pull-right"><a href="/2021/07/04/Java%E5%B9%B6%E5%8F%91/Java%E5%B9%B6%E5%8F%91%20(%20%E4%B8%80%20)%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/"><img class="next-cover" src="/img/cover/9.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java并发(一):多线程基础</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/07/04/Java并发/Java并发 ( 九 ) 框架和其他工具类/" title="Java并发(九):Java并发的其他知识"><img class="cover" src="/img/cover/17.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(九):Java并发的其他知识</div></div></a></div><div><a href="/2021/07/04/Java并发/Java并发 ( 八 ) 线程池/" title="Java并发(八):Java线程池"><img class="cover" src="/img/cover/16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(八):Java线程池</div></div></a></div><div><a href="/2021/07/04/Java并发/Java并发 ( 四 ) 原子操作类/" title="Java并发(四):原子类"><img class="cover" src="/img/cover/11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(四):原子类</div></div></a></div><div><a href="/2021/07/04/Java并发/Java并发 ( 三 ) 内存模型/" title="Java并发(三):JMM内存模型"><img class="cover" src="/img/cover/10.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(三):JMM内存模型</div></div></a></div><div><a href="/2021/07/04/Java并发/Java并发 ( 六 ) 并发队列/" title="Java并发(六):Java并发队列"><img class="cover" src="/img/cover/13.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(六):Java并发队列</div></div></a></div><div><a href="/2021/07/04/Java并发/Java并发 ( 五 ) 锁/" title="Java并发(五):锁"><img class="cover" src="/img/cover/12.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-04</div><div class="title">Java并发(五):锁</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">1、线程上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%80%E5%AE%9A%E6%9B%B4%E5%BF%AB%E4%B9%88"><span class="toc-text">1.1、多线程一定更快么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E5%87%8F%E5%B0%91%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">1.2、减少上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E3%80%81%E6%AD%BB%E9%94%81"><span class="toc-text">1.3、死锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-text">1.4、资源限制的挑战</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">2、可见性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E9%80%80%E4%B8%8D%E5%87%BA%E7%9A%84%E5%BE%AA%E7%8E%AF"><span class="toc-text">2.1、退不出的循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81volatile%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="toc-text">2.2、volatile可见性保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81synchronized%E4%BF%9D%E8%AF%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">2.3、synchronized保证可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">2.4、总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">3、原子性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%8E%9F%E5%AD%90%E6%80%A7%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">3.1、原子性的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81volatile%E4%B8%8D%E5%85%B7%E6%9C%89%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">3.2、volatile不具有原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81synchronized%E5%8E%9F%E5%AD%90%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="toc-text">3.3、synchronized原子性保证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81CAS%E5%8E%9F%E5%AD%90%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="toc-text">3.4、CAS原子性保证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text">4、有序性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81%E9%87%8D%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96"><span class="toc-text">4.1、重排序优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81%E9%87%8D%E6%8E%92%E5%BA%8F%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">4.2、重排序带来的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81volatile%E8%A7%A3%E5%86%B3%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-text">4.3、volatile解决重排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81synchronized%E8%A7%A3%E5%86%B3%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-text">4.4、synchronized解决重排序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81CAS%E6%B7%B1%E5%85%A5"><span class="toc-text">5、CAS深入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E6%97%A0%E9%94%81%E5%B9%B6%E5%8F%91"><span class="toc-text">5.1、无锁并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81CAS%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E5%A4%9F%E6%97%A0%E9%94%81%E5%B9%B6%E5%8F%91"><span class="toc-text">5.2、CAS为什么能够无锁并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E3%80%81ABA%E9%97%AE%E9%A2%98"><span class="toc-text">5.3、ABA问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4%E3%80%81CAS%E5%92%8C%E9%94%81%E7%9A%84%E8%B8%AA%E8%BF%B9"><span class="toc-text">5.4、CAS和锁的踪迹</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81synchronized%E4%BC%98%E5%8C%96"><span class="toc-text">6、synchronized优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81JMM%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%E6%80%BB%E7%BB%93"><span class="toc-text">7、JMM三大特性总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8%E3%80%81%E4%BE%8B%E9%A2%98"><span class="toc-text">8、例题</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

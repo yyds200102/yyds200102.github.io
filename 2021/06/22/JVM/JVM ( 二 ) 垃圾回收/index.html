@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JVM(二):垃圾回收 | Notes</title><meta name="keywords" content="JVM"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Java的基本语法">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JVM(二):堆内存回收 | Notes</title><meta name="keywords" content="JVM"><meta name="author" content="Bug"><meta name="copyright" content="Bug"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Java的基本语法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM(二):垃圾回收">
+<meta property="og:title" content="JVM(二):堆内存回收">
 <meta property="og:url" content="http://example.com/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
 <meta property="og:site_name" content="Notes">
 <meta property="og:description" content="Java的基本语法">
@@ -53,7 +53,7 @@
   islazyload: false,
   isanchor: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'JVM(二):垃圾回收',
+  title: 'JVM(二):堆内存回收',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
@@ -145,30 +145,38 @@
     if (fontSizeVal !== undefined) {
       document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
     }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/20.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JVM(二):垃圾回收</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-22T02:53:03.000Z" title="发表于 2021-06-22 10:53:03">2021-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-22T02:56:05.000Z" title="更新于 2021-06-22 10:56:05">2021-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JVM(二):垃圾回收"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、判断对象可以回收"><a href="#1、判断对象可以回收" class="headerlink" title="1、判断对象可以回收"></a>1、判断对象可以回收</h2><h3 id="1-1、引用计数法"><a href="#1-1、引用计数法" class="headerlink" title="1.1、引用计数法"></a>1.1、引用计数法</h3><p>当一个对象<strong>被引用时</strong>，就当引用对象的值加一，当值为 0 时，就表示该对象不被引用，可以被垃圾收集器回收。</p>
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar/1.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/20.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Notes</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JVM(二):堆内存回收</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-06-22T02:53:03.000Z" title="发表于 2021-06-22 10:53:03">2021-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-22T02:56:05.000Z" title="更新于 2021-06-22 10:56:05">2021-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">9.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JVM(二):堆内存回收"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1、判断对象可以回收"><a href="#1、判断对象可以回收" class="headerlink" title="1、判断对象可以回收"></a>1、判断对象可以回收</h2><h3 id="1-1、引用计数法"><a href="#1-1、引用计数法" class="headerlink" title="1.1、引用计数法"></a>1.1、引用计数法</h3><p>当一个对象<strong>被引用时</strong>，就当引用对象的值加一，当值为 0 时，就表示该对象不被引用，可以被回收。</p>
 <p><strong>缺陷：</strong>循环引用时，两个对象的计数都为1，导致两个对象都无法被释放。</p>
 <p><img src="/img/JVM/9.jpg"></p>
 <h3 id="1-2、可达性分析算法"><a href="#1-2、可达性分析算法" class="headerlink" title="1.2、可达性分析算法"></a>1.2、可达性分析算法</h3><p>扫描堆中的对象，看能否沿着 GC Root 对象为起点的引用链找到该对象，如果找不到，则表示可以回收</p>
 <p><strong>GC Root 对象</strong>：</p>
 <ul>
-<li>虚拟机栈（栈帧中的本地变量表）中引用的对象。</li>
-<li>方法区中类静态属性引用的对象</li>
+<li><code>虚拟机栈</code>中引用的对象。</li>
+<li><code>方法区</code>中类静态属性引用的对象</li>
 <li>方法区中常量引用的对象</li>
 <li>本地方法栈中 JNI（即一般说的Native方法）引用的对象</li>
+<li>JVM内部的引用，比如<code>Class对象</code>，同步（synchronized）对象</li>
 </ul>
-<h3 id="1-3、如何判断⼀个常量是废弃常量"><a href="#1-3、如何判断⼀个常量是废弃常量" class="headerlink" title="1.3、如何判断⼀个常量是废弃常量"></a>1.3、如何判断⼀个常量是废弃常量</h3><p>假如在常量池中存在字符串 “abc”，如果当前没有任何String对象引用该字符串常量的话，就说明常量 “abc” 就是废弃常量，如果这时发生内存回收的话而且有必要的话，”abc” 就会被系统清理出常量池。</p>
-<h3 id="1-4、-如何判断⼀个类是无用的类"><a href="#1-4、-如何判断⼀个类是无用的类" class="headerlink" title="1.4、 如何判断⼀个类是无用的类"></a>1.4、 如何判断⼀个类是无用的类</h3><p>满足下面3个条件，可能被回收，不是一定</p>
-<ul>
-<li>该类所有的实例都已经被回收，也就是 Java 堆中不存在该类的任何实例。</li>
-<li>加载该类的 ClassLoader 已经被回收。</li>
-<li>该类对应的 java.lang.Class 对象没有在任何地⽅被引⽤，⽆法在任何地⽅通过反射访问该类的方法。</li>
-</ul>
-<h3 id="1-5、四种引用"><a href="#1-5、四种引用" class="headerlink" title="1.5、四种引用"></a>1.5、四种引用</h3><p><img src="/img/JVM/10.jpg"></p>
+<blockquote>
+<p>GC ROOT查找过程</p>
+</blockquote>
 <ol>
-<li><strong>强引用</strong>：宁愿抛出OOM异常也不会被回收，除非不再被强引用</li>
-<li><strong>软引用</strong>（SoftReference）：在垃圾回收后，<strong>内存仍不足时</strong>会回收软引用<strong>引用的</strong>对象。</li>
-<li><strong>弱引用</strong>（WeakReference）：在垃圾回收时，无论内存是否充足，都会回收弱引用<strong>引用的</strong>对象。</li>
-<li><strong>虚引用</strong>（PhantomReference）：当虚引用对象所引用的对象被回收以后，虚引用对象就会被放入引用队列中，调用虚引用的方法，虚引用的一个体现是<strong>释放直接内存所分配的内存</strong>，当引用的对象ByteBuffer被垃圾回收以后，虚引用对象Cleaner就会被放入引用队列中，然后调用Cleaner的clean方法来释放直接内存</li>
+<li>第一次可达性后，如果没有被GC RooT引用，那么做一个标记</li>
+<li>JVM选择性调用目标的 finalize 方法（重写了该方法，并且全局该对象未调用过该方）</li>
+<li>第二次可达性后，如果没有被GC RooT引用，那么第二次标记，随后回收。如果可达，就不回收。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">super</span>.finalize();</span><br><span class="line">	Test.test = <span class="keyword">this</span>;  <span class="comment">// 把自己让 GC ROOT引用，就可以逃离一次被回收</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3、四种引用"><a href="#1-3、四种引用" class="headerlink" title="1.3、四种引用"></a>1.3、四种引用</h3><p><img src="/img/JVM/10.jpg"></p>
+<ol>
+<li><p><strong>强引用</strong>：宁愿抛出OOM异常也不会被回收，除非不再被强引用</p>
+</li>
+<li><p><strong>软引用</strong>（SoftReference）：在垃圾回收后，<strong>内存仍不足时</strong>会回收。</p>
+</li>
+<li><p><strong>弱引用</strong>（WeakReference）：在垃圾回收时，无论内存是否充足，都会回收。</p>
+</li>
+<li><p><strong>虚引用</strong>（PhantomReference）：无法通过虚引用获取实例。虚引用的唯一目的就是对象回收时会<code>收到收集器的一个通知</code>。这样便于虚引用对象被回收。当虚引用对象所引用的对象被回收以后，虚引用对象就会被<code>放入引用队列</code>中，调用虚引用的方法，虚引用的一个体现是<strong>释放直接内存所分配的内存</strong>，当引用的对象ByteBuffer被垃圾回收以后，虚引用对象Cleaner就会被放入引用队列中，然后调用Cleaner的clean方法来释放直接内存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue queue = <span class="keyword">new</span> ReferenceQueue();   <span class="comment">// 引用队列</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 被xx引用对象 所引用的对象，这种引用就叫做xx引用</span></span><br><span class="line">PhantomReference&lt;<span class="keyword">byte</span>[]&gt; reference = <span class="keyword">new</span> PhantomReference&lt;<span class="keyword">byte</span>[]&gt;(<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1</span>], queue);  <span class="comment">// PhantomReference虚引用  byte[] 被虚引用的对象</span></span><br><span class="line"></span><br><span class="line">System.out.println(reference.get());  <span class="comment">// null 无法通过虚引用获取对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 若byte[]被回收，那么PhantomReference会添加到 queue 里面被回收。</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <p><strong>注意点：</strong></p>
 <ul>
@@ -177,7 +185,7 @@
 <li>在程序设计中⼀般很少使用弱引用与虚引用，使用软引用的情况多，这是因为软引用可以加速JVM对垃圾内存的回收速度，可以维护系统的运行安全，防止内存溢出OOM等问题的产生。</li>
 </ul>
 <blockquote>
-<p>弱引用案例</p>
+<p>软引用案例</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置-Xmx20m</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ReferenceQueue&lt;<span class="keyword">byte</span>[]&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> _4M = <span class="number">4</span>*<span class="number">1024</span>*<span class="number">1024</span>;</span><br><span class="line">    <span class="comment">// list是GC ROOT 对象</span></span><br><span class="line">    List&lt;SoftReference&lt;<span class="keyword">byte</span>[]&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;<span class="number">5</span> ; i++) &#123;</span><br><span class="line">        <span class="comment">// ref 被强引用对象引用   里面的byte被弱引用对象引用</span></span><br><span class="line">        <span class="comment">// 这里关联引用队列，如果弱引用对象引用的被GC了，那么弱引用对象会添加进队列，可以清除</span></span><br><span class="line">        SoftReference&lt;<span class="keyword">byte</span>[]&gt; ref = <span class="keyword">new</span> SoftReference&lt;&gt;(<span class="keyword">new</span> <span class="keyword">byte</span>[_4M],queue);</span><br><span class="line">        list.add(ref);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    System.out.println(<span class="string">&quot;清理引用队列前&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (SoftReference&lt;<span class="keyword">byte</span>[]&gt; reference:list) &#123;</span><br><span class="line">        System.out.println(reference.get());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 移除引用队列里面的空弱引用</span></span><br><span class="line">    Reference&lt;? extends <span class="keyword">byte</span>[]&gt; poll = queue.poll();</span><br><span class="line">    <span class="keyword">while</span>(poll != <span class="keyword">null</span>) &#123;</span><br><span class="line">        list.remove(poll);  </span><br><span class="line">        poll = queue.poll();  <span class="comment">// 移动到下一个</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    System.out.println(<span class="string">&quot;清理引用队列后&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (SoftReference&lt;<span class="keyword">byte</span>[]&gt; reference:list) &#123;</span><br><span class="line">        System.out.println(reference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -186,303 +194,514 @@
 <p>扩展</p>
 </blockquote>
 <p><strong>终结器引用</strong>（FinalReference）：所有的类都继承自Object类，Object类有一个finalize方法。当某个对象不再被其他的对象所引用时，会先将终结器引用对象放入引用队列中，然后根据终结器引用对象找到它所引用的对象，然后调用该对象的finalize方法。调用以后，该对象就可以被垃圾回收了。</p>
-<h2 id="2、垃圾回收算法"><a href="#2、垃圾回收算法" class="headerlink" title="2、垃圾回收算法"></a>2、垃圾回收算法</h2><h3 id="2-1、标记清除算法"><a href="#2-1、标记清除算法" class="headerlink" title="2.1、标记清除算法"></a>2.1、标记清除算法</h3><ol>
+<h2 id="2、垃圾回收算法"><a href="#2、垃圾回收算法" class="headerlink" title="2、垃圾回收算法"></a>2、垃圾回收算法</h2><h3 id="2-1、概述"><a href="#2-1、概述" class="headerlink" title="2.1、概述"></a>2.1、概述</h3><blockquote>
+<p>总体分类（根据GC ROOT 计算方式）</p>
+</blockquote>
+<ul>
+<li>引用计数式垃圾收集：</li>
+<li>最终式垃圾收集：</li>
+</ul>
+<blockquote>
+<p>分代收集理论</p>
+</blockquote>
+<ul>
+<li>弱分代假说：绝大部分对象都是朝生夕灭的</li>
+<li>强分代假说：熬过多次回收的对象难以消亡</li>
+<li>跨代引用假说：假设跨代的对象之间几乎不产生引用。</li>
+</ul>
+<p><strong>以上提供了一个思路：</strong></p>
+<ol>
+<li>按照对象的年龄分代存储，分代回收。</li>
+<li>跨代引用只需要在更年轻的一代维护一个<code>全局的数据结果（记忆集）</code>，记录存在跨代引用的老年代区域，这样每次回收只需要遍历新生代和部分老年代，分代的作用得到体现。</li>
+</ol>
+<blockquote>
+<p>分代回收名词</p>
+</blockquote>
+<ol>
+<li>部分收集（Partial GC）：<ul>
+<li>新生代收集（Minor GC、Young GC）：只回收新生代</li>
+<li>老年代收集（Major GC、Old GC）：注意<strong>只有 CMS 收集器会单独回收老年代</strong></li>
+<li>混合收集（Mixed GC）：收集整个新生代以及部分老年代的垃圾收集。只有G1会涉及。</li>
+</ul>
+</li>
+<li>整堆收集（Full GC）：全部堆、方法区</li>
+</ol>
+<h3 id="2-2、几种垃圾回收算法"><a href="#2-2、几种垃圾回收算法" class="headerlink" title="2.2、几种垃圾回收算法"></a>2.2、几种垃圾回收算法</h3><h4 id="1、标记清除算法"><a href="#1、标记清除算法" class="headerlink" title="1、标记清除算法"></a>1、标记清除算法</h4><ol>
 <li>标记：把需要清除的垃圾标记起来</li>
 <li>清除：定义一张表，记录垃圾占用空间的<strong>首地址</strong>和<strong>尾地址</strong>，这些空间下次就可以继续分配</li>
 </ol>
-<p>优点：速度快</p>
-<p>缺点：会产生内存碎片，不连续的内存导致无法给大对象进行内存分配，进而导致频繁进行GC，影响性能。</p>
+<p><strong>特点：</strong>速度快，但是会产生内存碎片，不连续的内存导致无法给大对象进行内存分配，进而导致频繁进行GC，影响性能。</p>
 <p><img src="/img/JVM/11.jpg"></p>
-<h3 id="2-2、标记整理"><a href="#2-2、标记整理" class="headerlink" title="2.2、标记整理"></a>2.2、标记整理</h3><ol>
+<h4 id="2、标记整理"><a href="#2、标记整理" class="headerlink" title="2、标记整理"></a>2、标记整理</h4><ol>
 <li>标记：把需要清除的垃圾标记起来</li>
 <li>整理：把垃圾清除后，再把剩余的空间整理，确保没有内存碎片</li>
 </ol>
-<p>缺点：速度慢</p>
-<p>优点：没有内存碎片</p>
+<p><strong>特点：</strong>速度慢，但是没有内存碎片</p>
 <p><img src="/img/JVM/12.jpg"></p>
-<h3 id="2-3、复制"><a href="#2-3、复制" class="headerlink" title="2.3、复制"></a>2.3、复制</h3><ol>
+<h4 id="3、标记复制"><a href="#3、标记复制" class="headerlink" title="3、标记复制"></a>3、标记复制</h4><ol>
 <li>标记：把需要清除的垃圾标记起来</li>
 <li>复制：把from的区域的存活的对象全部复制到to区域</li>
 <li>交换：复制完后，to区变成原来的from区，from区变为to区</li>
 </ol>
-<p>优点：没有内存的碎片</p>
-<p>缺点：浪费内存空间，一半空间永远为空</p>
+<p><strong>特点：</strong>没有内存的碎片，但是浪费内存空间，一半空间永远为空</p>
 <p><img src="/img/JVM/13.jpg"></p>
-<h2 id="3、分代垃圾回收算法"><a href="#3、分代垃圾回收算法" class="headerlink" title="3、分代垃圾回收算法"></a>3、分代垃圾回收算法</h2><h3 id="3-1、堆内存介绍及算法"><a href="#3-1、堆内存介绍及算法" class="headerlink" title="3.1、堆内存介绍及算法"></a>3.1、堆内存介绍及算法</h3><p><img src="/img/JVM/14.jpg"></p>
-<p><strong>特点：</strong>新生代采用复制算法，老年代采用标记整理算法，提高效率</p>
-<p><strong>新生代：</strong>有伊甸园区、幸存区（From 、TO 区）</p>
+<blockquote>
+<p>复制算法的优化</p>
+</blockquote>
+<p><strong>现象：</strong>针对大量的对象存在朝生夕灭的情况，比如98%的对象会在第一轮被回收。</p>
+<p><strong>策略：</strong>即把新生代的区域设置的大一些，比如HotSpot默认情况下是 Eden 比 Survivor 等于 8 ：1。这样只会浪费很少的空间。但是也存在问题，就是不一定每次都会淘汰掉大部分对象，可能存在空间不足的情况。</p>
+<p><strong>特殊策略：</strong>分配担保，老年代可以担保，当幸存区的空间不足，对象可以直接进入老年代。</p>
+<h4 id="4、分代垃圾回收"><a href="#4、分代垃圾回收" class="headerlink" title="4、分代垃圾回收"></a>4、分代垃圾回收</h4><blockquote>
+<p>1、概述</p>
+</blockquote>
 <ol>
-<li>新创建的对象首先分配在 eden 区。</li>
-<li>新生代空间不足时，触发 minor gc（轻GC、会触发 <strong>stop the world</strong>， 暂停其他用户线程，只让垃圾回收线程工作） ，eden 区 和 from 区存活的对象使用 <strong><code>复制算法</code></strong> 复制到 to 中，存活的对象年龄加一，然后交换 from to区。</li>
-<li>当幸存区对象的寿命超过阈值时，会晋升到老年代，最大的寿命是 15（4bit）</li>
-<li>当老年代空间不足时，会先触发 minor gc（轻GC），如果空间仍然不足，那么就触发 full fc （重GC），停止的时间更长！</li>
+<li>新生代使用标记复制算法</li>
+<li>老年代使用标记清除（关注延迟）或者  标记整理（关注吞吐量）</li>
 </ol>
-<p><strong>老年代：</strong>当幸存区对象的寿命超过阈值时，会晋升到老年代</p>
-<p><strong>永久代：</strong>常驻内存，存java运行时的环境，<strong>不存在垃圾回收</strong>，虚拟机关闭时释放</p>
+<blockquote>
+<p>2、步骤分析</p>
+</blockquote>
+<p><img src="/img/JVM/14.jpg"></p>
+<ol>
+<li>新创建的对象首先分配在 eden 区 的 from 区域。</li>
+<li>eden 的 from 空间不足时，触发 minor gc（ 会触发 <strong>stop the world</strong>， 暂停线程），存活的标记加1，进入 to 区 然后交换 from to区。如果年龄大就进入 old 区域。</li>
+<li>old  不足时触发 Full GC。</li>
+</ol>
+<p><strong>注意：</strong>stop the world触发是因为复制对象时必须保证用户不会干扰到对象复制，所以必须暂停。这样引出了下文。</p>
+<blockquote>
+<p>3、延迟和吞吐的选择</p>
+</blockquote>
+<p><strong>概述：</strong>复制对象时必须停止用户线程防止出现问题，这时候如果还要进行内存整理，那么耗时更长，但是不操作，就会对象不连续，以后获取对象耗时更长，导致吞吐率下降。</p>
+<ol>
+<li><strong>选择吞吐量：</strong>标记整理</li>
+<li><strong>选择延迟：</strong>标记清除（注意标记清除次数多了内存碎片会极大影响效率，所以当碎片化超过阈值的时候，一般也会选择进标记整理）</li>
+</ol>
+<h2 id="3、HotSpot分析"><a href="#3、HotSpot分析" class="headerlink" title="3、HotSpot分析"></a>3、HotSpot分析</h2><h3 id="3-1、根节点枚举"><a href="#3-1、根节点枚举" class="headerlink" title="3.1、根节点枚举"></a>3.1、根节点枚举</h3><blockquote>
+<p>OopMap数据结构</p>
+</blockquote>
+<p><strong>作用：</strong>每当类加载完成或者即时编译后，就会同时把哪些地方存在对象引用记录到OopMap中，这样JVM寻找GC Root的时候就不需要遍历<code>虚拟机栈</code>，只需要根据OopMap记录的位置区寻找即可。</p>
+<blockquote>
+<p>安全点</p>
+</blockquote>
+<p><strong>问题：</strong>导致OopMap发送变化的代码行非常多，不可能为所有的地方都生成OopMap。消耗空间太大。</p>
+<p><strong>安全点：</strong>JVM把一些特殊的地方设置为安全点，安全点出保存了OopMap数据结构，现在需要考虑如果让线程能够停止到安全点。</p>
+<blockquote>
+<p>中断策略</p>
+</blockquote>
 <ul>
-<li>JDK6之前，叫永久代，常量池在方法区</li>
-<li>JDK7时，  叫永久代，但是慢慢退化，去永久代，常量池在堆中</li>
-<li>JDK8之后，无永久代，常量池还在堆里，方法区在元空间里</li>
+<li><strong>抢先式中断：</strong>中断后再唤醒线程，直到线程到达安全点。现在几乎不使用。</li>
+<li><strong>主动式中断：</strong>需要中断的线程设置标志位，线程会不断轮询标记位，等线程执行到安全点时就会主动中断。</li>
 </ul>
 <blockquote>
-<p>分配担保机制：提前进入老年代</p>
+<p>安全区</p>
 </blockquote>
-<p>当新生代几乎全部被分配完的时候，会发生轻GC，如果此时需要分配内存空间给对象，但是空间有不足，就会提前把新生代的转移到老年代中</p>
+<p><strong>问题：</strong>中断需要线程主动的执行，如果线程处于休眠状态，显然无法主动移动到安全点。</p>
+<p><strong>安全区：</strong>安全区是不会改变引用关系的区域，处于安全区的线程不会收到垃圾回收造成的线程停止的制约，但是如果想要退出安全区就必须等待。直到 Stop The Word 结束。</p>
+<h3 id="3-2、记忆集和卡带"><a href="#3-2、记忆集和卡带" class="headerlink" title="3.2、记忆集和卡带"></a>3.2、记忆集和卡带</h3><p><strong>概述：</strong>只要涉及到部分回收，那么就离不开记忆集和卡带。</p>
 <blockquote>
-<p>大对象直接进入老年代</p>
+<p>记忆集</p>
 </blockquote>
-<p>字符串、数组等，为了避免为⼤对象分配内存时由于分配担保机制带来的复制⽽降低效率。</p>
+<p><strong>概念：</strong>记录从非收集区域到收集区域（新生代到老年代）和指针集合的数据结构。</p>
+<ul>
+<li>字长精度：精确到一个字长（处理器的寻址位数，如32位，64位）</li>
+<li>对象精度：精确到一个对象</li>
+<li>卡精度：精确到一块区域</li>
+</ul>
 <blockquote>
-<p>OOM错误</p>
+<p>卡带</p>
 </blockquote>
-<p>当一个线程<strong>抛出OOM异常后</strong>，<strong>它所占据的内存资源会全部被释放掉</strong>，从而不会影响其他线程的运行，<strong>进程依然正常</strong></p>
+<p><strong>概念：</strong>是对记忆集的一种实现，规定了记忆集的精度为一块内存。</p>
+<p><strong>体现：</strong>HotSpot表现为一个字节数组。该字节数组的长度即代表内存被划分为多少块，只要该区域存在对象引用，<code>就标志为1，代表变脏了</code>，如果不存在，则为0。</p>
 <blockquote>
-<p>Hotsopt 更新阈值</p>
+<p>写屏障</p>
 </blockquote>
-<p>Hotspot 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的⼀半时，取这个年龄和MaxTenuringThreshold 中更小的⼀个值，作为新的晋升年龄阈值</p>
-<p>Hotsopt 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的⼀半时，取这个年龄和MaxTenuringThreshold 中更小的⼀个值，作为新的晋升年龄阈值</p>
-<h3 id="3-2、JVM参数"><a href="#3-2、JVM参数" class="headerlink" title="3.2、JVM参数"></a>3.2、JVM参数</h3><p>堆初始大小：-Xms<br>堆最大大小：-Xmx 或 -XX:MaxHeapSize=size<br>新生代大小：-Xmn 或 (-XX:NewSize=size + -XX:MaxNewSize=size )<br>幸存区比例：   -XX:InitialSurvivorRatio=ratio 和 -XX:+UseAdaptiveSizePolicy<br>幸存区比例：    -XX:SurvivorRatio=ratio<br>晋升阈值：    -XX:MaxTenuringThreshold=threshold<br>晋升详情：    -XX:+PrintTenuringDistribution<br>GC详情：                      -XX:+PrintGCDetails -verbose:gc<br>FullGC 前 MinorGC：    -XX:+ScavengeBeforeFullGC</p>
-<h3 id="3-3、测试"><a href="#3-3、测试" class="headerlink" title="3.3、测试"></a>3.3、测试</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _512KB = <span class="number">512</span> * <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _1MB = <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _6MB = <span class="number">6</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _7MB = <span class="number">7</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _8MB = <span class="number">8</span> * <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -Xms20m -Xmx20m -Xmn10m -XX:+UseSerialGC -XX:+PrintGCDetails -verbose:gc</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;<span class="keyword">byte</span>[]&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[_6MB]);</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[_512KB]);</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[_6MB]);</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[_512KB]);</span><br><span class="line">    list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[_6MB]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
+<p><strong>问题：</strong>卡带如何变脏？原则上引用类型字段赋值的时候触发。如果赋值的时候是执行字节码时候，比较容易实现。但是如果<code>已经解释&amp;编译成机器码</code>的时候，比较难处理。</p>
+<p><strong>解决：</strong>HotSpot加入写屏障，可以将该操作看做一个操作系统层面的AOP操作。赋值前称为前屏障、复制后称为后屏障。只需要在后屏障更新卡表即可。</p>
+<p><strong>缺点：</strong>如果开了写屏障，那么所有的引用更新都会增加一步操作。</p>
+<blockquote>
+<p>伪共享</p>
+</blockquote>
+<p><strong>缓存行：</strong>缓存系统中是以缓存行（cache line）为单位存储的，当多线程修改互相独立的变量时，如果这些变量共享同一个缓存行，就会无意中影响彼此的性能，这就是伪共享。</p>
+<p><strong>卡表：</strong>1个卡表占1个字节，64个卡表元素共享一个缓存行，64个卡表对应32KB大小的内存。如果不同的线程操作，可能导致更新卡表的时候正好写入一个缓存，影响性能。</p>
+<p><strong>解决：</strong>增加条件，之后未脏的才进行更新，减少更新的频率，减少冲突</p>
+<h3 id="3-3、三色标记法"><a href="#3-3、三色标记法" class="headerlink" title="3.3、三色标记法"></a>3.3、三色标记法</h3><blockquote>
+<p>可达性分析回顾</p>
+</blockquote>
+<p><strong>要求：</strong>可达性分析要求必须 Stop The World，要求<code>全过程保持一致性</code>。</p>
+<ul>
+<li><strong>GC ROOT 对象：</strong>现在已经优化的时间短暂固定（不随堆容量增长而增长）。</li>
+<li><strong>GC ROOT 引用对象：</strong>随堆容量增长而增长，如果堆很大，消耗时间会很长，这部分需要优化。</li>
+</ul>
+<p><strong>总结：</strong>当堆很大的情况下，如果Stop The World 等待GC ROOT遍历根完成，无疑会造成很大的问题，所以需要该部分主线程能够不 Stop The World </p>
+<blockquote>
+<p>并发情况下的一致性保证</p>
+</blockquote>
+<p><strong>GC ROOT 遍历过程中，按照颜色标记对象的访问状态</strong>：访问完成后<code>一条引用链上的</code>应该全部为黑色。</p>
+<ul>
+<li><strong>黑色：</strong>节点被遍历完成,而且子节点都遍历完成。</li>
+<li><strong>灰色：</strong>当前正在遍历的节点,而且子节点还没有遍历，需要继续遍历。</li>
+<li><strong>白色：</strong>还没有遍历到的节点，一开始默认全部是白色。</li>
+</ul>
+<p><strong>可以想象，GC ROOT 线程和用户线程并行，会出现两个问题</strong></p>
+<ol>
+<li>未访问的白色节点被黑色的引用；并且原本白色节点相连的灰色节点不存在或者被删除，导致白色的节点被误认为已访问，不再判断是否被引用。最后被当成没有被引用的垃圾被回收。<strong>不可容忍</strong>。</li>
+<li>黑色的节点，失去了引用，但是不能即时更新导致仍然认为是GC ROOT 可达。<code>会导致浮动垃圾</code>。但是<strong>可以容忍</strong>。</li>
+</ol>
+<blockquote>
+<p>1、增量更新（未访问的白色节点被黑色的引用）</p>
+</blockquote>
+<p><strong>思想：</strong>只要引用了新的对象，就需要<code>把自己变为灰色</code>。但是需要重新遍历，会导致消耗时间过长</p>
+<ol>
+<li>重新扫描（变灰）新生代。</li>
+<li>重新扫描并发标记结束时老年代的Card Table记录下的对象。</li>
+<li>重新扫描并发标记结束时老年代的Mod-Union Table记录下的对象。</li>
+</ol>
+<p><strong>技术：</strong>在原始快照中运用到了写后屏障</p>
+<p><strong>实例：</strong>CMS回收器使用。</p>
+<blockquote>
+<p>2、原始快照（原本白色节点相连的灰色节点不存在或者被删除）</p>
+</blockquote>
+<p><strong>思想：</strong>只要灰色删除了白色的引用，就记录下来放进当前用户线程私有的SATB Queue中，最终汇集到一个全局的SATB Queue Set中，在最终标记阶段再扫描这些记录下来的引用记录。</p>
+<p><strong>技术：</strong>在原始快照中运用到了写前屏障，因为要在引用被删除前把灰色对象到白色对象的关系记录。</p>
+<p><strong>实例：</strong>G1使用</p>
+<blockquote>
+<p>注意</p>
+</blockquote>
+<ul>
+<li>以上两种方式都是通过加入写屏障实现的（操作系统层面的AOP）。</li>
+<li>GC ROOT 往下寻找的时候是 并发的，但是最后修正标记的时候也必须 Stop the world。但是时间会很短。</li>
+</ul>
+<h3 id="3-4、JVM的一些优化"><a href="#3-4、JVM的一些优化" class="headerlink" title="3.4、JVM的一些优化"></a>3.4、JVM的一些优化</h3><ol>
+<li><strong>优先分配Eden区域</strong>：</li>
+<li><strong>大对象直接进入老年代</strong>：</li>
+<li><strong>长期存活的进入老年代</strong>：</li>
+<li><strong>动态更新阈值：</strong>Hotspot 遍历所有对象时，按照年龄从小到大对其所占用的大小进行累积，当累积的某个年龄大小超过了 survivor 区的⼀半时，取这个年龄和MaxTenuringThreshold 中更小的⼀个值，作为新的晋升年龄阈值。</li>
+<li><strong>线程OOM抛弃：</strong>当一个线程抛出OOM异常后<strong>，</strong>它所占据的内存资源会全部被释放掉，从而不会影响其他线程的运行，进程依然正常。</li>
+<li><strong>分配担保机制——提前进入老年代：</strong>当发生Minor GC 时，会判断老年代剩余内存和新生代占用内存<ul>
+<li><strong>老年代大：</strong>直接进行 MinorGC</li>
+<li><strong>新生代大：</strong>会先看是否允许分配担保，若允许，则会根据以往晋升的对象数量判断是否进行Minor GC。若无法进行 Minor GC，则会进行 Full GC。允许Minor GC 的情况下，如果新生代内存不足，那么就会直接进入老年代。</li>
+<li><strong>担保失败：</strong> Full GC</li>
+<li>JDK 6  UPdate 24 之后，默认开启。</li>
+</ul>
+</li>
+</ol>
 <h2 id="4、垃圾回收器"><a href="#4、垃圾回收器" class="headerlink" title="4、垃圾回收器"></a>4、垃圾回收器</h2><blockquote>
+<p>概述</p>
+</blockquote>
+<p><img src="/img/jvm/35.jpg"></p>
+<blockquote>
 <p>相关概念</p>
 </blockquote>
 <p><strong>并行收集</strong>：指多条垃圾收集线程并行工作，但此时<strong>用户线程仍处于等待状态</strong>。</p>
 <p><strong>并发收集</strong>：指用户线程与垃圾收集线程<strong>同时工作</strong>（不一定是并行的可能会交替执行）。<strong>用户程序在继续运行</strong>，而垃圾收集程序运行在另一个CPU上</p>
 <p><strong>吞吐量</strong>：即CPU用于<strong>运行用户代码的时间</strong>与CPU<strong>总消耗时间</strong>的比值（吞吐量 = 运行用户代码时间 / ( 运行用户代码时间 + 垃圾收集时间 )），也就是。例如：虚拟机共运行100分钟，垃圾收集器花掉1分钟，那么吞吐量就是99%</p>
-<h3 id="4-1、串行"><a href="#4-1、串行" class="headerlink" title="4.1、串行"></a>4.1、串行</h3><ul>
-<li>单线程的垃圾回收器。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态，</li>
-<li>优点：避免垃圾回收时，因为移动对象地址使得其他线程找不到被移动的对象</li>
-<li>适合：堆内存较小的个人电脑。</li>
-</ul>
-<p><img src="/img/JVM/20.jpg"></p>
+<h3 id="4-1、Serial-收集器"><a href="#4-1、Serial-收集器" class="headerlink" title="4.1、Serial 收集器"></a>4.1、Serial 收集器</h3><p><img src="/img/JVM/20.jpg"></p>
 <blockquote>
 <p>Serial 收集器</p>
 </blockquote>
-<p>Serial收集器是最基本的、发展历史最悠久的收集器，处理新生代</p>
-<p><strong>特点：</strong>单线程、简单高效（与其他收集器的单线程相比），采用<strong>复制算法</strong>。没有线程交互的开销。所以单个CPU下的效率最高，收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（Stop The World）。</p>
+<ol>
+<li>Serial收集器是最基本的、发展历史最悠久的收集器，负责处理新生代</li>
+<li>单线程执行的垃圾回收器，进行垃圾回收时 会<code>全程 Stop The World</code> ，暂停用户线程。</li>
+<li>采用<code>标记复制算法</code>实现新生代的垃圾回收。</li>
+</ol>
+<p><strong>优缺点：</strong>虽然会  Stop The World ，但是也避免了并发的安全问题，线程交互的开销。适合堆内存较小的电脑，这样停顿时间也会很小，不影响体验。</p>
 <blockquote>
 <p>Serial Old 收集器</p>
 </blockquote>
-<p>Serial Old是Serial收集器的老年代版本</p>
-<p><strong>特点</strong>：同样是单线程收集器，采用<strong>标记-整理算法</strong></p>
-<h3 id="4-2、吞吐量优先"><a href="#4-2、吞吐量优先" class="headerlink" title="4.2、吞吐量优先"></a>4.2、吞吐量优先</h3><ul>
-<li>多线程，适合堆内存较大，多核 cpu的程序</li>
-<li>进行GC时，仍然会<strong>暂停用户的线程</strong>，不同之处在于会开启多个线程进行GC操作。考虑的是单位时间内，让暂停的时间达到最短。</li>
-<li><strong>JDK1.8默认使用</strong>的垃圾回收器</li>
-</ul>
-<p><img src="/img/JVM/21.jpg"></p>
+<ol>
+<li>Serial Old是Serial收集器的老年代版本</li>
+<li>同样是单线程收集器，采用<code>标记-整理算法</code></li>
+</ol>
+<p><strong>注意：</strong>该收集器属于串行收集器。</p>
+<h3 id="4-2、ParNew-收集器"><a href="#4-2、ParNew-收集器" class="headerlink" title="4.2、ParNew 收集器"></a>4.2、ParNew 收集器</h3><p><strong>概念：</strong>Serial 收集器的多线程版本，处理新生代。目前只能和CMS收集器配合使用。为了推广G1 收集器，把ParNew 和Serial Old 、Serial 和 CMS 的取消了，可以说是第一款退出历史舞台的收集器。</p>
+<h3 id="4-3、Parallel-Scavenge-收集器"><a href="#4-3、Parallel-Scavenge-收集器" class="headerlink" title="4.3、Parallel Scavenge 收集器"></a>4.3、Parallel Scavenge 收集器</h3><p><img src="/img/JVM/21.jpg"></p>
 <blockquote>
 <p>Parallel Scavenge 收集器</p>
 </blockquote>
-<p>与吞吐量关系密切，故也称为吞吐量优先收集器</p>
-<p><strong>特点</strong>：属于新生代收集器也是采用<strong>复制算法</strong>的收集器（用到了新生代的幸存区），又是并行的多线程收集器（与ParNew收集器类似），使用<strong>GC自适应调节策略</strong>（与ParNew收集器最重要的一个区别）。</p>
+<ol>
+<li>该收集器关注的是<code>系统的吞吐量</code>，不关心停顿时间，故也称为吞吐量优先收集器。</li>
+<li>多线程执行的垃圾回收器，进行垃圾回收时 会<code>全程 Stop The World</code> ，暂停用户线程。</li>
+<li>采用<code>标记复制</code>算法进行新生代垃圾回收</li>
+<li>使用<strong>GC自适应调节策略</strong>（与ParNew收集器最重要的一个区别）</li>
+</ol>
 <p><strong>GC自适应调节策略</strong>：虚拟机会根据系统的运行状况收集性能监控信息，动态的设置新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX:SurvivorRation）、晋升老年代的对象年龄（-XX:PretenureSizeThreshold）等。可设置-XX:+UseAdptiveSizePolicy参数调整调用的CPU核数量。</p>
-<p>Parallel Scavenge收集器使用两个参数控制吞吐量：</p>
+<p><strong>控制吞吐量的两个参数：</strong></p>
 <ul>
-<li>XX:MaxGCPauseMillis 控制最大的垃圾收集停顿时间</li>
-<li>XX:GCRatio 直接设置吞吐量的大小</li>
+<li>XX:MaxGCPauseMillis：控制最大的垃圾收集停顿时间，收集器会尽力执行。是通过控制新生代堆内存的大小来实现的，所以需要合理设置。</li>
+<li>XX:GCRatio：设置垃圾回收时间占总时间的比例，默认99%，即1%时间用于垃圾回收。</li>
 </ul>
 <blockquote>
 <p>Parallel Old 收集器</p>
 </blockquote>
-<p>是Parallel Scavenge收集器的老年代版本</p>
-<p><strong>特点</strong>：多线程，采用<strong>标记-整理算法</strong></p>
-<h3 id="4-3、响应时间优先"><a href="#4-3、响应时间优先" class="headerlink" title="4.3、响应时间优先"></a>4.3、响应时间优先</h3><ul>
-<li>多线程，适合堆内存较大，多核 cpu的程序</li>
-<li>进行GC时，大部分不需要暂停用户的线程，会开启多个线程进行GC操作。考虑的是让每次暂停的时间达到最短（不影响用户的体验）。</li>
-</ul>
-<p><img src="/img/JVM/22.jpg"></p>
+<ol>
+<li>是Parallel Scavenge收集器的<code>老年代版本</code></li>
+<li>多线程，采用<strong>标记-整理</strong>算法，</li>
+</ol>
+<h3 id="4-4、CMS-收集器"><a href="#4-4、CMS-收集器" class="headerlink" title="4.4、CMS 收集器"></a>4.4、CMS 收集器</h3><p><img src="/img/JVM/22.jpg"></p>
 <blockquote>
 <p>CMS 收集器</p>
 </blockquote>
-<p>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</p>
-<p><strong>特点</strong>：</p>
-<ul>
-<li>基于<strong>标记-清除算法</strong>实现。</li>
-<li>并发收集、低停顿，但是会产生内存碎片，所以只能使用选择空闲列表(Free List) 执行内存分配。</li>
-<li>是一款真正意义上的并发收集器。</li>
-</ul>
-<p><strong>应用场景</strong>：适用于注重服务的响应速度，希望系统停顿时间最短，给用户带来更好的体验等场景下。如web程序、b/s服务</p>
 <ol>
-<li><p><strong>初始标记</strong>：标记GC Roots能直接到的对象。速度很快但是<strong>仍存在Stop The World问题</strong></p>
+<li>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</li>
+<li>基于<strong>标记-清除算法</strong>实现，是一款真正意义上的<strong>并发</strong>（和用户线程共同工作）收集器。</li>
+<li>唯一一款单独对老年代进行垃圾回收的收集器。</li>
+<li>多线程收集、低停顿，会<code>产生内存碎片</code>，所以只能使用选择空闲列表(Free List) 执行内存分配。</li>
+<li>对CPU资源要求高（程序变慢）、无法处理浮动垃圾。</li>
+</ol>
+<blockquote>
+<p>垃圾回收过程</p>
+</blockquote>
+<ol>
+<li><p><strong>初始标记</strong>：标记GC Roots能直接到的对象。速度很快但是仍存在**Stop The World **问题</p>
 </li>
 <li><p><strong>并发标记</strong>：进行GC Roots Tracing 的过程，找出GC ROOT 能达到的存活对象（无STW）。</p>
 </li>
-<li><p><strong>重新标记</strong>：用户操作使得并发标志需要更新，所以需要修正，<strong>仍存在Stop The World问题</strong>。会扫描整个堆空间。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">增量更新Incremental Update 算法解决误回收（原本的垃圾被重新引用）</span><br><span class="line"></span><br><span class="line">从结果入手，判断扫描完结时，是否有白色对象被黑色对象引用，如果被引用，则通过write barrier写屏障技术，把黑色的对象重新标记为灰色，然后重新扫描。</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p><strong>并发清理：</strong>清理删除掉标记阶段判断的已经死亡的对象,释放内存空间，无STW，但是由于获得的CPU资源少一些（还需运行用户程序），所以效率会低一些。</p>
+<li><p><strong>重新标记</strong>：用户操作使得并发标志需要更新，所以需要修正，<strong>仍存在Stop The World问题</strong>。会扫描整个堆空间。（增量更新解决误回收对象）</p>
+</li>
+<li><p><strong>并发清理：</strong>清理删除掉标记阶段判断的已经死亡的对象,释放内存空间，无STW（不需复制对象），但是由于获得的CPU资源少一些（还需运行用户程序），所以效率会低一些。</p>
 </li>
 </ol>
-<p><strong>优点：</strong>并发收集、低延迟</p>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>对CPU资源要求高一些</li>
-<li>产生内存碎片</li>
-<li>不处理浮动垃圾：一开始被引用，且标记为黑色，后来失去了引用（成为垃圾）。</li>
-</ul>
 <blockquote>
-<p>ParNew 收集器</p>
+<p>为什么不用标记整理算法？</p>
 </blockquote>
-<p>ParNew收集器其实就是Serial收集器的多线程版本</p>
-<p><strong>特点</strong>：多线程、ParNew收集器默认开启的收集线程数与CPU的数量相同，在CPU非常多的环境中，可以使用-XX:ParallelGCThreads参数来限制垃圾收集的线程数。和Serial收集器一样存在Stop The World问题</p>
-<blockquote>
-<p>Serial Old 收集器</p>
-</blockquote>
-<p><strong>概念：</strong>Serial Old是Serial收集器的老年代版本</p>
-<blockquote>
-<p>Serial Old 收集器</p>
-</blockquote>
-<p>Serial Old是Serial收集器的老年代版本</p>
-<p>新生代采用复制算法，老年代采用标记整理算法。可以和CMS配合使用</p>
-<h3 id="4-4、G1回收器"><a href="#4-4、G1回收器" class="headerlink" title="4.4、G1回收器"></a>4.4、G1回收器</h3><p><strong>定义：</strong> Garbage First，JDK 9以后默认使用，而且替代了CMS 收集器。是一个分代的，增量的，并行与并发的标记-复制的垃圾回收器。</p>
-<p><strong>特点：</strong></p>
-<ul>
-<li><strong>并行与并发</strong>：G1 能充分利⽤ CPU、多核环境下的硬件优势，使⽤多个 CPU（CPU 或者CPU 核心）来缩短 Stop-The-World 停顿时间，<strong>可以避免其他垃圾回收器存在的STW现象</strong>。</li>
-<li><strong>分代收集：</strong>G1把堆分为2048个区域,每一个region的大小是1 - 32M不等,必须是2的整数次幂，每个区域对应 E S O 的一种。内存的回收以 region为基本单位。</li>
-<li><strong>空间整合：</strong>整体上是<strong>标记-整理</strong>算法，局部之间是<strong>复制</strong>算法。</li>
-<li><strong>软实性：</strong>用户可以指定GC的最大停顿时间，回收器会根据时间找到最优的回收方案，这也是有时候为什么部分老年代没有被回收的原因。</li>
-<li><strong>特殊的H区域：</strong>一个对象如果容量占每个region （小堆区）的 一半以上，则认为是巨型对象，默认分配在老年代，若内存不够，则会寻找连续的H区域存放，若还是不够，会不断使用GC甚至 Full GC 来获得区域。</li>
-</ul>
-<p><strong>适用场景：</strong></p>
-<ul>
-<li>同时注重吞吐量和低延迟（响应时间）</li>
-<li>适合超大堆内存（内存大的），会将堆内存划分为多个大小相等的区域</li>
-</ul>
-<p><strong>相关参数：</strong></p>
-<ul>
-<li>JDK8 并不是默认开启的，所需要参数开启</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseG1GC</span><br><span class="line">-XX:G1HeapRegionSize=size</span><br><span class="line">-XX:MaxGCPauseMillis=time</span><br></pre></td></tr></table></figure>
-
-<h4 id="1、G1-垃圾回收阶段"><a href="#1、G1-垃圾回收阶段" class="headerlink" title="1、G1 垃圾回收阶段"></a>1、G1 垃圾回收阶段</h4><p><img src="/img/JVM/15.jpg"></p>
-<ul>
-<li>Young Collection：对新生代垃圾收集</li>
-<li>Young Collection + Concurrent Mark：如果老年代内存到达一定的阈值了，新生代垃圾收集同时会执行一些并发的标记。</li>
-<li>Mixed Collection：会对新生代 + 老年代 + 幸存区等进行混合收集，然后收集结束，会重新进入新生代收集。</li>
-</ul>
-<blockquote>
-<p>第一阶段：年轻代GC</p>
-</blockquote>
-<p><img src="/img/JVM/23.jpg"></p>
-<p>E：伊甸园 S：幸存区 O：老年代</p>
 <ol>
-<li>在Eden区域快要耗尽的时候触发，若Eden不足，则进入Survivor区域，若还是不足，进入 Old 区域。</li>
-<li>同时也会对S 区进行 复制算法的垃圾回收，Survivor区域进入新的Survivor区域，部分进入 Old 区域。</li>
-<li>不会对O 区域进行垃圾回收。</li>
-<li>最终Eden 为空，GC停止工作。</li>
+<li>标记整理算法需要在把空间进行整理， STW 时间变长，延迟增大。</li>
+<li>实际上也会使用，当碎片化太严重时，会进行整理。JDK9之前Full GC时整理，但是会提高时延，于是把整理提到 Full GC 前。注意 <strong>整理的时候不能并发</strong>。</li>
 </ol>
 <blockquote>
-<p>第二阶段：并发标记过程</p>
+<p>Concurrent Mode Failure 并发失败</p>
 </blockquote>
-<p><img src="/img/JVM/24.jpg"></p>
-<p>Young + CM（并发标记） 阶段</p>
+<p><strong>原因：</strong>第一点是因为无法处理浮动垃圾，导致占用一定的内存；第二点是因为和用户线程并发执行，所以需要预留足够的内存空间给用户，所以 JDK 5 时老年代达到 68 % 的时候，就会就会进行回收。为了效率，JDK 6 提升到 92 %。这也导致可能无法拿出足够的内存给用户使用，当内存分配失败的时候，CMS就会退化成为 Serial Old 收集器，进行 STW 暂停 用户线程。。</p>
+<h3 id="4-4、G1回收器"><a href="#4-4、G1回收器" class="headerlink" title="4.4、G1回收器"></a>4.4、G1回收器</h3><blockquote>
+<p>G1的设计思路</p>
+</blockquote>
+<ol>
+<li><strong>注重延时：</strong>根据优先级<code>部分回收垃圾</code>，这样程序 STW  时间就不会过长。</li>
+<li><strong>注重吞吐量：</strong>追求吞吐量，而不是追求延时，这也是为什么回收阶段<code>不选择和用户线程并发</code>的原因（注意G1线程是可以并发的）</li>
+<li><strong>没有内存碎片：</strong>整体上可以看做<strong>标记-整理</strong>算法，局部之间可以看做是<strong>标记复制</strong>算法。</li>
+</ol>
+<h4 id="4-1、特点概述"><a href="#4-1、特点概述" class="headerlink" title="4.1、特点概述"></a>4.1、特点概述</h4><p><strong>定义：</strong> Garbage First，JDK 9以后默认使用，而且替代了CMS 收集器。是一个分代的，增量的，并行与并发的标记-复制的垃圾回收器。</p>
+<blockquote>
+<p>1、区域粒度更小</p>
+</blockquote>
 <ul>
-<li>在 Young GC 时会<strong>对 GC Root 进行初始标记</strong>（有STW）</li>
-<li>在老年代<strong>占用堆内存的比例</strong>达到阈值时（45% 因为用户也需要使用内存），阈值可以根据用户来进行设定；会进行并发标记（不会STW），方便把存活的进行标记-复制算法，并发标记之后就会进入第三阶段。</li>
+<li><strong>细粒度：</strong>G1把堆分为2048个区域,每一个region的大小是1 - 32M不等,必须是2的整数次幂。</li>
+<li><strong>动态分代：</strong>每个区域根据内部垃圾的种类 对应 E（新生代） S （幸存区）O（老年代） 的一种。</li>
 </ul>
 <blockquote>
-<p>第三阶段</p>
+<p>2、Humongous区域（大对象优先回收）</p>
 </blockquote>
-<p><img src="/img/JVM/25.jpg"></p>
-<p>会对E S O 进行<strong>全面的回收</strong></p>
 <ul>
-<li>新生代：部分会存活，部分拷贝到老年代</li>
-<li>老年代：<strong>满足最大暂停时间</strong>的情况下，选择尽有价值老年代进行回收，主要为 复制算法。</li>
+<li><strong>特殊的H区域：</strong>一个对象如果容量占每个region （小堆区）的 一半以上，则认为是巨型对象，默认分配在老年代，若内存不够，则会寻找连续的H区域存放，若还是不够，会不断使用GC甚至 Full GC 来获得区域。</li>
+<li><strong>优先回收：</strong>大内存对象往往独占整个 Region ，所以一旦大对象变为垃圾该区域都是垃圾，比较容易处理，会优先被回收</li>
+<li><strong>不支持拷贝：</strong>JVM不会对巨型对象进行拷贝。</li>
 </ul>
-<p>-XX:MaxGCPauseMills:xxx 用于指定最长的停顿时间</p>
-<p><strong>注意：</strong>在G1 垃圾回收器关于Full GC的触发问题（CMS也是一样的）</p>
+<blockquote>
+<p>3、可预测停顿（缩短STW时间）</p>
+</blockquote>
+<ul>
+<li><strong>优先级划分：</strong>G1收集器会跟踪各个 Region 里面的垃圾堆积的价值大小，综合考虑回收的内存和耗费时间，把结果维护在一张<code>优先级列表</code>里面，</li>
+<li><strong>指定停顿时间：</strong>用户可以指定GC的最大停顿时间，回收器会根据优先级列表找到最佳的垃圾回收方案，这也是有时候为什么部分新生代没有被回收的原因。所以适合超大内存，可以边产生边回收。</li>
+<li><strong>混合回收：</strong>会回收全部的新生代，根据指定停顿时间回收选择性的回收老年代。</li>
+</ul>
+<h4 id="4-2、一些问题"><a href="#4-2、一些问题" class="headerlink" title="4.2、一些问题"></a>4.2、一些问题</h4><blockquote>
+<p>1、跨带引用问题</p>
+</blockquote>
+<p><strong>记忆集：</strong>G1的每个 Region 区域都有<code>自己的记忆集</code>，记录的是双向指针：别的Region指向自己的指针、指针所在的卡页范围。</p>
+<p><strong>本质：</strong>G1使用哈希表实现，key为其他 Region 的起始地址，value为一个集合记录所有<code>卡表的索引号</code>。每个value集合相当于普通分代策略的记忆集。</p>
+<p><strong>缺点：</strong>由于G1的每个 Region 区域都有<code>自己的记忆集</code>，所以消耗空间也比较大，一般需要消耗堆的 10% ~20% 来维持运行。</p>
+<blockquote>
+<p>2、并发的安全性问题</p>
+</blockquote>
+<ul>
+<li><strong>标记错误问题：</strong>G1 采用原始快照，CMS采用增量更新。</li>
+<li><strong>内存分配问题：</strong>（注意CMS是老年代的，对象分配在新生代所以CMS无需考虑）由于并发标记期间和用户是并行的，所以用户会产生新的对象，对于这部分对象，G1 收集器设置两个名为 TAMS 的指针，垃圾回收期间新对象<code>内存在此处分配</code>；该指针范围内的对象<code>不会参与本次垃圾回收</code>。</li>
+</ul>
+<p><strong>注意：</strong>当 TAMS 因为内存不足而无法分配时，G1收集器也会被迫 Stop Thre World，进行 Full GC 串行的垃圾收集。</p>
+<h4 id="4-3、回收过程"><a href="#4-3、回收过程" class="headerlink" title="4.3、回收过程"></a>4.3、回收过程</h4><img src="/img/JVM/15.jpg" style="zoom: 50%;" />
+
+<blockquote>
+<p>第一阶段：Young Collection 年轻代</p>
+</blockquote>
+<p><strong>概述：</strong>所有的Eden快满时触发，会 <code>根据卡带的信息</code> 对E、S区域进行如下操作，并且最后更新卡带。</p>
+<img src="/img/JVM/23.jpg" style="zoom:50%;" />
+
+<ol>
+<li><strong>处理 E 区：</strong>存活后进入S区域，标记复制算法。</li>
+<li><strong>处理 S 区：</strong>存活后进入新S区域，标记复制算法，部分进入O区域。</li>
+<li><strong>暂停线程：</strong> 存在STW ，目的是对象复制；同时对GC ROOT对象进行初始标记。</li>
+</ol>
+<blockquote>
+<p>第二阶段：Young Collection + Concurrent Mark 并发标记</p>
+</blockquote>
+<p><strong>触发：</strong>在老年代<strong>占用堆内存的比例</strong>达到阈值时（45% 因为用户也需要使用内存），阈值可以根据用户来进行设定；会进行并发标记（不会STW），具体过程如下。</p>
+<img src="/img/JVM/24.jpg" style="zoom:50%;" />
+
+<ol>
+<li><strong>初始标记：</strong>存在STW，会找到GC ROOT直接关联的对象，并且<strong>设置 TAMS 指针</strong>便于对象分配。具体实现是通过进行一次新生代的 GC 。</li>
+<li><strong>并发标记：</strong>不存在STW，会<code>使用三色标记</code> 进行可达性分析，同时拍摄 SATB（原始快照，记录被取消引用的对象）。</li>
+</ol>
+<p><strong>扩展：</strong>并发标记会进行类卸载，并且会检查所有字符串，把 char[] 值一样的指向同一个对象。注意与String类的 intern()  方法区分开。</p>
+<blockquote>
+<p>第三阶段：混合回收 Mixed Collection（很长的一个过程，涉及多次GC）</p>
+</blockquote>
+<p><strong>概述：</strong>采用和新生代一样的<code>标记复制</code>算法。优先回收新生代，在<strong>满足最大暂停时间</strong>的情况下，选择有价值老年代进行回收。</p>
+<img src="/img/JVM/25.jpg" style="zoom:50%;" />
+
+<ol>
+<li><strong>重新标记：</strong>存在短暂的STW，会对原始快照进行处理。</li>
+<li><strong>筛选回收：</strong>存在STW，此阶段由第三阶段混合回收完成。会结合用户设置的最大停顿时间 和 维护的优先级列表进行回收，并且更新优先级列表。回收方式是清空原本的 Region 区域，存活的迁移到另一个区域。</li>
+</ol>
+<blockquote>
+<p>4、Full GC（Mixed GC 失败）</p>
+</blockquote>
 <ul>
 <li>如果垃圾产生速度慢于垃圾回收速度，不会触发Full GC，还是并发地进行清理</li>
-<li>如果垃圾产生速度快于垃圾回收速度，便会触发Full GC，<strong>进行串行的收集</strong>，长时间 STW，会严重影响系统的响应时间。</li>
+<li>如果垃圾产生速度快于垃圾回收速度， <code>TAMS 指针分配内存失败</code>，便会触发Full GC，进行<code>串行</code>的收集，长时间 STW，会严重影响系统的响应时间。</li>
 </ul>
-<h4 id="2、Young-Collection-跨代引用"><a href="#2、Young-Collection-跨代引用" class="headerlink" title="2、Young Collection 跨代引用"></a>2、Young Collection 跨代引用</h4><p><img src="/img/JVM/26.jpg"></p>
-<p>只要父节点在老年代，则一律视为根节点，而遍历老年代找到GC ROOT 对象比较麻烦</p>
-<p><strong>办法：</strong>把老年代细分，每512KB的大小设置为1个卡，如果该区域引用了新生代对象 就标记为脏卡</p>
-<p>Remembered Set（记忆集）：会把脏卡记录下来</p>
-<h4 id="3、Remark重标记（三色标记）"><a href="#3、Remark重标记（三色标记）" class="headerlink" title="3、Remark重标记（三色标记）"></a>3、Remark重标记（三色标记）</h4><p><strong>并发标记：</strong>处理完成之后，如果存在引用就会被保留，不存在就会被回收。</p>
+<h4 id="4-4、CMS和G1的对比"><a href="#4-4、CMS和G1的对比" class="headerlink" title="4.4、CMS和G1的对比"></a>4.4、CMS和G1的对比</h4><blockquote>
+<p>1、回收算法</p>
+</blockquote>
 <ul>
-<li>黑色：节点被遍历完成,而且子节点都遍历完成</li>
-<li>灰色：当前正在遍历的节点,而且子节点还没有遍历</li>
-<li>白色：还没有遍历到的节点</li>
+<li>CMS：标记清除，内存碎片。只有老年代的回收</li>
+<li>G1：整体标记整理，局部标记复制，没有内存碎片。分为Mix Gc 和 Young GC</li>
 </ul>
-<p><img src="/img/JVM/27.jpg"></p>
-<p><strong>原始快照SATB算法</strong>解决误回收（原本的垃圾被重新引用）</p>
+<blockquote>
+<p>2、卡表</p>
+</blockquote>
 <ul>
-<li>并发标记之后拍摄快照，设定所有存在引用的对象，都是存活的</li>
-<li>重新标记，再次拍摄快照，将新引用的存活对象标记。</li>
-<li>最后把快照叠加，得到最终标记信息。</li>
+<li>CMS：只有一份，在新生代记录被老年代所引用的区域</li>
+<li>G1：每个 Region 区域都有一份，占用资源，所以如果 堆总内存较小，反而占用资源更多。</li>
 </ul>
-<p><strong>重新标记：</strong></p>
+<blockquote>
+<p>3、标记修正</p>
+</blockquote>
 <ul>
-<li>C的引用发生变化时，加一个写屏障，写屏障的指令会被执行，将C放入一个队列当中，并将C变为 处理中 状态，也就是灰色。</li>
-<li>在<strong>并发标记</strong>阶段结束以后，重新标记阶段会STW，然后将放在该队列中的对象重新处理，发现有强引用引用它，就会处理它</li>
+<li>CMS：增量更新，对新增引用的对象处理（增量更新remark阶段需要重新扫描新生代）</li>
+<li>G1：原始快照，对失去引用的对象处理（原始快照可以减少并发标记和重新标记阶段的资源消耗）</li>
 </ul>
-<p><strong>缺点：</strong>仍然存在浮动垃圾。</p>
-<h4 id="4、JDK-8u20-字符串去重"><a href="#4、JDK-8u20-字符串去重" class="headerlink" title="4、JDK 8u20 字符串去重"></a>4、JDK 8u20 字符串去重</h4><p>G1 回收时，会检查所有的字符串，把 char[] 值一样的指向同一个对象。</p>
-<p>String.intern：关注的是String 对象，G1 关注的是 Char[]  数组</p>
-<p><strong>特点：</strong>节省大量内存，但是增加回收时间。</p>
-<h4 id="5、JDK-8u40-并发标记类卸载"><a href="#5、JDK-8u40-并发标记类卸载" class="headerlink" title="5、JDK 8u40 并发标记类卸载"></a>5、JDK 8u40 并发标记类卸载</h4><p>在并发标记阶段结束以后，就能知道哪些类不再被使用。如果一个类加载器的所有类都不在使用，则卸载它所加载的所有类</p>
-<h4 id="6、JDK-8u60-回收巨型对象"><a href="#6、JDK-8u60-回收巨型对象" class="headerlink" title="6、JDK 8u60 回收巨型对象"></a>6、JDK 8u60 回收巨型对象</h4><ul>
-<li>一个对象大于region的一半时，就称为巨型对象</li>
-<li>G1不会对巨型对象进行拷贝</li>
-<li>回收时被优先考虑</li>
-<li>G1会跟踪老年代所有incoming引用，如果老年代incoming引用为0的巨型对象就可以在新生代垃圾回收时处理掉。</li>
+<blockquote>
+<p>4、内存屏障</p>
+</blockquote>
+<ul>
+<li>CMS：写后屏障维护卡表，直接同步操作。</li>
+<li>G1：写后屏障维护卡表，写前屏障维护原始快照。由于比较复杂，所以以消息队列的形式存储，过一会儿再实现。</li>
 </ul>
-<h3 id="4-5、ZGC回收器"><a href="#4-5、ZGC回收器" class="headerlink" title="4.5、ZGC回收器"></a>4.5、ZGC回收器</h3><p><strong>概念：</strong>ZGC是JDK 11中推出的一款低延迟垃圾回收器，它的设计目标包括：</p>
+<blockquote>
+<p>5、回收时间</p>
+</blockquote>
+<ul>
+<li>CMS：放弃整理内存，换取延时的降低。</li>
+<li>G1：放弃对全部内存的回收，换取延时的降低。</li>
+</ul>
+<blockquote>
+<p>5、实战</p>
+</blockquote>
+<ul>
+<li>G1：适合大内存，一般 6 ~ 8 G 内存以上比G1更好</li>
+<li>CMS</li>
+</ul>
+<h3 id="4-5、低延迟收集器"><a href="#4-5、低延迟收集器" class="headerlink" title="4.5、低延迟收集器"></a>4.5、低延迟收集器</h3><h4 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h4><blockquote>
+<p>1、垃圾收集器的三个指标（通常只能实现两项）</p>
+</blockquote>
+<ul>
+<li>内存占用</li>
+<li>吞吐量</li>
+<li>延迟</li>
+</ul>
+<blockquote>
+<p>2、低延迟收集器</p>
+</blockquote>
+<p><strong>描述：</strong>Shenandoah 和 ZGC 几乎全程并发，只有初始标记、最终标记阶段由短暂的停顿；并且停顿的时间与堆内存的大小几乎无关。</p>
+<p><strong>分析：</strong>低延迟收集器主要是减少了标记确认后垃圾回收执行过程的 Stop The World</p>
+<h4 id="2、Shenandoah收集器"><a href="#2、Shenandoah收集器" class="headerlink" title="2、Shenandoah收集器"></a>2、Shenandoah收集器</h4><blockquote>
+<p>1、概念</p>
+</blockquote>
+<ul>
+<li>第一款不由 Oracle 开发的收集器，所以收到排挤，知名度也不如其他收集器。</li>
+<li>相比 G1 收集器，支持标记确认后的回收阶段 与用户线程<code>并发执行</code>。</li>
+<li>相比 G1 收集器，同样使用 Region 进行分区，但是完全抛弃分代的概念。</li>
+<li>相比 G1 收集器，使用名为 连接矩阵的数据结构来存储解决<code>跨 Region 引用</code>的问题。</li>
+</ul>
+<blockquote>
+<p>2、回收阶段概述</p>
+</blockquote>
+<ol>
+<li>并发标记</li>
+<li>并发回收</li>
+<li>并发引用更新：回收完成之后需要复制存活的对象，这时就需要能够即使的更新引用。</li>
+</ol>
+<blockquote>
+<p>3、转发指针</p>
+</blockquote>
+<p><strong>概念：</strong>转发指针就是让指针进行一次转发，指向真实的地址，每次更新先把旧对象的转发指针设置为新地址，这样就不会导致获取对象失败。</p>
+<p><strong>问题：</strong>   复制旧对象 —–&gt;    用户修改字段     ——–&gt; 修改转发指针     导致用户的修改操作失效。</p>
+<p>解决：CAS方式。</p>
+<h4 id="3、ZGC回收器"><a href="#3、ZGC回收器" class="headerlink" title="3、ZGC回收器"></a>3、ZGC回收器</h4><blockquote>
+<p>1、概念</p>
+</blockquote>
+<p><strong>概念：</strong>ZGC是JDK 11中推出的一款低延迟垃圾回收器，</p>
 <ul>
 <li>停顿时间不超过10ms；</li>
 <li>停顿时间不会随着堆的大小，或者活跃对象的大小而增加；</li>
-<li>支持8MB~4TB级别的堆（未来支持16TB</li>
+<li>支持8MB~4TB级别的堆（未来支持16TB）</li>
 </ul>
 <p><strong>使用范围：</strong>适用于大内存低延迟服务的内存管理和回收</p>
-<p><strong>使用ZGC回收器的原因：</strong>CMS和G1的停顿时间（STW）瓶颈</p>
-<ul>
-<li><strong>标记阶段：</strong>初始时寻找 GCROOT时需要 STW、并发标记之后需要修正，重新标记的时候需要 STW</li>
-<li><strong>清理阶段：</strong>清点出有存活对象的分区和没有存活对象的分区，该阶段不会清理垃圾对象，也不会执行存活对象的复制。该阶段是STW的。</li>
-<li><strong>复制阶段</strong>：转移阶段需要分配新内存和复制对象的成员变量。转移阶段是STW的，该阶段耗时较长。G1未能解决转移过程中准确定位对象地址的问题。</li>
-</ul>
 <blockquote>
-<p>ZGC</p>
+<p>2、G1的缺陷</p>
+</blockquote>
+<p><strong>使用ZGC回收器的原因：</strong>G1的停顿时间（STW）瓶颈</p>
+<p><strong>G1复制阶段</strong>：对象复制阶段需要分配新内存和复制对象的成员变量。转移阶段是STW的，该阶段耗时较长。G1未能解决转移过程中准确定位对象地址的问题。</p>
+<blockquote>
+<p>3、ZGC的优势</p>
 </blockquote>
 <p><img src="/img/JVM/29.jpg"></p>
 <p><strong>最大特点：</strong>没有进行分代，因为ZGC的底层算法比较复杂，暂时还没有写分代，后续会加入。</p>
-<p><strong>内存分布：</strong>以Region的方式进行内存布局的，暂时没有设置分代，使用读屏障、颜色指针等技术来实现可并发的标记–整理算法。</p>
+<p><strong>内存分布：</strong>以Region（动态创建、销毁、扩容）的方式进行内存布局的，暂时没有设置分代，使用读屏障、颜色指针等技术来实现可并发的标记–整理算法。</p>
 <ul>
 <li>小型Region(small Region)：容量为2mb，用于放置小于256kb的对象。</li>
 <li>中型Region(medium Region)：容量为3mb，用于放置容量大于等于256kb但小于4mb的对象。</li>
-<li>大型Region(large Region)：容量不固定，大小可变，但必须是2的整数倍，且大小大于等于4mb的对象。</li>
+<li>大型Region(large Region)：容量不固定，大小可变，但必须是2的整数倍，且大小大于等于4mb的对象。每个大型Region只存放一个大对象，所以大型对象不会被ZGC重分配，当成为垃圾时直接销毁即可。</li>
 </ul>
-<p><strong>注意：</strong>每个大型Region只存放一个大对象，所以大型对象不会被ZGC重分配，当成为垃圾时直接销毁即可。</p>
 <p><strong>优势：</strong>ZGC也采用标记-复制算法，不过ZGC对该算法做了重大改进：ZGC在标记、转移和重定位阶段几乎都是并发的，这是ZGC实现停顿时间小于10ms目标的最关键原因。</p>
-<p><strong>三次STW：</strong>只有 初始标记、再标记、初始转移阶段 是STW的</p>
-<ul>
-<li>初始标记：初始标记就扫描 GC Roots 直接可达的，耗时很短，</li>
-<li>再标记：再标记阶段STW时间很短，最多1ms，超过1ms则再次进入并发标记阶段。</li>
-<li>初始转移</li>
-</ul>
-<p><strong>关键技术：</strong>着色指针和读屏障技术</p>
 <blockquote>
 <p>着色指针</p>
 </blockquote>
-<p><strong>描述：</strong>将信息存储在指针中的技术。</p>
-<p><strong>思想：</strong>使用“空间换时间”思想，去降低GC停顿时间，将对象存活信息存储在42~45位中，这与传统的垃圾回收并将对象存活信息放在对象头中完全不同。</p>
+<p><strong>描述：</strong>将信息<code>存储在指针</code>中的技术。</p>
+<p><strong>思想：</strong>使用“空间换时间”思想，去降低GC停顿时间，将对象存活信息（三色标记状态、是否进入重分配集等）存储在指针的第42~45位中，说这与传统的垃圾回收并将对象存活信息放在对象头中完全不同。不过由于占用4位，所以最大支持内存只有4T，比其他的少。</p>
+<p>其他的收集器：Serial把标记记录在对象头上，G1、Shenandoah使用一个叫 BItMap的数据结构。</p>
+<blockquote>
+<p>着色指针技术的基础：内存多重映射</p>
+</blockquote>
+<p><strong>原理：</strong>将不同的虚拟内存地址映射到同一个物理内存地址上的技术，这样即使第42~45位改变了，映射的地址还是一致的</p>
 <blockquote>
 <p>读屏障</p>
 </blockquote>
 <p><strong>描述：</strong>JVM向应用代码插入一小段代码的技术。当应用线程从堆中读取对象引用时，就会执行这段代码。需要注意的是，仅“从堆中读取对象引用”才会触发这段代码。</p>
 <p><strong>作用：</strong>如果发现对象被移动了，那么“读屏障”会<strong>通过着色指针</strong>把读出来的指针更新到对象的新地址上</p>
 <blockquote>
-<p>G1的优势</p>
+<p>4、回收流程</p>
 </blockquote>
-<p>高并发，一秒数十万的请求，使用G1更好</p>
-<p><strong>原因：</strong></p>
 <ol>
-<li>由于消息量大，但是不需要长时间保存，所以进行minor gc是最好的</li>
-<li>G1可以进行最大停顿时间控制，让程序边回收程序边运行，</li>
+<li><strong>并发标记：</strong>会STW，并且在此阶段会<code>更新着色指针</code>。</li>
+<li><strong>并发预备重分配：</strong>不会STW，会扫描整个 Reigon 区域 ，根据条件计算回收哪些区域，并且回收只保证 Region 被释放，不保证对象被回收。</li>
+<li><strong>并发重分配：</strong>内部维护一个转发表，记录旧地址到新地址的映射关系，由于染色指针，所以<code>仅仅通过引用就可以知道处于重分配</code>过程，用户线程获取对象时就会根据转发记录表修正指针，实现地址重分配。至于没有立即访问但是又存在引用的将来可能访问的，只需要保留转发表，将来访问时，根据染色指针判断处于重分配状态，就会查找转发表修正。</li>
+<li><strong>并发重映射：</strong>修正堆中指向重分配集中就对象的所有引用。ZGC把这部分操作交给下一次的并发标记阶段去处理，而再次期间，只需要保留转发表即可。</li>
 </ol>
+<h3 id="4-6、ZGC和G1"><a href="#4-6、ZGC和G1" class="headerlink" title="4.6、ZGC和G1"></a>4.6、ZGC和G1</h3><blockquote>
+<p>是否分代</p>
+</blockquote>
+<ul>
+<li>G1：每一个 Region 都维护一个卡表，需要依靠写屏障实现；内存占用大，影响性能。</li>
+<li>ZGC：不分代，不需要跨带引用，但是需要全堆扫描，所以每次并发收集的时间都会很长。回收期间产生的垃圾收集器都默认存活，所以会造成大量<code>浮动垃圾</code>。增大对内存可以很好的缓解这个问题，所以ZGC可以在一些比较大内存的设备上使用。</li>
+</ul>
+<blockquote>
+<p>使用场景</p>
+</blockquote>
+<ul>
+<li>高并发，一秒数十万的请求，比如 Kafka 使用G1更好。因为分代有 Young GC更快，而且可以最大停顿时间控制，让程序边回收程序边运行。</li>
+<li>时延要求高，可以使用ZGC。</li>
+</ul>
 <h3 id="4-6、垃圾回收器的选择"><a href="#4-6、垃圾回收器的选择" class="headerlink" title="4.6、垃圾回收器的选择"></a>4.6、垃圾回收器的选择</h3><p><img src="/img/JVM/28.jpg"></p>
 <ol>
 <li>优先调整堆的大小让服务器自己来选择。</li>
@@ -493,42 +712,6 @@
 <li>4G以下可以用parallel，4-8G可以用ParNew+CMS，8G以上可以用G1，几百G以上用ZGC</li>
 <li>实时数据占用超过一半的堆空间、对象分配或者晋升的速度变化大使用G1</li>
 </ol>
-<h3 id="4-7、G1和CMS"><a href="#4-7、G1和CMS" class="headerlink" title="4.7、G1和CMS"></a>4.7、G1和CMS</h3><blockquote>
-<p>适用范围</p>
-</blockquote>
-<p>CMS收集器是老年代的收集器，可以配合新生代的Serial和ParNew收集器一起使用</p>
-<p>G1收集器收集范围是老年代和新生代。不需要结合其他收集器使用</p>
-<blockquote>
-<p>STW时间</p>
-</blockquote>
-<p>CMS收集器以最小的停顿时间为目标的收集器。</p>
-<p>G1收集器可预测垃圾回收的停顿时间（建立可预测的停顿时间模型）</p>
-<blockquote>
-<p>垃圾碎片</p>
-</blockquote>
-<p>CMS收集器是使用“标记-清除”算法进行的垃圾回收，容易产生内存碎片</p>
-<p>G1收集器使用的是“标记-整理”算法，进行了空间整合，降低了内存空间碎片。</p>
-<blockquote>
-<p>回收过程</p>
-</blockquote>
-<p>CMS：初始标记 —》  并发标记  —-》 重新标记    —-》 并发清除</p>
-<p>G1：   初始标记  —-》并发标记  —–》 最终标记   —–》 筛选回收</p>
-<blockquote>
-<p>内存空间</p>
-</blockquote>
-<p>CMS：是分代的</p>
-<p>G1：内存拆分成多等份，多个域（Region），同时保留不同代的区别。</p>
-<blockquote>
-<p>回收算法</p>
-</blockquote>
-<p>CMS：标记清除</p>
-<p>G1：标记整理   复制</p>
-<blockquote>
-<p>大对象处理</p>
-</blockquote>
-<blockquote>
-</blockquote>
-<p>G1在压缩空间方面有优势、避免内存碎片、Eden、Survivor、Old区不再固定，在内存使用效率上来说更灵活、设置预期停顿时间、适合大内存的情况。</p>
 <h2 id="5、GC调优"><a href="#5、GC调优" class="headerlink" title="5、GC调优"></a>5、GC调优</h2><p><strong>查看GC相关的参数</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;D:\JavaStudy\JDK8\bin\java&quot; -XX:+PrintFlagsFinal -version | findstr &quot;GC&quot;</span><br></pre></td></tr></table></figure>
 
@@ -586,7 +769,7 @@
 <ul>
 <li>永久代的空间不足，增大永久代的大小</li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">http://example.com/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/20.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/"><img class="prev-cover" src="/img/cover/22.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JVM(一):内存结构</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/22/JVM/JVM%20(%20%E4%B8%89%20)%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%97%E8%8A%82%E7%A0%81/"><img class="next-cover" src="/img/cover/21.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JVM(三):JVM类加载和对象加载</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/22/JVM/JVM ( 一 ) 内存结构/" title="JVM(一):内存结构"><img class="cover" src="/img/cover/22.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(一):内存结构</div></div></a></div><div><a href="/2021/06/22/JVM/JVM ( 三 ) 类加载和字节码/" title="JVM(三):JVM类加载和对象加载"><img class="cover" src="/img/cover/21.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(三):JVM类加载和对象加载</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E5%8F%AF%E4%BB%A5%E5%9B%9E%E6%94%B6"><span class="toc-text">1、判断对象可以回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="toc-text">1.1、引用计数法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-text">1.2、可达性分析算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E3%80%81%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E2%BC%80%E4%B8%AA%E5%B8%B8%E9%87%8F%E6%98%AF%E5%BA%9F%E5%BC%83%E5%B8%B8%E9%87%8F"><span class="toc-text">1.3、如何判断⼀个常量是废弃常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4%E3%80%81-%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E2%BC%80%E4%B8%AA%E7%B1%BB%E6%98%AF%E6%97%A0%E7%94%A8%E7%9A%84%E7%B1%BB"><span class="toc-text">1.4、 如何判断⼀个类是无用的类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5%E3%80%81%E5%9B%9B%E7%A7%8D%E5%BC%95%E7%94%A8"><span class="toc-text">1.5、四种引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-text">2、垃圾回收算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="toc-text">2.1、标记清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86"><span class="toc-text">2.2、标记整理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E5%A4%8D%E5%88%B6"><span class="toc-text">2.3、复制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E5%88%86%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-text">3、分代垃圾回收算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%A0%86%E5%86%85%E5%AD%98%E4%BB%8B%E7%BB%8D%E5%8F%8A%E7%AE%97%E6%B3%95"><span class="toc-text">3.1、堆内存介绍及算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81JVM%E5%8F%82%E6%95%B0"><span class="toc-text">3.2、JVM参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81%E6%B5%8B%E8%AF%95"><span class="toc-text">3.3、测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">4、垃圾回收器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81%E4%B8%B2%E8%A1%8C"><span class="toc-text">4.1、串行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81%E5%90%9E%E5%90%90%E9%87%8F%E4%BC%98%E5%85%88"><span class="toc-text">4.2、吞吐量优先</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88"><span class="toc-text">4.3、响应时间优先</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81G1%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">4.4、G1回收器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81G1-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%98%B6%E6%AE%B5"><span class="toc-text">1、G1 垃圾回收阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Young-Collection-%E8%B7%A8%E4%BB%A3%E5%BC%95%E7%94%A8"><span class="toc-text">2、Young Collection 跨代引用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81Remark%E9%87%8D%E6%A0%87%E8%AE%B0%EF%BC%88%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%EF%BC%89"><span class="toc-text">3、Remark重标记（三色标记）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81JDK-8u20-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8E%BB%E9%87%8D"><span class="toc-text">4、JDK 8u20 字符串去重</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81JDK-8u40-%E5%B9%B6%E5%8F%91%E6%A0%87%E8%AE%B0%E7%B1%BB%E5%8D%B8%E8%BD%BD"><span class="toc-text">5、JDK 8u40 并发标记类卸载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81JDK-8u60-%E5%9B%9E%E6%94%B6%E5%B7%A8%E5%9E%8B%E5%AF%B9%E8%B1%A1"><span class="toc-text">6、JDK 8u60 回收巨型对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5%E3%80%81ZGC%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">4.5、ZGC回收器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">4.6、垃圾回收器的选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7%E3%80%81G1%E5%92%8CCMS"><span class="toc-text">4.7、G1和CMS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81GC%E8%B0%83%E4%BC%98"><span class="toc-text">5、GC调优</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E6%96%B0%E7%94%9F%E4%BB%A3%E8%B0%83%E4%BC%98"><span class="toc-text">5.1、新生代调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E5%B9%B8%E5%AD%98%E5%8C%BA%E8%B0%83%E4%BC%98"><span class="toc-text">5.2、幸存区调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E3%80%81%E8%80%81%E5%B9%B4%E4%BB%A3%E8%B0%83%E4%BC%98"><span class="toc-text">5.3、老年代调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4%E3%80%81%E6%A1%88%E4%BE%8B"><span class="toc-text">5.4、案例</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bug</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">http://example.com/2021/06/22/JVM/JVM%20(%20%E4%BA%8C%20)%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Notes</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/20.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/22/JVM/JVM%20(%20%E4%B8%80%20)%20%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84/"><img class="prev-cover" src="/img/cover/22.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JVM(一):内存结构</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/22/JVM/JVM%20(%20%E4%B8%89%20)%20%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%AD%97%E8%8A%82%E7%A0%81/"><img class="next-cover" src="/img/cover/21.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JVM(三):JVM类加载和对象加载</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/06/22/JVM/JVM ( 一 ) 内存结构/" title="JVM(一):内存结构"><img class="cover" src="/img/cover/22.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(一):内存结构</div></div></a></div><div><a href="/2021/06/22/JVM/JVM ( 三 ) 类加载和字节码/" title="JVM(三):JVM类加载和对象加载"><img class="cover" src="/img/cover/21.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-22</div><div class="title">JVM(三):JVM类加载和对象加载</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%88%A4%E6%96%AD%E5%AF%B9%E8%B1%A1%E5%8F%AF%E4%BB%A5%E5%9B%9E%E6%94%B6"><span class="toc-text">1、判断对象可以回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="toc-text">1.1、引用计数法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E3%80%81%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-text">1.2、可达性分析算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E3%80%81%E5%9B%9B%E7%A7%8D%E5%BC%95%E7%94%A8"><span class="toc-text">1.3、四种引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-text">2、垃圾回收算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1、概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E5%87%A0%E7%A7%8D%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-text">2.2、几种垃圾回收算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="toc-text">1、标记清除算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86"><span class="toc-text">2、标记整理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%A0%87%E8%AE%B0%E5%A4%8D%E5%88%B6"><span class="toc-text">3、标记复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%88%86%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">4、分代垃圾回收</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81HotSpot%E5%88%86%E6%9E%90"><span class="toc-text">3、HotSpot分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E6%A0%B9%E8%8A%82%E7%82%B9%E6%9E%9A%E4%B8%BE"><span class="toc-text">3.1、根节点枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E8%AE%B0%E5%BF%86%E9%9B%86%E5%92%8C%E5%8D%A1%E5%B8%A6"><span class="toc-text">3.2、记忆集和卡带</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3%E3%80%81%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="toc-text">3.3、三色标记法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4%E3%80%81JVM%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BC%98%E5%8C%96"><span class="toc-text">3.4、JVM的一些优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">4、垃圾回收器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E3%80%81Serial-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">4.1、Serial 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2%E3%80%81ParNew-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">4.2、ParNew 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E3%80%81Parallel-Scavenge-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">4.3、Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81CMS-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">4.4、CMS 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E3%80%81G1%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">4.4、G1回收器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1%E3%80%81%E7%89%B9%E7%82%B9%E6%A6%82%E8%BF%B0"><span class="toc-text">4.1、特点概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2%E3%80%81%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">4.2、一些问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3%E3%80%81%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B"><span class="toc-text">4.3、回收过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4%E3%80%81CMS%E5%92%8CG1%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-text">4.4、CMS和G1的对比</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5%E3%80%81%E4%BD%8E%E5%BB%B6%E8%BF%9F%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">4.5、低延迟收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">1、概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Shenandoah%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">2、Shenandoah收集器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81ZGC%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="toc-text">3、ZGC回收器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6%E3%80%81ZGC%E5%92%8CG1"><span class="toc-text">4.6、ZGC和G1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6%E3%80%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">4.6、垃圾回收器的选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81GC%E8%B0%83%E4%BC%98"><span class="toc-text">5、GC调优</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1%E3%80%81%E6%96%B0%E7%94%9F%E4%BB%A3%E8%B0%83%E4%BC%98"><span class="toc-text">5.1、新生代调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2%E3%80%81%E5%B9%B8%E5%AD%98%E5%8C%BA%E8%B0%83%E4%BC%98"><span class="toc-text">5.2、幸存区调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3%E3%80%81%E8%80%81%E5%B9%B4%E4%BB%A3%E8%B0%83%E4%BC%98"><span class="toc-text">5.3、老年代调优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4%E3%80%81%E6%A1%88%E4%BE%8B"><span class="toc-text">5.4、案例</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By Bug</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
